@@ -1,0 +1,30 @@
+{
+  "name": "token-create-bot",
+  "version": "1.0.0",
+  "description": "Automated token creation bot for Monad",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "create-tokens": "tsx src/index.ts",
+    "create-tokens:watch": "nodemon --exec tsx src/index.ts",
+    "prepare-metadata": "tsx src/scripts/prepare-metadata.ts",
+    "show-wallets": "tsx src/scripts/show-wallets.ts",
+    "fund-wallets": "tsx src/scripts/fund-wallets.ts",
+    "withdraw-funds": "tsx src/scripts/withdraw-funds.ts"
+  },
+  "keywords": ["monad", "token", "automation", "bot"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "viem": "^2.21.0",
+    "dotenv": "^16.4.5",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.0",
+    "nodemon": "^3.0.3"
+  }
+}
