@@ -11,6 +11,58 @@ const METADATA_FILE = resolve(DATA_DIR, 'metadata.json');
 const STATE_FILE = resolve(DATA_DIR, 'state.json');
 
 /**
+ * State lock manager to prevent concurrent state modifications
+ */
+class StateLockManager {
+  private locked: boolean = false;
+  private queue: Array<() => void> = [];
+
+  /**
+   * Acquire lock (waits if locked)
+   */
+  async acquire(): Promise<void> {
+    if (!this.locked) {
+      this.locked = true;
+      return;
+    }
+
+    // Wait for lock to be released
+    return new Promise((resolve) => {
+      this.queue.push(resolve);
+    });
+  }
+
+  /**
+   * Release lock and process queue
+   */
+  release(): void {
+    const next = this.queue.shift();
+    if (next) {
+      // Pass lock to next in queue
+      next();
+    } else {
+      // No one waiting, unlock
+      this.locked = false;
+    }
+  }
+
+  /**
+   * Execute function with lock
+   */
+  async withLock<T>(fn: () => T | Promise<T>): Promise<T> {
+    await this.acquire();
+    try {
+      return await fn();
+    } finally {
+      this.release();
+    }
+  }
+}
+
+// Global state lock instance
+const stateLock = new StateLockManager();
+
+/**
  * Ensure data directory exists
  */
 function ensureDataDir(): void {
@@ -84,11 +136,28 @@ export function loadState(): BotState {
 }
 
 /**
- * Save bot state
+ * Save bot state (with lock to prevent concurrent writes)
  */
-export function saveState(state: BotState): void {
-  ensureDataDir();
-  writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+export async function saveState(state: BotState): Promise<void> {
+  await stateLock.withLock(() => {
+    ensureDataDir();
+    writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+  });
+}
+
+/**
+ * Update state atomically with a function
+ * Useful for concurrent modifications like incrementing counters
+ */
+export async function updateState(
+  updater: (state: BotState) => void | Promise<void>
+): Promise<void> {
+  await stateLock.withLock(async () => {
+    const state = loadState();
+    await updater(state);
+    ensureDataDir();
+    writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+  });
 }
 
 /**

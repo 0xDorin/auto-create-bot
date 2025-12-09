@@ -61,3 +61,20 @@ export const TX_DEFAULTS = {
   DEADLINE_OFFSET: 300, // 5 minutes
   SLIPPAGE_BPS: 100, // 1% (100 basis points)
 } as const;
+
+/**
+ * Timing constants (in milliseconds)
+ */
+export const TIMING = {
+  /** Wait time after transaction receipt for RPC node sync */
+  RPC_SYNC_DELAY: 2000, // 2 seconds
+
+  /** Retry delay for balanceOf calls */
+  BALANCE_RETRY_DELAY: 2000, // 2 seconds
+
+  /** Max retries for balanceOf calls */
+  BALANCE_MAX_RETRIES: 3,
+
+  /** Wallet lock polling interval */
+  WALLET_LOCK_POLL_INTERVAL: 2000, // 2 seconds
+} as const;

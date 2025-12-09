@@ -5,7 +5,7 @@
 import { parseEther } from "viem";
 import { createToken, sellTokens } from "./contracts";
 import { config } from "../config";
-import { saveState } from "./storage";
+import { updateState } from "./storage";
 import type { WalletInstance } from "./wallet";
 import type { PreparedToken } from "../types";
 import type { BotState } from "./storage";
@@ -15,8 +15,7 @@ import type { BotState } from "./storage";
  */
 export async function executeTokenCreation(
   wallet: WalletInstance,
-  metadata: PreparedToken,
-  state: BotState
+  metadata: PreparedToken
 ): Promise<void> {
   console.log(`\n${"=".repeat(80)}`);
   console.log(`Creating token: ${metadata.name} (${metadata.symbol})`);
@@ -36,16 +35,17 @@ export async function executeTokenCreation(
     initialBuyAmount
   );
 
-  // Update state immediately after successful creation
-  state.tokensCreated++;
-  state.lastCreatedAt = Date.now();
-  state.createdTokens.push({
-    tokenAddress,
-    metadata,
-    createdAt: Date.now(),
-    walletIndex: wallet.index,
+  // Update state immediately after successful creation (atomic operation)
+  await updateState((state) => {
+    state.tokensCreated++;
+    state.lastCreatedAt = Date.now();
+    state.createdTokens.push({
+      tokenAddress,
+      metadata,
+      createdAt: Date.now(),
+      walletIndex: wallet.index,
+    });
   });
-  saveState(state);
 
   console.log(`✅ Token created and saved to state`);
 
@@ -64,7 +64,7 @@ export async function executeTokenCreation(
     );
   }
 
-  console.log(`\n✅ Token ${state.tokensCreated} workflow completed!\n`);
+  console.log(`\n✅ Token workflow completed!\n`);
 }
 
 /**
@@ -80,19 +80,16 @@ export async function withRetry<T>(
     try {
       return await fn();
     } catch (error) {
-      console.error(
-        `\n❌ Failed to ${taskName} (attempt ${attempt}/${maxRetries}):`,
-        error
-      );
+      console.error(`\n❌ Failed to ${taskName} (attempt ${attempt}/${maxRetries}):`);
+      console.error(error instanceof Error ? error.stack || error.message : error);
 
       if (attempt < maxRetries) {
         const delay = retryDelay * attempt;
         console.log(`   Retrying in ${delay}ms...\n`);
         await new Promise((resolve) => setTimeout(resolve, delay));
       } else {
-        throw new Error(
-          `${taskName} failed after ${maxRetries} attempts: ${error}`
-        );
+        const finalError = error instanceof Error ? error : new Error(String(error));
+        throw new Error(`${taskName} failed after ${maxRetries} attempts: ${finalError.message}`);
       }
     }
   }

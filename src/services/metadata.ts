@@ -3,6 +3,7 @@
  */
 
 import { config } from '../config';
+import { httpGet, httpPost, httpUpload } from './api';
 import type {
   TokenListResponse,
   MetadataUploadRequest,
@@ -27,30 +28,18 @@ interface ImageUploadResponse {
 /**
  * Fetch token list from API (always mainnet)
  */
-export async function fetchTokenList(
+export function fetchTokenList(
   page: number,
   limit: number
 ): Promise<TokenListResponse> {
-  const url = new URL(`${TOKEN_LIST_API_BASE_URL}/order/creation_time`);
-  url.searchParams.set('page', page.toString());
-  url.searchParams.set('limit', limit.toString());
-  url.searchParams.set('is_nsfw', 'false');
-  url.searchParams.set('direction', 'ASC');
-
-  const response = await fetch(url.toString(), {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
+  return httpGet<TokenListResponse>(TOKEN_LIST_API_BASE_URL, '/order/creation_time', {
+    params: {
+      page,
+      limit,
+      is_nsfw: false,
+      direction: 'ASC',
     },
   });
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch token list: ${response.status} ${response.statusText}`
-    );
-  }
-
-  return response.json();
 }
 
 /**
@@ -97,48 +86,26 @@ export async function uploadImage(imageUrl: string): Promise<ImageUploadResponse
   // Detect content type from URL
   const contentType = detectContentType(imageUrl);
 
-  // Upload as binary with Content-Type header (same as frontend)
-  const response = await fetch(`${METADATA_UPLOAD_API_BASE_URL}/metadata/image`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': contentType,
-    },
-    body: imageBuffer,
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `Failed to upload image: ${response.status} ${response.statusText}\n${errorText}`
-    );
-  }
-
-  return response.json();
+  // Upload as binary with Content-Type header
+  return httpUpload<ImageUploadResponse>(
+    METADATA_UPLOAD_API_BASE_URL,
+    '/metadata/image',
+    imageBuffer,
+    contentType
+  );
 }
 
 /**
  * Upload metadata and get metadata URI (network-specific)
  */
-export async function uploadMetadata(
+export function uploadMetadata(
   metadata: MetadataUploadRequest
 ): Promise<MetadataUploadResponse> {
-  const response = await fetch(`${METADATA_UPLOAD_API_BASE_URL}/metadata/metadata`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(metadata),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `Failed to upload metadata: ${response.status} ${response.statusText}\n${errorText}`
-    );
-  }
-
-  return response.json();
+  return httpPost<MetadataUploadResponse, MetadataUploadRequest>(
+    METADATA_UPLOAD_API_BASE_URL,
+    '/metadata/metadata',
+    metadata
+  );
 }
 
 /**

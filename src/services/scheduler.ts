@@ -2,10 +2,11 @@
  * Token creation scheduler
  */
 
-import { deriveWallets } from './wallet';
-import { loadMetadata, loadState, saveState, type BotState } from './storage';
-import { executeTokenCreation, withRetry } from './tokenCreator';
+import { deriveWallets, type WalletInstance } from './wallet';
+import { loadMetadata, loadState, saveState } from './storage';
+import { executeTokenCreation } from './tokenCreator';
 import { config } from '../config';
+import { TIMING } from '../config/constants';
 import type { PreparedToken } from '../types';
 
 /**
@@ -75,13 +76,19 @@ function generateTasks(
   const averageDelay = durationMs / totalTokens;
 
   if (config.executionMode === 'parallel') {
-    // Parallel mode: assign random delays within the duration
-    let cumulativeTime = 0;
+    // Parallel mode: assign random execution times distributed across duration
+    // Create array of random times within the duration window
+    const randomTimes: number[] = [];
+    for (let i = 0; i < totalTokens; i++) {
+      // Generate random time within [0, durationMs]
+      const randomTime = Math.random() * durationMs;
+      randomTimes.push(randomTime);
+    }
+
+    // Sort times to maintain some order (optional, but helps with visualization)
+    randomTimes.sort((a, b) => a - b);
 
     for (let i = 0; i < totalTokens; i++) {
-      const delay = getRandomDelay(averageDelay, config.delayRandomness);
-      cumulativeTime += delay;
-
       // Select random metadata
       const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
 
@@ -89,20 +96,17 @@ function generateTasks(
         tokenIndex: i,
         walletIndex: i % numWallets,
         metadata: metadata[randomMetadataIndex]!,
-        delayMs: cumulativeTime,
-        scheduledTime: startTime + cumulativeTime,
+        delayMs: randomTimes[i]!,
+        scheduledTime: startTime + randomTimes[i]!,
       });
     }
-
-    // Shuffle tasks to randomize execution order
-    for (let i = tasks.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [tasks[i], tasks[j]] = [tasks[j]!, tasks[i]!];
-    }
   } else {
-    // Sequential mode: fixed delays
+    // Sequential mode: evenly spaced delays with optional randomness
     for (let i = 0; i < totalTokens; i++) {
-      const delay = i * averageDelay;
+      const baseDelay = i * averageDelay;
+      const delay = config.delayRandomness > 0
+        ? getRandomDelay(baseDelay, config.delayRandomness)
+        : baseDelay;
 
       // Select random metadata
       const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
@@ -125,8 +129,7 @@ function generateTasks(
  */
 async function executeTask(
   task: TokenTask,
-  wallet: any,
-  state: BotState,
+  wallet: WalletInstance,
   lockManager: WalletLockManager
 ): Promise<void> {
   const scheduledDate = new Date(task.scheduledTime);
@@ -146,7 +149,7 @@ async function executeTask(
     console.log(
       `\n⏳ Token ${task.tokenIndex + 1}: Wallet [${task.walletIndex + 1}] is busy, waiting...`
     );
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // Check every 2 seconds
+    await new Promise((resolve) => setTimeout(resolve, TIMING.WALLET_LOCK_POLL_INTERVAL));
   }
 
   try {
@@ -157,7 +160,7 @@ async function executeTask(
     console.log(`Actual: ${new Date().toLocaleTimeString()}`);
     console.log(`${'='.repeat(80)}`);
 
-    await executeTokenCreation(wallet, task.metadata, state);
+    await executeTokenCreation(wallet, task.metadata);
 
     console.log(`✅ Token ${task.tokenIndex + 1} created successfully!`);
   } finally {
@@ -210,7 +213,7 @@ export async function runScheduler(): Promise<void> {
   // Set start time if not already set
   if (!state.startTime) {
     state.startTime = Date.now();
-    saveState(state);
+    await saveState(state);
   }
 
   const durationMs = config.durationHours * 60 * 60 * 1000;
@@ -260,8 +263,9 @@ export async function runScheduler(): Promise<void> {
     // Parallel execution (no retry, skip failures)
     const results = await Promise.allSettled(
       tasks.map((task) =>
-        executeTask(task, wallets[task.walletIndex]!, state, lockManager).catch((error) => {
-          console.error(`\n❌ Task ${task.tokenIndex + 1} failed, skipping:`, error.message);
+        executeTask(task, wallets[task.walletIndex]!, lockManager).catch((error) => {
+          console.error(`\n❌ Task ${task.tokenIndex + 1} failed, skipping:`);
+          console.error(error instanceof Error ? error.stack || error.message : error);
           // Don't throw, just skip this token
         })
       )
@@ -281,9 +285,10 @@ export async function runScheduler(): Promise<void> {
     // Sequential execution (skip failures, continue)
     for (const task of sortedTasks) {
       try {
-        await executeTask(task, wallets[task.walletIndex]!, state, lockManager);
+        await executeTask(task, wallets[task.walletIndex]!, lockManager);
       } catch (error) {
-        console.error(`\n❌ Token ${task.tokenIndex + 1} failed, skipping:`, error);
+        console.error(`\n❌ Token ${task.tokenIndex + 1} failed, skipping:`);
+        console.error(error instanceof Error ? error.stack || error.message : error);
         // Continue to next token instead of stopping
       }
     }

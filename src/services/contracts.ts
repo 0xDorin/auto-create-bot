@@ -4,7 +4,7 @@
 
 import { type Address, type Hash, parseEther, formatEther } from "viem";
 import { bondingCurveRouterAbi, lensAbi, erc20Abi } from "../abi";
-import { CONTRACTS, TX_DEFAULTS } from "../config/constants";
+import { CONTRACTS, TX_DEFAULTS, TIMING } from "../config/constants";
 import { config } from "../config";
 import type { WalletInstance } from "./wallet";
 import { randomBytes } from "crypto";
@@ -122,11 +122,11 @@ export async function createToken(
   }
 
   // Wait a bit for contract state to be fully synced on RPC node
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, TIMING.RPC_SYNC_DELAY));
 
   // Get token balance with retry
   let tokensReceived: bigint = 0n;
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  for (let attempt = 1; attempt <= TIMING.BALANCE_MAX_RETRIES; attempt++) {
     try {
       tokensReceived = await wallet.publicClient.readContract({
         address: tokenAddress,
@@ -136,9 +136,9 @@ export async function createToken(
       });
       break;
     } catch (error) {
-      if (attempt === 3) throw error;
-      console.log(`  ⚠️  balanceOf failed (attempt ${attempt}/3), retrying...`);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      if (attempt === TIMING.BALANCE_MAX_RETRIES) throw error;
+      console.log(`  ⚠️  balanceOf failed (attempt ${attempt}/${TIMING.BALANCE_MAX_RETRIES}), retrying...`);
+      await new Promise((resolve) => setTimeout(resolve, TIMING.BALANCE_RETRY_DELAY));
     }
   }
 

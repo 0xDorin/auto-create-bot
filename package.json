@@ -11,7 +11,11 @@
     "prepare-metadata": "tsx src/scripts/prepare-metadata.ts",
     "show-wallets": "tsx src/scripts/show-wallets.ts",
     "fund-wallets": "tsx src/scripts/fund-wallets.ts",
-    "withdraw-funds": "tsx src/scripts/withdraw-funds.ts"
+    "withdraw-funds": "tsx src/scripts/withdraw-funds.ts",
+    "start:prepare-metadata": "node dist/scripts/prepare-metadata.js",
+    "start:show-wallets": "node dist/scripts/show-wallets.js",
+    "start:fund-wallets": "node dist/scripts/fund-wallets.js",
+    "start:withdraw-funds": "node dist/scripts/withdraw-funds.js"
   },
   "keywords": ["monad", "token", "automation", "bot"],
   "author": "",
