@@ -77,47 +77,75 @@ function generateTasks(
 
   if (config.executionMode === 'parallel') {
     // Parallel mode: assign random execution times distributed across duration
-    // Create array of random times within the duration window
-    const randomTimes: number[] = [];
-    for (let i = 0; i < totalTokens; i++) {
-      // Generate random time within [0, durationMs]
-      const randomTime = Math.random() * durationMs;
-      randomTimes.push(randomTime);
-    }
+    if (durationMs === 0) {
+      // No duration left - create all tasks immediately
+      for (let i = 0; i < totalTokens; i++) {
+        const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
+        tasks.push({
+          tokenIndex: i,
+          walletIndex: i % numWallets,
+          metadata: metadata[randomMetadataIndex]!,
+          delayMs: 0,
+          scheduledTime: startTime,
+        });
+      }
+    } else {
+      // Create array of random times within the duration window
+      const randomTimes: number[] = [];
+      for (let i = 0; i < totalTokens; i++) {
+        // Generate random time within [0, durationMs]
+        const randomTime = Math.random() * durationMs;
+        randomTimes.push(randomTime);
+      }
 
-    // Sort times to maintain some order (optional, but helps with visualization)
-    randomTimes.sort((a, b) => a - b);
+      // Sort times to maintain some order (optional, but helps with visualization)
+      randomTimes.sort((a, b) => a - b);
 
-    for (let i = 0; i < totalTokens; i++) {
-      // Select random metadata
-      const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
+      for (let i = 0; i < totalTokens; i++) {
+        // Select random metadata
+        const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
 
-      tasks.push({
-        tokenIndex: i,
-        walletIndex: i % numWallets,
-        metadata: metadata[randomMetadataIndex]!,
-        delayMs: randomTimes[i]!,
-        scheduledTime: startTime + randomTimes[i]!,
-      });
+        tasks.push({
+          tokenIndex: i,
+          walletIndex: i % numWallets,
+          metadata: metadata[randomMetadataIndex]!,
+          delayMs: randomTimes[i]!,
+          scheduledTime: startTime + randomTimes[i]!,
+        });
+      }
     }
   } else {
     // Sequential mode: evenly spaced delays with optional randomness
-    for (let i = 0; i < totalTokens; i++) {
-      const baseDelay = i * averageDelay;
-      const delay = config.delayRandomness > 0
-        ? getRandomDelay(baseDelay, config.delayRandomness)
-        : baseDelay;
+    if (durationMs === 0) {
+      // No duration left - create all tasks immediately
+      for (let i = 0; i < totalTokens; i++) {
+        const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
+        tasks.push({
+          tokenIndex: i,
+          walletIndex: i % numWallets,
+          metadata: metadata[randomMetadataIndex]!,
+          delayMs: 0,
+          scheduledTime: startTime,
+        });
+      }
+    } else {
+      for (let i = 0; i < totalTokens; i++) {
+        const baseDelay = i * averageDelay;
+        const delay = config.delayRandomness > 0
+          ? getRandomDelay(baseDelay, config.delayRandomness)
+          : baseDelay;
 
-      // Select random metadata
-      const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
+        // Select random metadata
+        const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
 
-      tasks.push({
-        tokenIndex: i,
-        walletIndex: i % numWallets,
-        metadata: metadata[randomMetadataIndex]!,
-        delayMs: delay,
-        scheduledTime: startTime + delay,
-      });
+        tasks.push({
+          tokenIndex: i,
+          walletIndex: i % numWallets,
+          metadata: metadata[randomMetadataIndex]!,
+          delayMs: delay,
+          scheduledTime: startTime + delay,
+        });
+      }
     }
   }
 
@@ -217,10 +245,14 @@ export async function runScheduler(): Promise<void> {
   }
 
   const durationMs = config.durationHours * 60 * 60 * 1000;
-  const estimatedEndTime = new Date(state.startTime + durationMs);
+  const originalEndTime = new Date(state.startTime + durationMs);
+  const elapsedTime = Date.now() - state.startTime;
+  const remainingDuration = Math.max(0, durationMs - elapsedTime);
 
   console.log(`\nStart time: ${new Date(state.startTime).toLocaleString()}`);
-  console.log(`Estimated completion: ${estimatedEndTime.toLocaleString()}`);
+  console.log(`Original completion time: ${originalEndTime.toLocaleString()}`);
+  console.log(`Elapsed time: ${(elapsedTime / 1000 / 60).toFixed(2)} minutes`);
+  console.log(`Remaining time: ${(remainingDuration / 1000 / 60).toFixed(2)} minutes`);
 
   // Generate tasks
   const remainingTokens = config.totalTokensToCreate - state.tokensCreated;
@@ -230,12 +262,29 @@ export async function runScheduler(): Promise<void> {
   }
 
   console.log(`\n📋 Generating ${remainingTokens} token creation tasks...`);
+
+  // Use remaining duration for restart scenarios
+  let effectiveDuration: number;
+  let effectiveStartTime: number;
+
+  if (remainingDuration > 0) {
+    // Still within original duration - use remaining time
+    effectiveDuration = remainingDuration;
+    effectiveStartTime = Date.now();
+    console.log(`⏱️  Using remaining duration: ${(remainingDuration / 1000 / 60).toFixed(2)} minutes`);
+  } else {
+    // Original duration has passed - create all remaining tokens immediately
+    effectiveDuration = 0;
+    effectiveStartTime = Date.now();
+    console.log(`⚠️  Original duration has passed. Creating ${remainingTokens} tokens immediately.`);
+  }
+
   const tasks = generateTasks(
     remainingTokens,
-    durationMs,
+    effectiveDuration,
     wallets.length,
     metadata,
-    state.startTime
+    effectiveStartTime
   );
 
   // Sort tasks by scheduled time for display

@@ -1,15 +1,21 @@
 /**
  * Script to prepare metadata before running the bot
  *
- * Usage: npm run prepare-metadata
+ * Usage:
+ *   npm run prepare-metadata           # Append to existing (default)
+ *   npm run prepare-metadata -- --replace  # Replace all existing
  */
 
 import { fetchAndPrepareTokens } from '../services/metadata';
-import { saveMetadata } from '../services/storage';
+import { saveMetadata, appendMetadata } from '../services/storage';
 import { config } from '../config';
 
 async function main() {
+  // Check if --replace flag is provided
+  const replaceMode = process.argv.includes('--replace');
+
   console.log('=== Metadata Preparation Script ===\n');
+  console.log(`Mode: ${replaceMode ? '🔄 REPLACE' : '➕ APPEND'} (${replaceMode ? 'overwrites' : 'adds to'} existing metadata)`);
   console.log(`Network mode: ${config.networkMode} (tokens will be created here)`);
   console.log(`Metadata mode: ${config.metadataMode}`);
   console.log(`Token list API: ${config.tokenListApiBaseUrl} (always mainnet for more tokens)`);
@@ -34,12 +40,19 @@ async function main() {
     );
 
     // Save to file
-    saveMetadata(tokens);
+    if (replaceMode) {
+      saveMetadata(tokens);
+      console.log('\n✅ Metadata preparation completed successfully!');
+      console.log(`   Replaced with ${tokens.length} metadata entries`);
+    } else {
+      appendMetadata(tokens);
+      console.log('\n✅ Metadata preparation completed successfully!');
+      console.log(`   Added ${tokens.length} new metadata entries`);
+    }
 
-    console.log('\n✅ Metadata preparation completed successfully!');
-    console.log(`   Prepared ${tokens.length} metadata entries`);
     console.log(`\nBot will randomly select from these when creating tokens.`);
     console.log(`You can now run the bot with: npm run dev`);
+    console.log(`\nTip: Use different METADATA_START_PAGE to fetch new tokens next time`);
   } catch (error) {
     console.error('\n❌ Metadata preparation failed:', error);
     process.exit(1);

@@ -7,10 +7,6 @@ dist/
 # Environment variables
 .env
 
-# Runtime data
-data/*.json
-!data/.gitkeep
-
 # Logs
 logs/
 *.log

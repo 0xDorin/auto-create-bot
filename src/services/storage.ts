@@ -8,7 +8,10 @@ import type { PreparedToken, PreparedTokensFile } from '../types';
 
 const DATA_DIR = resolve(__dirname, '../../data');
 const METADATA_FILE = resolve(DATA_DIR, 'metadata.json');
-const STATE_FILE = resolve(DATA_DIR, 'state.json');
+
+// Use SERVICE_NAME env var for separate state files per service
+const SERVICE_NAME = process.env.SERVICE_NAME || 'default';
+const STATE_FILE = resolve(DATA_DIR, `state-${SERVICE_NAME}.json`);
 
 /**
  * State lock manager to prevent concurrent state modifications
@@ -72,7 +75,7 @@ function ensureDataDir(): void {
 }
 
 /**
- * Save prepared tokens to JSON file
+ * Save prepared tokens to JSON file (overwrites existing)
  */
 export function saveMetadata(tokens: PreparedToken[]): void {
   ensureDataDir();
@@ -82,6 +85,49 @@ export function saveMetadata(tokens: PreparedToken[]): void {
   };
   writeFileSync(METADATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
   console.log(`Saved ${tokens.length} tokens to ${METADATA_FILE}`);
+}
+
+/**
+ * Append new tokens to existing metadata file
+ */
+export function appendMetadata(newTokens: PreparedToken[]): void {
+  ensureDataDir();
+
+  let existingTokens: PreparedToken[] = [];
+
+  // Load existing metadata if file exists
+  if (existsSync(METADATA_FILE)) {
+    try {
+      const content = readFileSync(METADATA_FILE, 'utf-8');
+      const data = JSON.parse(content);
+      existingTokens = Array.isArray(data) ? data : data.tokens;
+      console.log(`Found ${existingTokens.length} existing tokens`);
+    } catch (error) {
+      console.warn('Could not load existing metadata, starting fresh');
+      existingTokens = [];
+    }
+  }
+
+  // Combine existing and new tokens
+  const allTokens = [...existingTokens, ...newTokens];
+
+  // Remove duplicates based on symbol (keep the newest one)
+  const uniqueTokens = allTokens.reduce((acc, token) => {
+    const existing = acc.find(t => t.symbol === token.symbol);
+    if (!existing) {
+      acc.push(token);
+    }
+    // If duplicate, keep the current one (newest)
+    return acc;
+  }, [] as PreparedToken[]);
+
+  const data: PreparedTokensFile = {
+    tokens: uniqueTokens,
+    total_count: uniqueTokens.length,
+  };
+
+  writeFileSync(METADATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+  console.log(`Added ${newTokens.length} new tokens (${existingTokens.length} → ${uniqueTokens.length} total, ${allTokens.length - uniqueTokens.length} duplicates removed)`);
 }
 
 /**
@@ -112,6 +158,7 @@ export interface BotState {
   tokensCreated: number;
   startTime?: number;
   lastCreatedAt?: number;
+  lastRunDate?: string; // Format: "YYYY-MM-DD"
   createdTokens: Array<{
     tokenAddress: string;
     metadata: PreparedToken;
@@ -167,6 +214,8 @@ export function resetState(): void {
   const emptyState: BotState = {
     tokensCreated: 0,
     createdTokens: [],
+    startTime: undefined,
+    lastCreatedAt: undefined,
   };
   saveState(emptyState);
   console.log('Bot state reset');

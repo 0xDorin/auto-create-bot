@@ -6,6 +6,7 @@ import { parseEther } from "viem";
 import { createToken, sellTokens } from "./contracts";
 import { config } from "../config";
 import { updateState } from "./storage";
+import { calculateMonAmount } from "./priceOracle";
 import type { WalletInstance } from "./wallet";
 import type { PreparedToken } from "../types";
 import type { BotState } from "./storage";
@@ -17,12 +18,18 @@ export async function executeTokenCreation(
   wallet: WalletInstance,
   metadata: PreparedToken
 ): Promise<void> {
-  console.log(`\n${"=".repeat(80)}`);
-  console.log(`Creating token: ${metadata.name} (${metadata.symbol})`);
-  console.log(`Wallet [${wallet.index}]: ${wallet.address}`);
-  console.log(`${"=".repeat(80)}\n`);
+  console.log(`\n🪙 ${metadata.symbol} (Wallet ${wallet.index})`);
 
-  const initialBuyAmount = parseEther(config.initialBuyAmount);
+  // Determine initial buy amount based on mode
+  let initialBuyAmount: bigint;
+
+  if (config.initialBuyMode === 'dynamic') {
+    const monAmount = await calculateMonAmount(config.targetPoints);
+    initialBuyAmount = parseEther(monAmount.toString());
+  } else {
+    initialBuyAmount = parseEther(config.initialBuyAmount);
+    console.log(`💰 Buy: ${config.initialBuyAmount} MON (fixed)`);
+  }
 
   // Create token (no retry - if fails, skip to next)
   const { tokenAddress, tokensReceived } = await createToken(
@@ -47,14 +54,10 @@ export async function executeTokenCreation(
     });
   });
 
-  console.log(`✅ Token created and saved to state`);
-
   // Sell tokens if configured (WITH RETRY - must succeed to ensure wallet only has MON)
   if (config.sellPercentage > 0) {
     const sellAmount =
       (tokensReceived * BigInt(config.sellPercentage)) / BigInt(100);
-
-    console.log(`\nSelling ${config.sellPercentage}% of tokens...`);
 
     await withRetry(
       () => sellTokens(wallet, tokenAddress, sellAmount),
@@ -64,7 +67,7 @@ export async function executeTokenCreation(
     );
   }
 
-  console.log(`\n✅ Token workflow completed!\n`);
+  console.log(`✅ Complete\n`);
 }
 
 /**
