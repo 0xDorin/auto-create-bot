@@ -130,7 +130,7 @@ async function main() {
 
     // 4. Reset state (each cron run starts fresh)
     console.log('🔄 Resetting state for new run...');
-    resetState();
+    await resetState();
 
     // 5. Run scheduler
     console.log('🚀 Starting token creation...\n');

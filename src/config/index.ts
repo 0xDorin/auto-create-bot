@@ -62,8 +62,6 @@ function validateEnv(): void {
   const required = [
     "MNEMONIC",
     "NUM_WALLETS",
-    "TOTAL_TOKENS_TO_CREATE",
-    "DURATION_HOURS",
     "TOKEN_LIST_API_BASE_URL",
   ];
 
@@ -128,8 +126,8 @@ function parseConfig(): BotConfig {
     mnemonic: process.env.MNEMONIC!,
     numWallets: parseInt(process.env.NUM_WALLETS!),
     walletFundingAmount: process.env.WALLET_FUNDING_AMOUNT || "50",
-    totalTokensToCreate: parseInt(process.env.TOTAL_TOKENS_TO_CREATE!),
-    durationHours: parseFloat(process.env.DURATION_HOURS!),
+    totalTokensToCreate: parseInt(process.env.TOTAL_TOKENS_TO_CREATE || '1'),
+    durationHours: parseFloat(process.env.DURATION_HOURS || '1'),
     executionMode: (process.env.EXECUTION_MODE || "parallel") as
       | "sequential"
       | "parallel",

@@ -210,13 +210,13 @@ export async function updateState(
 /**
  * Reset bot state
  */
-export function resetState(): void {
+export async function resetState(): Promise<void> {
   const emptyState: BotState = {
     tokensCreated: 0,
     createdTokens: [],
     startTime: undefined,
     lastCreatedAt: undefined,
   };
-  saveState(emptyState);
+  await saveState(emptyState);
   console.log('Bot state reset');
 }

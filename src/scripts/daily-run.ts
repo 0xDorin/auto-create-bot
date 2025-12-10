@@ -117,9 +117,9 @@ function sleep(ms: number): Promise<void> {
 /**
  * Reset state for new run
  */
-function resetRunState() {
+async function resetRunState() {
   console.log('🔄 Resetting state...');
-  resetState();
+  await resetState();
 }
 
 /**
