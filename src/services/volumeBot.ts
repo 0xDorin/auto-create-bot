@@ -12,6 +12,8 @@ import { buyTokens, sellTokens } from "./contracts";
 import { getBalance, type WalletInstance } from "./wallet";
 import { calculateMonAmount } from "./priceOracle";
 import { loadState } from "./storage";
+import { existsSync, readFileSync } from "fs";
+import { resolve } from "path";
 
 /**
  * Holder info from API
@@ -43,6 +45,7 @@ export interface VolumeConfig {
   dailyTrades: number;
   targetPoints: number;
   delayRandomness: number;
+  tradesPerWallet: number;
 }
 
 /**
@@ -64,19 +67,38 @@ export function getVolumeConfig(): VolumeConfig {
     throw new Error("VOLUME_MNEMONIC is required");
   }
 
-  const targetPoints = parseFloat(process.env.VOLUME_TARGET_POINTS || "0");
-  if (targetPoints <= 0) {
-    throw new Error(
-      "VOLUME_TARGET_POINTS must be greater than 0 (volume bot requires trading)"
-    );
+  const numWallets = parseInt(process.env.VOLUME_WALLETS || "");
+  if (!process.env.VOLUME_WALLETS || isNaN(numWallets) || numWallets <= 0) {
+    throw new Error("VOLUME_WALLETS is required and must be greater than 0");
+  }
+
+  const dailyTrades = parseInt(process.env.VOLUME_DAILY_TRADES || "");
+  if (!process.env.VOLUME_DAILY_TRADES || isNaN(dailyTrades) || dailyTrades <= 0) {
+    throw new Error("VOLUME_DAILY_TRADES is required and must be greater than 0");
+  }
+
+  const targetPoints = parseFloat(process.env.VOLUME_TARGET_POINTS || "");
+  if (!process.env.VOLUME_TARGET_POINTS || isNaN(targetPoints) || targetPoints <= 0) {
+    throw new Error("VOLUME_TARGET_POINTS is required and must be greater than 0 (volume bot requires trading)");
+  }
+
+  const delayRandomness = parseFloat(process.env.VOLUME_DELAY_RANDOMNESS || "");
+  if (!process.env.VOLUME_DELAY_RANDOMNESS || isNaN(delayRandomness) || delayRandomness < 0) {
+    throw new Error("VOLUME_DELAY_RANDOMNESS is required and must be >= 0");
+  }
+
+  const tradesPerWallet = parseInt(process.env.VOLUME_TRADES_PER_WALLET || "");
+  if (!process.env.VOLUME_TRADES_PER_WALLET || isNaN(tradesPerWallet) || tradesPerWallet <= 0) {
+    throw new Error("VOLUME_TRADES_PER_WALLET is required and must be greater than 0");
   }
 
   return {
     mnemonic,
-    numWallets: parseInt(process.env.VOLUME_WALLETS || "24"),
-    dailyTrades: parseInt(process.env.VOLUME_DAILY_TRADES || "96"),
+    numWallets,
+    dailyTrades,
     targetPoints,
-    delayRandomness: parseFloat(process.env.VOLUME_DELAY_RANDOMNESS || "0.3"),
+    delayRandomness,
+    tradesPerWallet,
   };
 }
 
@@ -99,17 +121,31 @@ export async function checkHolderCount(tokenAddress: string): Promise<number> {
 
 /**
  * Get tokens where I'm the only holder (total_count === 0)
+ * Returns tokens in the same format as BotState.createdTokens for compatibility
+ * Sources:
+ * 1. state.createdTokens (tokens created by this bot)
+ * 2. data/eligible-tokens.json (fetched tokens from fetch-eligible-tokens script)
  */
 export async function getEligibleTokens(): Promise<
-  Array<{ tokenAddress: string; symbol: string }>
+  Array<{
+    tokenAddress: string;
+    metadata?: { symbol: string; name: string; [key: string]: any };
+    createdAt: number;
+    walletIndex?: number;
+  }>
 > {
   const state = loadState();
+  const eligible: Array<{
+    tokenAddress: string;
+    metadata?: { symbol: string; name: string; [key: string]: any };
+    createdAt: number;
+    walletIndex?: number;
+  }> = [];
 
+  // 1. Check created tokens from state
   console.log(
     `\n🔍 Checking ${state.createdTokens.length} created tokens for eligibility...`
   );
-
-  const eligible: Array<{ tokenAddress: string; symbol: string }> = [];
 
   for (const token of state.createdTokens) {
     try {
@@ -117,10 +153,7 @@ export async function getEligibleTokens(): Promise<
 
       if (holderCount === 0) {
         console.log(`  ✅ ${token.metadata.symbol}: ${holderCount} holders`);
-        eligible.push({
-          tokenAddress: token.tokenAddress,
-          symbol: token.metadata.symbol,
-        });
+        eligible.push(token); // Push entire token object (matches format)
       } else {
         console.log(
           `  ⏭️  ${token.metadata.symbol}: ${holderCount} holders (skip)`
@@ -131,8 +164,42 @@ export async function getEligibleTokens(): Promise<
     }
   }
 
+  // 2. Load tokens from eligible-tokens.json if exists
+  const eligibleTokensPath = resolve(__dirname, "../../data/eligible-tokens.json");
+  if (existsSync(eligibleTokensPath)) {
+    try {
+      const fileContent = readFileSync(eligibleTokensPath, "utf-8");
+      const fileData = JSON.parse(fileContent);
+      const fetchedTokens = fileData.tokens || [];
+
+      console.log(`\n📂 Loading ${fetchedTokens.length} tokens from eligible-tokens.json...`);
+
+      for (const token of fetchedTokens) {
+        // Convert to standard format
+        const standardToken = {
+          tokenAddress: token.tokenAddress,
+          metadata: token.symbol
+            ? { symbol: token.symbol, name: token.name }
+            : undefined,
+          createdAt: token.createdAt || Date.now(),
+          walletIndex: undefined,
+        };
+
+        // Avoid duplicates
+        const exists = eligible.some((t) => t.tokenAddress === standardToken.tokenAddress);
+        if (!exists) {
+          eligible.push(standardToken);
+        }
+      }
+
+      console.log(`  ✅ Added ${fetchedTokens.length} fetched tokens`);
+    } catch (error) {
+      console.warn(`  ⚠️  Failed to load eligible-tokens.json:`, error);
+    }
+  }
+
   console.log(
-    `\n📊 Found ${eligible.length} eligible tokens (holder count = 0)\n`
+    `\n📊 Total eligible tokens: ${eligible.length}\n`
   );
 
   return eligible;
@@ -147,7 +214,7 @@ export async function executeVolumeTrade(
   tokenAddress: Address,
   tokenSymbol: string,
   targetPoints: number
-): Promise<TradeResult> {
+): Promise<any> {
   console.log(`\n📈 ${tokenSymbol} - Wallet ${wallet.index}`);
 
   // 1. Check holder count before trading

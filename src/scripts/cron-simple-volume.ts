@@ -21,8 +21,6 @@ import {
 } from '../services/volumeBot';
 import { loadVolumeState, updateVolumeState } from '../services/storage';
 
-const TRADES_PER_WALLET = 4;
-
 /**
  * Calculate delay in milliseconds with randomness
  */
@@ -57,11 +55,15 @@ async function main() {
     // 1. Get volume config
     const volumeConfig = getVolumeConfig();
 
+    // Calculate points per trade
+    const pointsPerTrade = volumeConfig.targetPoints / volumeConfig.tradesPerWallet;
+
     console.log('📋 Configuration:');
     console.log(`  Wallets: ${volumeConfig.numWallets}`);
     console.log(`  Daily trades: ${volumeConfig.dailyTrades}`);
-    console.log(`  Trades per wallet: ${TRADES_PER_WALLET}`);
-    console.log(`  Target points per trade: ${volumeConfig.targetPoints}`);
+    console.log(`  Trades per wallet: ${volumeConfig.tradesPerWallet}`);
+    console.log(`  Total target points per wallet: ${volumeConfig.targetPoints}`);
+    console.log(`  Points per trade: ${pointsPerTrade.toFixed(1)}`);
     console.log(`  Delay randomness: ±${(volumeConfig.delayRandomness * 100).toFixed(0)}%`);
 
     // Calculate base delay between trades
@@ -75,7 +77,7 @@ async function main() {
 
     console.log('📊 Current State:');
     console.log(`  Current wallet: ${state.currentWalletIndex + 1}/${volumeConfig.numWallets}`);
-    console.log(`  Current wallet trades: ${state.currentWalletTrades}/${TRADES_PER_WALLET}`);
+    console.log(`  Current wallet trades: ${state.currentWalletTrades}/${volumeConfig.tradesPerWallet}`);
     console.log(`  Total completed trades: ${state.totalCompletedTrades}/${volumeConfig.dailyTrades}`);
     console.log(`  Next token index: ${state.nextTokenIndex}`);
 
@@ -135,7 +137,7 @@ async function main() {
       // If starting new wallet, print header
       if (walletTrades === 0) {
         console.log(`\n${'─'.repeat(80)}`);
-        console.log(`💼 Wallet ${walletIndex + 1}/${volumeConfig.numWallets} - ${TRADES_PER_WALLET} trades`);
+        console.log(`💼 Wallet ${walletIndex + 1}/${volumeConfig.numWallets} - ${volumeConfig.tradesPerWallet} trades`);
         console.log(`${'─'.repeat(80)}`);
       }
 
@@ -150,14 +152,15 @@ async function main() {
         // Get token for this trade (rotate through list)
         const token = eligibleTokens[tokenIndex % eligibleTokens.length]!;
         const displayTokenNum = (tokenIndex % eligibleTokens.length) + 1;
+        const tokenSymbol = token.metadata?.symbol || token.tokenAddress.slice(0, 8);
 
-        console.log(`\n  Trade ${walletTrades + 1}/${TRADES_PER_WALLET}: ${token.symbol} (Token #${displayTokenNum}/${eligibleTokens.length})`);
+        console.log(`\n  Trade ${walletTrades + 1}/${volumeConfig.tradesPerWallet}: ${tokenSymbol} (Token #${displayTokenNum}/${eligibleTokens.length})`);
 
         const result: TradeResult = await executeVolumeTrade(
           wallet,
           token.tokenAddress as Address,
-          token.symbol,
-          volumeConfig.targetPoints
+          tokenSymbol,
+          pointsPerTrade
         );
 
         // Handle result
@@ -179,8 +182,8 @@ async function main() {
           console.log(`    📊 Progress: ${totalTrades}/${volumeConfig.dailyTrades} total trades`);
 
           // Check if wallet completed all trades
-          if (walletTrades >= TRADES_PER_WALLET) {
-            console.log(`\n  ✅ Wallet ${walletIndex + 1} completed all ${TRADES_PER_WALLET} trades`);
+          if (walletTrades >= volumeConfig.tradesPerWallet) {
+            console.log(`\n  ✅ Wallet ${walletIndex + 1} completed all ${volumeConfig.tradesPerWallet} trades`);
             walletIndex++;
             walletTrades = 0;
 
