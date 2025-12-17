@@ -1,24 +1,82 @@
 /**
  * Script to fund wallets from master wallet
  *
- * Usage: npm run fund-wallets
+ * Usage:
+ *   npm run fund-wallets:create  (for Token Create Bot wallets)
+ *   npm run fund-wallets:volume  (for Simple Volume Bot wallets)
  */
 
 import { parseEther, formatEther } from 'viem';
 import { config } from '../config';
-import { deriveWallets, getBalance, sendNative } from '../services/wallet';
+import { deriveWallet, deriveWallets, getBalance, sendNative } from '../services/wallet';
+
+type WalletMode = 'create' | 'volume';
+
+interface FundConfig {
+  title: string;
+  mnemonic: string;
+  numWallets: number;
+  fundingAmount: string;
+  masterIndex: number;  // 0 for create, undefined for volume (uses index 0 as source)
+}
 
 async function main() {
+  // Get mode from command line argument
+  const mode = process.argv[2] as WalletMode;
+
+  if (!mode || (mode !== 'create' && mode !== 'volume')) {
+    console.error('❌ Invalid mode. Use: create or volume');
+    console.error('Usage: tsx src/scripts/fund-wallets.ts <create|volume>');
+    process.exit(1);
+  }
+
+  // Get funding configuration based on mode
+  const fundConfig = getFundConfig(mode);
+
+  // Execute funding
+  await fundWallets(fundConfig);
+}
+
+function getFundConfig(mode: WalletMode): FundConfig {
+  if (mode === 'create') {
+    return {
+      title: '💼 FUND TOKEN CREATE BOT WALLETS',
+      mnemonic: config.mnemonic,
+      numWallets: config.numWallets,
+      fundingAmount: config.walletFundingAmount,
+      masterIndex: 0,
+    };
+  } else {
+    const volumeMnemonic = process.env.VOLUME_MNEMONIC;
+    if (!volumeMnemonic) {
+      console.error('❌ VOLUME_MNEMONIC not found in .env');
+      process.exit(1);
+    }
+
+    const numWallets = parseInt(process.env.VOLUME_WALLETS || '24');
+    const fundingAmount = process.env.VOLUME_FUNDING_AMOUNT || config.walletFundingAmount;
+
+    return {
+      title: '📊 FUND SIMPLE VOLUME BOT WALLETS',
+      mnemonic: volumeMnemonic,
+      numWallets: numWallets,
+      fundingAmount: fundingAmount,
+      masterIndex: 0,  // Volume bot uses index 0 as funding source
+    };
+  }
+}
+
+async function fundWallets(fundConfig: FundConfig) {
   console.log('\n' + '='.repeat(80));
-  console.log('FUND WALLETS FROM MASTER');
+  console.log(fundConfig.title);
   console.log('='.repeat(80));
   console.log(`\nNetwork: ${config.networkMode}`);
   console.log(`RPC: ${config.network.rpcUrl}`);
-  console.log(`Number of wallets to fund: ${config.numWallets}`);
-  console.log(`Amount per wallet: ${config.walletFundingAmount} MON`);
+  console.log(`Number of wallets to fund: ${fundConfig.numWallets}`);
+  console.log(`Amount per wallet: ${fundConfig.fundingAmount} MON`);
 
   // Derive master wallet (index 0) and worker wallets (indices 1-N)
-  const allWallets = deriveWallets(config.mnemonic, config.numWallets + 1);
+  const allWallets = deriveWallets(fundConfig.mnemonic, fundConfig.numWallets + 1);
   const masterWallet = allWallets[0]!;
   const workerWallets = allWallets.slice(1);
 
@@ -28,7 +86,7 @@ async function main() {
   const masterBalance = await getBalance(masterWallet);
   console.log(`Master balance: ${formatEther(masterBalance)} MON`);
 
-  const fundingAmount = parseEther(config.walletFundingAmount);
+  const fundingAmount = parseEther(fundConfig.fundingAmount);
   const totalNeeded = fundingAmount * BigInt(workerWallets.length);
 
   console.log(`\nTotal needed: ${formatEther(totalNeeded)} MON`);
@@ -49,7 +107,7 @@ async function main() {
   for (const wallet of workerWallets) {
     try {
       console.log(`\nWallet [${wallet.index}]: ${wallet.address}`);
-      console.log(`  Sending: ${config.walletFundingAmount} MON`);
+      console.log(`  Sending: ${fundConfig.fundingAmount} MON`);
 
       const hash = await sendNative(masterWallet, wallet.address, fundingAmount);
 

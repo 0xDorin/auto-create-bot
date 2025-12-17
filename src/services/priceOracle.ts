@@ -123,11 +123,10 @@ export async function calculateMonAmount(
   const remainingPoints = targetPoints - createPoints;
 
   if (remainingPoints <= 0) {
-    throw new Error(
-      `Target points (${targetPoints}) is too low. ` +
-        `Create fee alone earns ${createPoints.toFixed(2)} points ` +
-        `(10 MON × $${monPrice.toFixed(6)} × 8)`
-    );
+    console.log(`⚠️  Target points (${targetPoints}) ≤ Create fee points (${createPoints.toFixed(2)})`);
+    console.log(`   Create fee: 10 MON × $${monPrice.toFixed(6)} × 8 = ${createPoints.toFixed(2)} pts`);
+    console.log(`   → Skipping initial buy (create only)`);
+    return 0;
   }
 
   // Buy points = buyAmount × 0.01 × 10 = buyAmount × 0.1

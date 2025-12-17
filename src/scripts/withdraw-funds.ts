@@ -1,20 +1,73 @@
 /**
  * Withdraw all MON from worker wallets back to master wallet
+ *
+ * Usage:
+ *   npm run withdraw-funds:create  (for Token Create Bot wallets)
+ *   npm run withdraw-funds:volume  (for Simple Volume Bot wallets)
  */
 
-import { parseEther, formatEther } from 'viem';
+import { formatEther } from 'viem';
 import { deriveWallets, getBalance, sendNative } from '../services/wallet';
 import { config } from '../config';
 
+type WalletMode = 'create' | 'volume';
+
+interface WithdrawConfig {
+  title: string;
+  mnemonic: string;
+  numWallets: number;
+}
+
 async function main() {
+  // Get mode from command line argument
+  const mode = process.argv[2] as WalletMode;
+
+  if (!mode || (mode !== 'create' && mode !== 'volume')) {
+    console.error('❌ Invalid mode. Use: create or volume');
+    console.error('Usage: tsx src/scripts/withdraw-funds.ts <create|volume>');
+    process.exit(1);
+  }
+
+  // Get withdraw configuration based on mode
+  const withdrawConfig = getWithdrawConfig(mode);
+
+  // Execute withdrawal
+  await withdrawFunds(withdrawConfig);
+}
+
+function getWithdrawConfig(mode: WalletMode): WithdrawConfig {
+  if (mode === 'create') {
+    return {
+      title: '💼 WITHDRAW FROM TOKEN CREATE BOT WALLETS',
+      mnemonic: config.mnemonic,
+      numWallets: config.numWallets,
+    };
+  } else {
+    const volumeMnemonic = process.env.VOLUME_MNEMONIC;
+    if (!volumeMnemonic) {
+      console.error('❌ VOLUME_MNEMONIC not found in .env');
+      process.exit(1);
+    }
+
+    const numWallets = parseInt(process.env.VOLUME_WALLETS || '24');
+
+    return {
+      title: '📊 WITHDRAW FROM SIMPLE VOLUME BOT WALLETS',
+      mnemonic: volumeMnemonic,
+      numWallets: numWallets,
+    };
+  }
+}
+
+async function withdrawFunds(withdrawConfig: WithdrawConfig) {
   console.log('\n' + '='.repeat(80));
-  console.log('WITHDRAW FUNDS TO MASTER WALLET');
+  console.log(withdrawConfig.title);
   console.log('='.repeat(80));
   console.log(`\nNetwork: ${config.networkMode}`);
-  console.log(`Number of worker wallets: ${config.numWallets}`);
+  console.log(`Number of worker wallets: ${withdrawConfig.numWallets}`);
 
   // Derive master wallet (index 0) and worker wallets (indices 1-N)
-  const allWallets = deriveWallets(config.mnemonic, config.numWallets + 1);
+  const allWallets = deriveWallets(withdrawConfig.mnemonic, withdrawConfig.numWallets + 1);
   const masterWallet = allWallets[0]!;
   const workerWallets = allWallets.slice(1);
 

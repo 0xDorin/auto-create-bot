@@ -12,6 +12,7 @@ const METADATA_FILE = resolve(DATA_DIR, 'metadata.json');
 // Use SERVICE_NAME env var for separate state files per service
 const SERVICE_NAME = process.env.SERVICE_NAME || 'default';
 const STATE_FILE = resolve(DATA_DIR, `state-${SERVICE_NAME}.json`);
+const VOLUME_STATE_FILE = resolve(DATA_DIR, 'volume-state.json');
 
 /**
  * State lock manager to prevent concurrent state modifications
@@ -168,6 +169,17 @@ export interface BotState {
 }
 
 /**
+ * Volume bot state
+ */
+export interface VolumeState {
+  currentWalletIndex: number;    // Current wallet being processed (0-based)
+  currentWalletTrades: number;   // Number of trades completed by current wallet (0-4)
+  nextTokenIndex: number;        // Next token index to use from eligible tokens list
+  totalCompletedTrades: number;  // Total number of completed trades
+  lastTradeTimestamp?: number;   // Timestamp of last trade (for resuming)
+}
+
+/**
  * Load bot state
  */
 export function loadState(): BotState {
@@ -211,12 +223,69 @@ export async function updateState(
  * Reset bot state
  */
 export async function resetState(): Promise<void> {
+  const today = new Date().toISOString().split('T')[0]; // "2025-01-10"
   const emptyState: BotState = {
     tokensCreated: 0,
     createdTokens: [],
     startTime: undefined,
     lastCreatedAt: undefined,
+    lastRunDate: today,
   };
   await saveState(emptyState);
   console.log('Bot state reset');
+}
+
+/**
+ * Load volume bot state
+ */
+export function loadVolumeState(): VolumeState {
+  if (!existsSync(VOLUME_STATE_FILE)) {
+    return {
+      currentWalletIndex: 0,
+      currentWalletTrades: 0,
+      nextTokenIndex: 0,
+      totalCompletedTrades: 0,
+    };
+  }
+
+  const content = readFileSync(VOLUME_STATE_FILE, 'utf-8');
+  return JSON.parse(content) as VolumeState;
+}
+
+/**
+ * Save volume bot state (with lock to prevent concurrent writes)
+ */
+export async function saveVolumeState(state: VolumeState): Promise<void> {
+  await stateLock.withLock(() => {
+    ensureDataDir();
+    writeFileSync(VOLUME_STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+  });
+}
+
+/**
+ * Update volume state atomically
+ */
+export async function updateVolumeState(
+  updater: (state: VolumeState) => void | Promise<void>
+): Promise<void> {
+  await stateLock.withLock(async () => {
+    const state = loadVolumeState();
+    await updater(state);
+    ensureDataDir();
+    writeFileSync(VOLUME_STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+  });
+}
+
+/**
+ * Reset volume bot state
+ */
+export async function resetVolumeState(): Promise<void> {
+  const emptyState: VolumeState = {
+    currentWalletIndex: 0,
+    currentWalletTrades: 0,
+    nextTokenIndex: 0,
+    totalCompletedTrades: 0,
+  };
+  await saveVolumeState(emptyState);
+  console.log('Volume bot state reset');
 }

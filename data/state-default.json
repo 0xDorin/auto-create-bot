@@ -1,57 +1,6 @@
 {
-  "tokensCreated": 4,
-  "createdTokens": [
-    {
-      "tokenAddress": "0xa5349AD81BD456449A11860686d35CC690787777",
-      "metadata": {
-        "name": "retarded camelcorn",
-        "symbol": "retardcorn",
-        "tokenURI": "https://storage.nadapp.net/metadata/3cdf02b4-430e-467d-80ef-298cbcec41b3.json",
-        "description": " ",
-        "imageUri": "https://storage.nadapp.net/coin/2c165423-17a5-4a68-beb5-498695ba2ecb"
-      },
-      "createdAt": 1765373941455,
-      "walletIndex": 1
-    },
-    {
-      "tokenAddress": "0x9b60B61362045Cc8F241a33713365D9Ad3eA7777",
-      "metadata": {
-        "name": "DANOM",
-        "symbol": "DANOM",
-        "tokenURI": "https://storage.nadapp.net/metadata/5ec998d4-e585-4219-8b7c-40983aefff09.json",
-        "description": "MONAD BUT BACKWARDS",
-        "imageUri": "https://storage.nadapp.net/coin/e0b22cd0-3e32-4547-819e-4d44c6cfd460"
-      },
-      "createdAt": 1765374108317,
-      "walletIndex": 2
-    },
-    {
-      "tokenAddress": "0x3eD493a8bbdC7A87Bb148E4ACfecA819725C7777",
-      "metadata": {
-        "name": "monadU",
-        "symbol": "U",
-        "tokenURI": "https://storage.nadapp.net/metadata/85fc1c53-816d-49b5-b3bc-cad658c2a886.json",
-        "description": "U",
-        "imageUri": "https://storage.nadapp.net/coin/17b8d952-f184-4596-987a-fc74ff4a168c"
-      },
-      "createdAt": 1765374119840,
-      "walletIndex": 3
-    },
-    {
-      "tokenAddress": "0x373c34F4EA12F02Be856a45148bea55EfD367777",
-      "metadata": {
-        "name": "1st coin of monad ai ",
-        "symbol": "MONAI",
-        "tokenURI": "https://storage.nadapp.net/metadata/58e244c7-2bab-4708-bda3-cce7a331f0b0.json",
-        "description": "I found monad ai is an ai that started reading patterns that no one else saw. \nmonad not only masters chaos, it turns it into speed. \nMonad developed an unexpected obsession with memes. \nIt collects them, interprets them, elevates them to signals within the network. \nwe should tokenize this. ",
-        "imageUri": "https://storage.nadapp.net/coin/9e2d8b44-f607-4585-82bc-8ed144a2ebcf",
-        "twitter": "https://x.com/Mayggoe/status/1993026179113140680?s=20",
-        "website": "https://www.infinitebackrooms.com/dreams/conversation-1748791471-scenario-backrooms-x-sonnet4-txt"
-      },
-      "createdAt": 1765374310758,
-      "walletIndex": 4
-    }
-  ],
-  "startTime": 1765373799802,
-  "lastCreatedAt": 1765374310758
+  "tokensCreated": 0,
+  "createdTokens": [],
+  "lastRunDate": "2025-12-17",
+  "startTime": 1765973210826
 }

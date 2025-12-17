@@ -2,16 +2,16 @@
  * Cron job for Railway
  * - Runs once and exits (not a daemon)
  * - Resets state before each run
- * - Uses MODE env var to determine configuration (evening or night)
- * - Evening (21:00): 30 tokens, 4 hours
- * - Night (01:30): 20 tokens, 19.5 hours
+ * - Uses MODE env var to determine configuration (peak or low)
+ * - Peak (21:00): 30 tokens, 4 hours
+ * - Low (01:00): 20 tokens, 15 hours
  */
 
 import { formatEther, parseEther } from 'viem';
 import { deriveWallet, getBalance } from '../services/wallet';
 import { config } from '../config';
 import { runScheduler } from '../services/scheduler';
-import { resetState, loadState } from '../services/storage';
+import { loadState } from '../services/storage';
 import { fetchMonPrice, calculateMonAmount } from '../services/priceOracle';
 
 /**
@@ -28,26 +28,26 @@ interface ModeConfig {
  * Get mode configuration from MODE env var
  */
 function getModeConfig(): ModeConfig {
-  const mode = process.env.MODE || 'evening';
+  const mode = process.env.MODE || 'peak';
 
-  if (mode === 'evening') {
-    // Evening: 21:00-01:00 KST (4 hours, 30 tokens)
+  if (mode === 'peak') {
+    // Peak: 21:00-01:00 KST (4 hours, 30 tokens)
     return {
-      name: 'evening',
+      name: 'peak',
       tokensToCreate: 30,
       durationHours: 4,
       numWallets: parseInt(process.env.NUM_WALLETS || '10'),
     };
-  } else if (mode === 'night') {
-    // Night: 01:00-16:00 KST (15 hours, 20 tokens)
+  } else if (mode === 'low') {
+    // Low: 01:00-16:00 KST (15 hours, 20 tokens)
     return {
-      name: 'night',
+      name: 'low',
       tokensToCreate: 20,
       durationHours: 15,
       numWallets: parseInt(process.env.NUM_WALLETS || '10'),
     };
   } else {
-    throw new Error(`Invalid MODE: ${mode}. Must be 'evening' or 'night'`);
+    throw new Error(`Invalid MODE: ${mode}. Must be 'peak' or 'low'`);
   }
 }
 
@@ -155,32 +155,23 @@ async function main() {
     const requiredBalance = await calculateRequiredBalance(modeConfig.tokensToCreate);
 
     console.log('💰 Balance Check:');
-    console.log(`  Current: ${formatEther(startBalance)} MON`);
+    console.log(`  Master wallet: ${formatEther(startBalance)} MON`);
     console.log(`  Required: ${formatEther(requiredBalance)} MON`);
 
     if (startBalance < requiredBalance) {
-      await sendAlert('Insufficient balance for cron run', {
-        mode: modeConfig.name,
-        current: formatEther(startBalance),
-        required: formatEther(requiredBalance),
-        shortfall: formatEther(requiredBalance - startBalance),
-      });
-      console.log('\n❌ Insufficient balance. Aborting.\n');
-      process.exit(1);
+      console.log(`  ⚠️  WARNING: Master wallet may have insufficient balance`);
+      console.log(`  Shortfall: ${formatEther(requiredBalance - startBalance)} MON`);
+      console.log(`  Proceeding anyway (sub-wallets may have balance)...\n`);
+    } else {
+      console.log('  ✅ Sufficient balance\n');
     }
-
-    console.log('  ✅ Sufficient balance\n');
 
     // 3. Override config with mode settings
     (config as any).totalTokensToCreate = modeConfig.tokensToCreate;
     (config as any).durationHours = modeConfig.durationHours;
     (config as any).numWallets = modeConfig.numWallets;
 
-    // 4. Reset state (each cron run starts fresh)
-    console.log('🔄 Resetting state for new run...');
-    await resetState();
-
-    // 5. Run scheduler
+    // 4. Run scheduler (state will accumulate across runs)
     console.log('🚀 Starting token creation...\n');
     await runScheduler();
 

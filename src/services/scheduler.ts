@@ -2,12 +2,14 @@
  * Token creation scheduler
  */
 
-import { deriveWallets, type WalletInstance } from './wallet';
+import { deriveWallets, getBalance, type WalletInstance } from './wallet';
 import { loadMetadata, loadState, saveState } from './storage';
 import { executeTokenCreation } from './tokenCreator';
 import { config } from '../config';
 import { TIMING } from '../config/constants';
 import type { PreparedToken } from '../types';
+import { calculateMonAmount } from './priceOracle';
+import { parseEther, formatEther } from 'viem';
 
 /**
  * Token creation task
@@ -153,11 +155,39 @@ function generateTasks(
 }
 
 /**
+ * Calculate required balance for token creation
+ * Returns: (10 MON deploy + initialBuy) + 5 MON gas buffer
+ */
+async function calculateRequiredBalance(): Promise<bigint> {
+  const deployFee = parseEther('10');
+  const gasBuffer = parseEther('5');
+
+  let initialBuy: bigint;
+  if (config.initialBuyMode === 'dynamic') {
+    const monAmount = await calculateMonAmount(config.targetPoints);
+    initialBuy = monAmount > 0 ? parseEther(monAmount.toString()) : BigInt(0);
+  } else {
+    initialBuy = parseEther(config.initialBuyAmount);
+  }
+
+  return deployFee + initialBuy + gasBuffer;
+}
+
+/**
+ * Check if wallet has sufficient balance
+ */
+async function checkWalletBalance(wallet: WalletInstance, required: bigint): Promise<boolean> {
+  const balance = await getBalance(wallet);
+  return balance >= required;
+}
+
+/**
  * Execute a single token creation task
+ * Includes wallet balance check and random wallet retry on insufficient balance
  */
 async function executeTask(
   task: TokenTask,
-  wallet: WalletInstance,
+  wallets: WalletInstance[],
   lockManager: WalletLockManager
 ): Promise<void> {
   const scheduledDate = new Date(task.scheduledTime);
@@ -172,29 +202,85 @@ async function executeTask(
     await new Promise((resolve) => setTimeout(resolve, waitTime));
   }
 
-  // Wait for wallet to be available (not locked by another task)
-  while (!lockManager.tryAcquire(task.walletIndex)) {
-    console.log(
-      `\n⏳ Token ${task.tokenIndex + 1}: Wallet [${task.walletIndex + 1}] is busy, waiting...`
-    );
-    await new Promise((resolve) => setTimeout(resolve, TIMING.WALLET_LOCK_POLL_INTERVAL));
+  // Calculate required balance
+  const requiredBalance = await calculateRequiredBalance();
+
+  // Try to find a wallet with sufficient balance
+  let selectedWalletIndex = task.walletIndex;
+  let selectedWallet = wallets[selectedWalletIndex]!;
+  const maxRetries = wallets.length; // Try all wallets once
+  const triedWallets = new Set<number>();
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    // Wait for wallet to be available (not locked by another task)
+    while (!lockManager.tryAcquire(selectedWalletIndex)) {
+      console.log(
+        `\n⏳ Token ${task.tokenIndex + 1}: Wallet [${selectedWalletIndex + 1}] is busy, waiting...`
+      );
+      await new Promise((resolve) => setTimeout(resolve, TIMING.WALLET_LOCK_POLL_INTERVAL));
+    }
+
+    try {
+      // Check wallet balance
+      const hasBalance = await checkWalletBalance(selectedWallet, requiredBalance);
+
+      if (hasBalance) {
+        // Sufficient balance - proceed with token creation
+        console.log(`\n${'='.repeat(80)}`);
+        console.log(`Creating token ${task.tokenIndex + 1}/${config.totalTokensToCreate}: ${task.metadata.symbol}`);
+        console.log(`Wallet [${selectedWalletIndex + 1}]: ${selectedWallet.address}`);
+        console.log(`Required: ${formatEther(requiredBalance)} MON`);
+        console.log(`Scheduled: ${scheduledDate.toLocaleTimeString()}`);
+        console.log(`Actual: ${new Date().toLocaleTimeString()}`);
+        console.log(`${'='.repeat(80)}`);
+
+        await executeTokenCreation(selectedWallet, task.metadata);
+
+        console.log(`✅ Token ${task.tokenIndex + 1} created successfully!`);
+
+        // Release lock before returning
+        lockManager.release(selectedWalletIndex);
+        return; // Success - exit function
+      } else {
+        // Insufficient balance - try another wallet
+        const balance = await getBalance(selectedWallet);
+        console.log(
+          `\n⚠️  Token ${task.tokenIndex + 1}: Wallet [${selectedWalletIndex + 1}] has insufficient balance`
+        );
+        console.log(`   Current: ${formatEther(balance)} MON`);
+        console.log(`   Required: ${formatEther(requiredBalance)} MON`);
+
+        triedWallets.add(selectedWalletIndex);
+        lockManager.release(selectedWalletIndex);
+
+        // Find a random wallet we haven't tried yet
+        const availableWallets = Array.from(
+          { length: wallets.length },
+          (_, i) => i
+        ).filter((i) => !triedWallets.has(i));
+
+        if (availableWallets.length === 0) {
+          throw new Error('All wallets have insufficient balance');
+        }
+
+        // Select random wallet from available ones
+        selectedWalletIndex = availableWallets[Math.floor(Math.random() * availableWallets.length)]!;
+        selectedWallet = wallets[selectedWalletIndex]!;
+
+        console.log(`   Trying random wallet [${selectedWalletIndex + 1}]...`);
+        // Loop will continue to try this new wallet
+      }
+    } catch (error) {
+      // Release lock and re-throw
+      lockManager.release(selectedWalletIndex);
+      throw error;
+    }
   }
 
-  try {
-    console.log(`\n${'='.repeat(80)}`);
-    console.log(`Creating token ${task.tokenIndex + 1}/${config.totalTokensToCreate}: ${task.metadata.symbol}`);
-    console.log(`Wallet [${task.walletIndex + 1}]: ${wallet.address}`);
-    console.log(`Scheduled: ${scheduledDate.toLocaleTimeString()}`);
-    console.log(`Actual: ${new Date().toLocaleTimeString()}`);
-    console.log(`${'='.repeat(80)}`);
-
-    await executeTokenCreation(wallet, task.metadata);
-
-    console.log(`✅ Token ${task.tokenIndex + 1} created successfully!`);
-  } finally {
-    // Always release the lock, even if execution failed
-    lockManager.release(task.walletIndex);
-  }
+  // If we get here, all wallets were tried and failed
+  // Release the last acquired lock before throwing
+  lockManager.release(selectedWalletIndex);
+  throw new Error(`Token ${task.tokenIndex + 1}: All ${maxRetries} wallets have insufficient balance`);
 }
 
 /**
@@ -210,7 +296,13 @@ export async function runScheduler(): Promise<void> {
   console.log(`Number of wallets: ${config.numWallets}`);
   console.log(`Execution mode: ${config.executionMode}`);
   console.log(`Delay randomness: ${(config.delayRandomness * 100).toFixed(0)}%`);
-  console.log(`Initial buy amount: ${config.initialBuyAmount} MON`);
+
+  if (config.initialBuyMode === 'dynamic') {
+    console.log(`Initial buy mode: dynamic (${config.targetPoints} points target)`);
+  } else {
+    console.log(`Initial buy mode: fixed (${config.initialBuyAmount} MON)`);
+  }
+
   console.log(`Sell percentage: ${config.sellPercentage}%`);
 
   // Load metadata
@@ -311,18 +403,22 @@ export async function runScheduler(): Promise<void> {
   if (config.executionMode === 'parallel') {
     // Parallel execution (no retry, skip failures)
     const results = await Promise.allSettled(
-      tasks.map((task) =>
-        executeTask(task, wallets[task.walletIndex]!, lockManager).catch((error) => {
-          console.error(`\n❌ Task ${task.tokenIndex + 1} failed, skipping:`);
-          console.error(error instanceof Error ? error.stack || error.message : error);
-          // Don't throw, just skip this token
-        })
-      )
+      tasks.map((task) => executeTask(task, wallets, lockManager))
     );
 
     // Count successes and failures
-    const successes = results.filter((r) => r.status === 'fulfilled').length;
-    const failures = results.filter((r) => r.status === 'rejected').length;
+    let successes = 0;
+    let failures = 0;
+
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        successes++;
+      } else {
+        failures++;
+        console.error(`\n❌ Task ${index + 1} failed, skipping:`);
+        console.error(result.reason instanceof Error ? result.reason.stack || result.reason.message : result.reason);
+      }
+    });
 
     console.log('\n' + '='.repeat(80));
     console.log('📊 EXECUTION SUMMARY');
@@ -334,7 +430,7 @@ export async function runScheduler(): Promise<void> {
     // Sequential execution (skip failures, continue)
     for (const task of sortedTasks) {
       try {
-        await executeTask(task, wallets[task.walletIndex]!, lockManager);
+        await executeTask(task, wallets, lockManager);
       } catch (error) {
         console.error(`\n❌ Token ${task.tokenIndex + 1} failed, skipping:`);
         console.error(error instanceof Error ? error.stack || error.message : error);

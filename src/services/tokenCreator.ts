@@ -2,7 +2,7 @@
  * Token creation workflow
  */
 
-import { parseEther } from "viem";
+import { parseEther, formatEther } from "viem";
 import { createToken, sellTokens } from "./contracts";
 import { config } from "../config";
 import { updateState } from "./storage";
@@ -54,8 +54,12 @@ export async function executeTokenCreation(
     });
   });
 
-  // Sell tokens if configured (WITH RETRY - must succeed to ensure wallet only has MON)
-  if (config.sellPercentage > 0) {
+  // Sell tokens if configured AND initial buy was > 0 (WITH RETRY - must succeed to ensure wallet only has MON)
+  if (initialBuyAmount === 0n) {
+    console.log(`⏭️  Skipping sell (no initial buy)`);
+  } else if (config.sellPercentage === 0) {
+    console.log(`⏭️  Skipping sell (sellPercentage is 0, holding ${formatEther(tokensReceived)} tokens)`);
+  } else if (config.sellPercentage > 0) {
     const sellAmount =
       (tokensReceived * BigInt(config.sellPercentage)) / BigInt(100);
 

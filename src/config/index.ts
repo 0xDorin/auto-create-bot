@@ -174,8 +174,8 @@ function parseConfig(): BotConfig {
     throw new Error('INITIAL_BUY_MODE must be either "fixed" or "dynamic"');
   }
 
-  if (config.targetPoints <= 0) {
-    throw new Error("TARGET_POINTS must be greater than 0");
+  if (config.targetPoints < 0) {
+    throw new Error("TARGET_POINTS must be greater than or equal to 0 (0 = skip buy/sell)");
   }
 
   // Validate mnemonic (basic check)

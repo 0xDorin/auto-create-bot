@@ -66,16 +66,22 @@ export async function createToken(
   },
   initialBuyAmount: bigint
 ): Promise<{ tokenAddress: Address; tokensReceived: bigint; hash: Hash }> {
-  // Get expected tokens from Lens
-  const expectedTokens = await wallet.publicClient.readContract({
-    address: ADDRS.LENS as Address,
-    abi: lensAbi,
-    functionName: "getInitialBuyAmountOut",
-    args: [initialBuyAmount],
-  });
+  // Get expected tokens from Lens (skip if initialBuyAmount is 0)
+  let expectedTokens = BigInt(0);
+  let minTokens = BigInt(0);
 
-  const minTokens =
-    (expectedTokens * BigInt(10000 - TX_DEFAULTS.SLIPPAGE_BPS)) / BigInt(10000);
+  if (initialBuyAmount > 0n) {
+    expectedTokens = await wallet.publicClient.readContract({
+      address: ADDRS.LENS as Address,
+      abi: lensAbi,
+      functionName: "getInitialBuyAmountOut",
+      args: [initialBuyAmount],
+    });
+
+    minTokens =
+      (expectedTokens * BigInt(10000 - TX_DEFAULTS.SLIPPAGE_BPS)) / BigInt(10000);
+  }
+
   const deployFee = parseEther("10");
   const totalValue = deployFee + initialBuyAmount;
 
@@ -146,6 +152,96 @@ export async function createToken(
   console.log(`  Tokens received: ${formatEther(tokensReceived)}`);
 
   return { tokenAddress, tokensReceived, hash };
+}
+
+/**
+ * Buy tokens on bonding curve (for volume trading)
+ */
+export async function buyTokens(
+  wallet: WalletInstance,
+  tokenAddress: Address,
+  monAmount: bigint
+): Promise<bigint> {
+  // Check if graduated
+  const isGraduated = await wallet.publicClient.readContract({
+    address: ADDRS.LENS as Address,
+    abi: lensAbi,
+    functionName: "isGraduated",
+    args: [tokenAddress],
+  });
+
+  if (isGraduated) {
+    throw new Error("Token has graduated - use DEX router instead");
+  }
+
+  // Get quote
+  const [router, expectedTokens] = await wallet.publicClient.readContract({
+    address: ADDRS.LENS as Address,
+    abi: lensAbi,
+    functionName: "getAmountOut",
+    args: [tokenAddress, monAmount, true],
+  });
+
+  const minTokens =
+    (expectedTokens * BigInt(10000 - TX_DEFAULTS.SLIPPAGE_BPS)) / BigInt(10000);
+  const deadline = BigInt(
+    Math.floor(Date.now() / 1000) + TX_DEFAULTS.DEADLINE_OFFSET
+  );
+
+  console.log(`  Buying tokens with ${formatEther(monAmount)} MON`);
+  console.log(`  Expected tokens: ${formatEther(expectedTokens)}`);
+  console.log(`  Min tokens (1% slippage): ${formatEther(minTokens)}`);
+
+  // Buy
+  const hash = await wallet.walletClient.writeContract({
+    address: ADDRS.BONDING_CURVE_ROUTER as Address,
+    abi: bondingCurveRouterAbi,
+    functionName: "buy",
+    args: [
+      {
+        amountOutMin: minTokens,
+        token: tokenAddress,
+        to: wallet.address,
+        deadline,
+      },
+    ],
+    account: wallet.account,
+    chain: wallet.walletClient.chain,
+    value: monAmount,
+  });
+
+  console.log(`  Transaction hash: ${hash}`);
+
+  const receipt = await wallet.publicClient.waitForTransactionReceipt({ hash });
+
+  if (receipt.status === "reverted") {
+    throw new Error(`Token buy reverted: ${hash}`);
+  }
+
+  // Wait for RPC sync
+  await new Promise((resolve) => setTimeout(resolve, TIMING.RPC_SYNC_DELAY));
+
+  // Get token balance with retry
+  let tokensReceived: bigint = 0n;
+  for (let attempt = 1; attempt <= TIMING.BALANCE_MAX_RETRIES; attempt++) {
+    try {
+      tokensReceived = await wallet.publicClient.readContract({
+        address: tokenAddress,
+        abi: erc20Abi,
+        functionName: "balanceOf",
+        args: [wallet.address],
+      });
+      break;
+    } catch (error) {
+      if (attempt === TIMING.BALANCE_MAX_RETRIES) throw error;
+      console.log(`  ⚠️  balanceOf failed (attempt ${attempt}/${TIMING.BALANCE_MAX_RETRIES}), retrying...`);
+      await new Promise((resolve) => setTimeout(resolve, TIMING.BALANCE_RETRY_DELAY));
+    }
+  }
+
+  console.log(`  ✅ Buy successful - received ${formatEther(tokensReceived)} tokens`);
+
+  return tokensReceived;
 }
 
 /**

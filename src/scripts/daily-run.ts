@@ -10,7 +10,7 @@ import { formatEther, parseEther } from 'viem';
 import { deriveWallet, getBalance } from '../services/wallet';
 import { config } from '../config';
 import { runScheduler } from '../services/scheduler';
-import { loadState, resetState } from '../services/storage';
+import { loadState } from '../services/storage';
 import { fetchMonPrice, calculateMonAmount } from '../services/priceOracle';
 
 /**
@@ -118,8 +118,8 @@ function sleep(ms: number): Promise<void> {
  * Reset state for new run
  */
 async function resetRunState() {
-  console.log('🔄 Resetting state...');
-  await resetState();
+  console.log('🔄 State will accumulate (no reset)');
+  // State accumulates across runs - no reset
 }
 
 /**
@@ -143,19 +143,16 @@ async function executeRun(): Promise<void> {
   const requiredBalance = await calculateRequiredBalance();
 
   console.log('💰 Balance Check:');
-  console.log(`  Current: ${formatEther(startBalance)} MON`);
+  console.log(`  Master wallet: ${formatEther(startBalance)} MON`);
   console.log(`  Required: ${formatEther(requiredBalance)} MON`);
 
   if (startBalance < requiredBalance) {
-    await sendAlert('Insufficient balance for run', {
-      current: formatEther(startBalance),
-      required: formatEther(requiredBalance),
-      shortfall: formatEther(requiredBalance - startBalance),
-    });
-    throw new Error('Insufficient balance');
+    console.log(`  ⚠️  WARNING: Master wallet may have insufficient balance`);
+    console.log(`  Shortfall: ${formatEther(requiredBalance - startBalance)} MON`);
+    console.log(`  Proceeding anyway (sub-wallets may have balance)...\n`);
+  } else {
+    console.log('  ✅ Sufficient balance\n');
   }
-
-  console.log('  ✅ Sufficient balance\n');
 
   // 3. Reset state
   resetRunState();
