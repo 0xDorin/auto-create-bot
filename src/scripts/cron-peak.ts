@@ -70,62 +70,87 @@ async function sendReport(
 }
 
 /**
+ * Calculate absolute end time for peak mode
+ * Peak: 21:00 KST today → 01:00 KST tomorrow
+ */
+function getEndTime(): Date {
+  const now = new Date();
+  const kstOffset = 9 * 60 * 60 * 1000; // KST = UTC + 9 hours
+  const kstNow = new Date(now.getTime() + kstOffset);
+
+  const kstHour = kstNow.getUTCHours();
+
+  // If current time is before 01:00 KST, end time is 01:00 today
+  // If current time is 01:00 or after, end time is 01:00 tomorrow
+  const endTime = new Date(kstNow);
+  endTime.setUTCHours(1, 0, 0, 0);
+
+  if (kstHour >= 1) {
+    // Add 1 day
+    endTime.setUTCDate(endTime.getUTCDate() + 1);
+  }
+
+  // Convert back to UTC
+  return new Date(endTime.getTime() - kstOffset);
+}
+
+/**
  * Main cron run function
  */
 async function main() {
   // Set SERVICE_NAME for separate state file
   process.env.SERVICE_NAME = MODE_CONFIG.name;
 
-  console.log('\n' + '='.repeat(80));
-  console.log('🤖 CRON JOB STARTED - PEAK TIME MODE');
-  console.log('='.repeat(80));
-  console.log(`Time: ${new Date().toLocaleString()}`);
-  console.log(`Network: ${config.networkMode}`);
-  console.log(`Tokens to create: ${MODE_CONFIG.tokensToCreate}`);
-  console.log(`Duration: ${MODE_CONFIG.durationHours} hours (21:00-01:00 KST)`);
-  console.log(`Wallets: ${MODE_CONFIG.numWallets}`);
-  console.log('='.repeat(80) + '\n');
+  console.log(`\n🤖 CRON:PEAK Started [${config.networkMode}] - 21:00-01:00 KST (30 tokens / 4 hours)`);
+
+  // Check if already past end time
+  const endTime = getEndTime();
+  const now = new Date();
+
+  if (now >= endTime) {
+    console.log('⏰ Past end time (01:00 KST). Skipping.\n');
+    process.exit(0);
+  }
+
+  const remainingMinutes = Math.floor((endTime.getTime() - now.getTime()) / 60000);
+  const remainingHours = remainingMinutes / 60;
+
+  console.log(`⏰ Remaining: ${remainingMinutes}min (${remainingHours.toFixed(2)}h)`);
 
   try {
-    // 1. Check date and reset state if needed
-    const today = new Date().toISOString().split('T')[0]; // "2025-01-10"
+    const today = new Date().toISOString().split('T')[0];
     const state = loadState();
 
     if (state.lastRunDate !== today) {
-      console.log(`📅 Date Check:`);
-      console.log(`  Last run: ${state.lastRunDate || 'Never'}`);
-      console.log(`  Today: ${today}`);
-      console.log(`  → New day detected, resetting state...\n`);
-
+      console.log(`📅 New day detected, resetting state...`);
       await resetState();
-    } else {
-      console.log(`📅 Date Check: Same day (${today}), keeping existing state\n`);
     }
 
-    // 2. Fetch current MON price
     const priceData = await fetchMonPrice();
-    console.log(`💵 MON: $${priceData.price.toFixed(6)}\n`);
+    console.log(`💵 MON: $${priceData.price.toFixed(6)}`);
 
-    // 3. Override config with mode settings
-    (config as any).totalTokensToCreate = MODE_CONFIG.tokensToCreate;
-    (config as any).durationHours = MODE_CONFIG.durationHours;
+    const adjustedDuration = Math.min(MODE_CONFIG.durationHours, remainingHours);
+
+    const adjustedTokens = Math.round(
+      (adjustedDuration / MODE_CONFIG.durationHours) * MODE_CONFIG.tokensToCreate
+    );
+
+    console.log(`⚙️  Creating ${adjustedTokens} tokens over ${adjustedDuration.toFixed(2)}h`);
+
+    (config as any).totalTokensToCreate = adjustedTokens;
+    (config as any).durationHours = adjustedDuration;
     (config as any).numWallets = MODE_CONFIG.numWallets;
 
-    // 4. Get master wallet for report
     const masterWallet = deriveWallet(config.mnemonic, 0);
     const startBalance = await getBalance(masterWallet);
 
-    // 5. Run scheduler (wallet balance check happens per-token)
-    console.log('🚀 Starting token creation...\n');
-    console.log('💡 Note: Wallet balance will be checked before each token creation\n');
     await runScheduler();
 
-    // 6. Send report
     const endBalance = await getBalance(masterWallet);
     const finalState = loadState();
     await sendReport(startBalance, endBalance, finalState.tokensCreated);
 
-    console.log('✅ Peak time cron job completed successfully!\n');
+    console.log('✅ Completed\n');
     process.exit(0);
   } catch (error) {
     await sendAlert('Peak time cron job failed', {

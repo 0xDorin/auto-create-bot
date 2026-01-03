@@ -6,36 +6,35 @@
  * - Resets state on new day
  */
 
-import { formatEther, parseEther } from 'viem';
-import { deriveWallet, getBalance } from '../services/wallet';
-import { config } from '../config';
-import { runScheduler } from '../services/scheduler';
-import { loadState, resetState } from '../services/storage';
-import { fetchMonPrice, calculateMonAmount } from '../services/priceOracle';
+import { formatEther, parseEther } from "viem";
+import { deriveWallet, getBalance } from "../services/wallet";
+import { config } from "../config";
+import { runScheduler } from "../services/scheduler";
+import { loadState, resetState } from "../services/storage";
+import { fetchMonPrice, calculateMonAmount } from "../services/priceOracle";
 
 /**
  * Low time mode configuration (hardcoded)
  */
 const MODE_CONFIG = {
-  name: 'low',
+  name: "low",
   tokensToCreate: 20,
   durationHours: 15,
-  numWallets: parseInt(process.env.NUM_WALLETS || '10'),
+  numWallets: parseInt(process.env.NUM_WALLETS || "10"),
 };
-
 
 /**
  * Send alert (placeholder - implement with your notification system)
  */
 async function sendAlert(message: string, details?: any) {
-  console.error('\n' + '='.repeat(80));
-  console.error('🚨 ALERT');
-  console.error('='.repeat(80));
+  console.error("\n" + "=".repeat(80));
+  console.error("🚨 ALERT");
+  console.error("=".repeat(80));
   console.error(message);
   if (details) {
     console.error(JSON.stringify(details, null, 2));
   }
-  console.error('='.repeat(80) + '\n');
+  console.error("=".repeat(80) + "\n");
 
   // TODO: Implement actual notification
   // - Telegram bot
@@ -54,19 +53,45 @@ async function sendReport(
 ) {
   const spent = startBalance - endBalance;
 
-  console.log('\n' + '='.repeat(80));
-  console.log('📊 RUN REPORT');
-  console.log('='.repeat(80));
+  console.log("\n" + "=".repeat(80));
+  console.log("📊 RUN REPORT");
+  console.log("=".repeat(80));
   console.log(`Mode: ${MODE_CONFIG.name}`);
   console.log(`Time: ${new Date().toLocaleString()}`);
   console.log(`Tokens created: ${tokensCreated}`);
   console.log(`Start balance: ${formatEther(startBalance)} MON`);
   console.log(`End balance: ${formatEther(endBalance)} MON`);
   console.log(`Spent: ${formatEther(spent)} MON`);
-  console.log(`Cost per token: ${formatEther(spent / BigInt(tokensCreated || 1))} MON`);
-  console.log('='.repeat(80) + '\n');
+  console.log(
+    `Cost per token: ${formatEther(spent / BigInt(tokensCreated || 1))} MON`
+  );
+  console.log("=".repeat(80) + "\n");
 
   // TODO: Send to monitoring system
+}
+
+/**
+ * Calculate absolute end time for low mode
+ * Low: 01:00 KST → 16:00 KST (same day)
+ */
+function getEndTime(): Date {
+  const now = new Date();
+  const kstOffset = 9 * 60 * 60 * 1000; // KST = UTC + 9 hours
+  const kstNow = new Date(now.getTime() + kstOffset);
+
+  const kstHour = kstNow.getUTCHours();
+
+  // End time is 16:00 KST today
+  const endTime = new Date(kstNow);
+  endTime.setUTCHours(16, 0, 0, 0);
+
+  // If current time is already past 16:00 KST, set end time to tomorrow 16:00
+  if (kstHour >= 16) {
+    endTime.setUTCDate(endTime.getUTCDate() + 1);
+  }
+
+  // Convert back to UTC
+  return new Date(endTime.getTime() - kstOffset);
 }
 
 /**
@@ -76,65 +101,71 @@ async function main() {
   // Set SERVICE_NAME for separate state file
   process.env.SERVICE_NAME = MODE_CONFIG.name;
 
-  console.log('\n' + '='.repeat(80));
-  console.log('🤖 CRON JOB STARTED - LOW TIME MODE');
-  console.log('='.repeat(80));
-  console.log(`Time: ${new Date().toLocaleString()}`);
-  console.log(`Network: ${config.networkMode}`);
-  console.log(`Tokens to create: ${MODE_CONFIG.tokensToCreate}`);
-  console.log(`Duration: ${MODE_CONFIG.durationHours} hours (01:00-16:00 KST)`);
-  console.log(`Wallets: ${MODE_CONFIG.numWallets}`);
-  console.log('='.repeat(80) + '\n');
+  console.log(`\n🤖 CRON:LOW Started [${config.networkMode}] - 01:00-16:00 KST (20 tokens / 15 hours)`);
+
+  // Check if already past end time
+  const endTime = getEndTime();
+  const now = new Date();
+
+  if (now >= endTime) {
+    console.log("⏰ Past end time (16:00 KST). Skipping.\n");
+    process.exit(0);
+  }
+
+  const remainingMinutes = Math.floor(
+    (endTime.getTime() - now.getTime()) / 60000
+  );
+  const remainingHours = remainingMinutes / 60;
+
+  console.log(`⏰ Remaining: ${remainingMinutes}min (${remainingHours.toFixed(2)}h)`);
 
   try {
-    // 1. Check date and reset state if needed
-    const today = new Date().toISOString().split('T')[0]; // "2025-01-10"
+    const today = new Date().toISOString().split("T")[0];
     const state = loadState();
 
     if (state.lastRunDate !== today) {
-      console.log(`📅 Date Check:`);
-      console.log(`  Last run: ${state.lastRunDate || 'Never'}`);
-      console.log(`  Today: ${today}`);
-      console.log(`  → New day detected, resetting state...\n`);
-
+      console.log(`📅 New day detected, resetting state...`);
       await resetState();
-    } else {
-      console.log(`📅 Date Check: Same day (${today}), keeping existing state\n`);
     }
 
-    // 2. Fetch current MON price
     const priceData = await fetchMonPrice();
-    console.log(`💵 MON: $${priceData.price.toFixed(6)}\n`);
+    console.log(`💵 MON: $${priceData.price.toFixed(6)}`);
 
-    // 3. Override config with mode settings
-    (config as any).totalTokensToCreate = MODE_CONFIG.tokensToCreate;
-    (config as any).durationHours = MODE_CONFIG.durationHours;
+    const adjustedDuration = Math.min(
+      MODE_CONFIG.durationHours,
+      remainingHours
+    );
+
+    const adjustedTokens = Math.round(
+      (adjustedDuration / MODE_CONFIG.durationHours) *
+        MODE_CONFIG.tokensToCreate
+    );
+
+    console.log(`⚙️  Creating ${adjustedTokens} tokens over ${adjustedDuration.toFixed(2)}h`);
+
+    (config as any).totalTokensToCreate = adjustedTokens;
+    (config as any).durationHours = adjustedDuration;
     (config as any).numWallets = MODE_CONFIG.numWallets;
 
-    // 4. Get master wallet for report
     const masterWallet = deriveWallet(config.mnemonic, 0);
     const startBalance = await getBalance(masterWallet);
 
-    // 5. Run scheduler (wallet balance check happens per-token)
-    console.log('🚀 Starting token creation...\n');
-    console.log('💡 Note: Wallet balance will be checked before each token creation\n');
     await runScheduler();
 
-    // 6. Send report
     const endBalance = await getBalance(masterWallet);
     const finalState = loadState();
     await sendReport(startBalance, endBalance, finalState.tokensCreated);
 
-    console.log('✅ Low time cron job completed successfully!\n');
+    console.log("✅ Completed\n");
     process.exit(0);
   } catch (error) {
-    await sendAlert('Low time cron job failed', {
+    await sendAlert("Low time cron job failed", {
       mode: MODE_CONFIG.name,
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
     });
 
-    console.error('\n❌ Low time cron job failed:', error);
+    console.error("\n❌ Low time cron job failed:", error);
     process.exit(1);
   }
 }

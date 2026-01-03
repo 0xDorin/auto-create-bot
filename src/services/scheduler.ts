@@ -2,14 +2,14 @@
  * Token creation scheduler
  */
 
-import { deriveWallets, getBalance, type WalletInstance } from './wallet';
-import { loadMetadata, loadState, saveState } from './storage';
-import { executeTokenCreation } from './tokenCreator';
-import { config } from '../config';
-import { TIMING } from '../config/constants';
-import type { PreparedToken } from '../types';
-import { calculateMonAmount } from './priceOracle';
-import { parseEther, formatEther } from 'viem';
+import { deriveWallets, getBalance, type WalletInstance } from "./wallet";
+import { loadMetadata, loadState, saveState } from "./storage";
+import { executeTokenCreation } from "./tokenCreator";
+import { config } from "../config";
+import { TIMING } from "../config/constants";
+import type { PreparedToken } from "../types";
+import { calculateMonAmount } from "./priceOracle";
+import { parseEther, formatEther } from "viem";
 
 /**
  * Token creation task
@@ -77,7 +77,7 @@ function generateTasks(
   const tasks: TokenTask[] = [];
   const averageDelay = durationMs / totalTokens;
 
-  if (config.executionMode === 'parallel') {
+  if (config.executionMode === "parallel") {
     // Parallel mode: assign random execution times distributed across duration
     if (durationMs === 0) {
       // No duration left - create all tasks immediately
@@ -133,9 +133,10 @@ function generateTasks(
     } else {
       for (let i = 0; i < totalTokens; i++) {
         const baseDelay = i * averageDelay;
-        const delay = config.delayRandomness > 0
-          ? getRandomDelay(baseDelay, config.delayRandomness)
-          : baseDelay;
+        const delay =
+          config.delayRandomness > 0
+            ? getRandomDelay(baseDelay, config.delayRandomness)
+            : baseDelay;
 
         // Select random metadata
         const randomMetadataIndex = Math.floor(Math.random() * metadata.length);
@@ -159,11 +160,11 @@ function generateTasks(
  * Returns: (10 MON deploy + initialBuy) + 5 MON gas buffer
  */
 async function calculateRequiredBalance(): Promise<bigint> {
-  const deployFee = parseEther('10');
-  const gasBuffer = parseEther('5');
+  const deployFee = parseEther("10");
+  const gasBuffer = parseEther("5");
 
   let initialBuy: bigint;
-  if (config.initialBuyMode === 'dynamic') {
+  if (config.initialBuyMode === "dynamic") {
     const monAmount = await calculateMonAmount(config.targetPoints);
     initialBuy = monAmount > 0 ? parseEther(monAmount.toString()) : BigInt(0);
   } else {
@@ -176,7 +177,10 @@ async function calculateRequiredBalance(): Promise<bigint> {
 /**
  * Check if wallet has sufficient balance
  */
-async function checkWalletBalance(wallet: WalletInstance, required: bigint): Promise<boolean> {
+async function checkWalletBalance(
+  wallet: WalletInstance,
+  required: bigint
+): Promise<boolean> {
   const balance = await getBalance(wallet);
   return balance >= required;
 }
@@ -196,7 +200,9 @@ async function executeTask(
 
   if (waitTime > 0) {
     console.log(
-      `\n⏰ Token ${task.tokenIndex + 1} scheduled at ${scheduledDate.toLocaleTimeString()}`
+      `\n⏰ Token ${
+        task.tokenIndex + 1
+      } scheduled at ${scheduledDate.toLocaleTimeString()}`
     );
     console.log(`   Waiting ${(waitTime / 1000 / 60).toFixed(2)} minutes...`);
     await new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -215,24 +221,37 @@ async function executeTask(
     // Wait for wallet to be available (not locked by another task)
     while (!lockManager.tryAcquire(selectedWalletIndex)) {
       console.log(
-        `\n⏳ Token ${task.tokenIndex + 1}: Wallet [${selectedWalletIndex + 1}] is busy, waiting...`
+        `\n⏳ Token ${task.tokenIndex + 1}: Wallet [${
+          selectedWalletIndex + 1
+        }] is busy, waiting...`
       );
-      await new Promise((resolve) => setTimeout(resolve, TIMING.WALLET_LOCK_POLL_INTERVAL));
+      await new Promise((resolve) =>
+        setTimeout(resolve, TIMING.WALLET_LOCK_POLL_INTERVAL)
+      );
     }
 
     try {
       // Check wallet balance
-      const hasBalance = await checkWalletBalance(selectedWallet, requiredBalance);
+      const hasBalance = await checkWalletBalance(
+        selectedWallet,
+        requiredBalance
+      );
 
       if (hasBalance) {
         // Sufficient balance - proceed with token creation
-        console.log(`\n${'='.repeat(80)}`);
-        console.log(`Creating token ${task.tokenIndex + 1}/${config.totalTokensToCreate}: ${task.metadata.symbol}`);
-        console.log(`Wallet [${selectedWalletIndex + 1}]: ${selectedWallet.address}`);
+        console.log(`\n${"=".repeat(80)}`);
+        console.log(
+          `Creating token ${task.tokenIndex + 1}/${
+            config.totalTokensToCreate
+          }: ${task.metadata.symbol}`
+        );
+        console.log(
+          `Wallet [${selectedWalletIndex + 1}]: ${selectedWallet.address}`
+        );
         console.log(`Required: ${formatEther(requiredBalance)} MON`);
         console.log(`Scheduled: ${scheduledDate.toLocaleTimeString()}`);
         console.log(`Actual: ${new Date().toLocaleTimeString()}`);
-        console.log(`${'='.repeat(80)}`);
+        console.log(`${"=".repeat(80)}`);
 
         await executeTokenCreation(selectedWallet, task.metadata);
 
@@ -245,7 +264,9 @@ async function executeTask(
         // Insufficient balance - try another wallet
         const balance = await getBalance(selectedWallet);
         console.log(
-          `\n⚠️  Token ${task.tokenIndex + 1}: Wallet [${selectedWalletIndex + 1}] has insufficient balance`
+          `\n⚠️  Token ${task.tokenIndex + 1}: Wallet [${
+            selectedWalletIndex + 1
+          }] has insufficient balance`
         );
         console.log(`   Current: ${formatEther(balance)} MON`);
         console.log(`   Required: ${formatEther(requiredBalance)} MON`);
@@ -260,11 +281,14 @@ async function executeTask(
         ).filter((i) => !triedWallets.has(i));
 
         if (availableWallets.length === 0) {
-          throw new Error('All wallets have insufficient balance');
+          throw new Error("All wallets have insufficient balance");
         }
 
         // Select random wallet from available ones
-        selectedWalletIndex = availableWallets[Math.floor(Math.random() * availableWallets.length)]!;
+        selectedWalletIndex =
+          availableWallets[
+            Math.floor(Math.random() * availableWallets.length)
+          ]!;
         selectedWallet = wallets[selectedWalletIndex]!;
 
         console.log(`   Trying random wallet [${selectedWalletIndex + 1}]...`);
@@ -280,25 +304,33 @@ async function executeTask(
   // If we get here, all wallets were tried and failed
   // Release the last acquired lock before throwing
   lockManager.release(selectedWalletIndex);
-  throw new Error(`Token ${task.tokenIndex + 1}: All ${maxRetries} wallets have insufficient balance`);
+  throw new Error(
+    `Token ${
+      task.tokenIndex + 1
+    }: All ${maxRetries} wallets have insufficient balance`
+  );
 }
 
 /**
  * Run the bot scheduler
  */
 export async function runScheduler(): Promise<void> {
-  console.log('\n' + '='.repeat(80));
-  console.log('TOKEN CREATION BOT STARTED');
-  console.log('='.repeat(80));
+  console.log("\n" + "=".repeat(80));
+  console.log("TOKEN CREATION BOT STARTED");
+  console.log("=".repeat(80));
   console.log(`\nNetwork: ${config.networkMode}`);
   console.log(`Total tokens to create: ${config.totalTokensToCreate}`);
   console.log(`Duration: ${config.durationHours} hours`);
   console.log(`Number of wallets: ${config.numWallets}`);
   console.log(`Execution mode: ${config.executionMode}`);
-  console.log(`Delay randomness: ${(config.delayRandomness * 100).toFixed(0)}%`);
+  console.log(
+    `Delay randomness: ${(config.delayRandomness * 100).toFixed(0)}%`
+  );
 
-  if (config.initialBuyMode === 'dynamic') {
-    console.log(`Initial buy mode: dynamic (${config.targetPoints} points target)`);
+  if (config.initialBuyMode === "dynamic") {
+    console.log(
+      `Initial buy mode: dynamic (${config.targetPoints} points target)`
+    );
   } else {
     console.log(`Initial buy mode: fixed (${config.initialBuyAmount} MON)`);
   }
@@ -314,7 +346,9 @@ export async function runScheduler(): Promise<void> {
     );
   }
 
-  console.log(`\nMetadata loaded: ${metadata.length} entries (will be randomly selected)`);
+  console.log(
+    `\nMetadata loaded: ${metadata.length} entries (will be randomly selected)`
+  );
   metadata.forEach((m, i) => {
     console.log(`  [${i + 1}] ${m.symbol}`);
   });
@@ -323,7 +357,9 @@ export async function runScheduler(): Promise<void> {
   const state = loadState();
 
   // Derive wallets (skip index 0 which is master wallet)
-  const wallets = deriveWallets(config.mnemonic, config.numWallets + 1).slice(1);
+  const wallets = deriveWallets(config.mnemonic, config.numWallets + 1).slice(
+    1
+  );
 
   console.log(`\nWallets loaded: ${wallets.length}`);
   wallets.forEach((w, i) => {
@@ -344,12 +380,14 @@ export async function runScheduler(): Promise<void> {
   console.log(`\nStart time: ${new Date(state.startTime).toLocaleString()}`);
   console.log(`Original completion time: ${originalEndTime.toLocaleString()}`);
   console.log(`Elapsed time: ${(elapsedTime / 1000 / 60).toFixed(2)} minutes`);
-  console.log(`Remaining time: ${(remainingDuration / 1000 / 60).toFixed(2)} minutes`);
+  console.log(
+    `Remaining time: ${(remainingDuration / 1000 / 60).toFixed(2)} minutes`
+  );
 
   // Generate tasks
   const remainingTokens = config.totalTokensToCreate - state.tokensCreated;
   if (remainingTokens === 0) {
-    console.log('\n✅ All tokens have already been created!');
+    console.log("\n✅ All tokens have already been created!");
     return;
   }
 
@@ -363,12 +401,18 @@ export async function runScheduler(): Promise<void> {
     // Still within original duration - use remaining time
     effectiveDuration = remainingDuration;
     effectiveStartTime = Date.now();
-    console.log(`⏱️  Using remaining duration: ${(remainingDuration / 1000 / 60).toFixed(2)} minutes`);
+    console.log(
+      `⏱️  Using remaining duration: ${(remainingDuration / 1000 / 60).toFixed(
+        2
+      )} minutes`
+    );
   } else {
     // Original duration has passed - create all remaining tokens immediately
     effectiveDuration = 0;
     effectiveStartTime = Date.now();
-    console.log(`⚠️  Original duration has passed. Creating ${remainingTokens} tokens immediately.`);
+    console.log(
+      `⚠️  Original duration has passed. Creating ${remainingTokens} tokens immediately.`
+    );
   }
 
   const tasks = generateTasks(
@@ -380,27 +424,31 @@ export async function runScheduler(): Promise<void> {
   );
 
   // Sort tasks by scheduled time for display
-  const sortedTasks = [...tasks].sort((a, b) => a.scheduledTime - b.scheduledTime);
+  const sortedTasks = [...tasks].sort(
+    (a, b) => a.scheduledTime - b.scheduledTime
+  );
   console.log(`\n📅 Token creation schedule:`);
   sortedTasks.slice(0, 10).forEach((task) => {
     const time = new Date(task.scheduledTime).toLocaleTimeString();
     console.log(
-      `  ${task.tokenIndex + 1}. ${task.metadata.symbol.padEnd(10)} at ${time} (Wallet ${task.walletIndex + 1})`
+      `  ${task.tokenIndex + 1}. ${task.metadata.symbol.padEnd(
+        10
+      )} at ${time} (Wallet ${task.walletIndex + 1})`
     );
   });
   if (sortedTasks.length > 10) {
     console.log(`  ... and ${sortedTasks.length - 10} more`);
   }
 
-  console.log('\n' + '='.repeat(80));
+  console.log("\n" + "=".repeat(80));
   console.log(`🚀 Starting ${config.executionMode} execution...`);
-  console.log('='.repeat(80) + '\n');
+  console.log("=".repeat(80) + "\n");
 
   // Create wallet lock manager
   const lockManager = new WalletLockManager();
 
   // Execute based on mode
-  if (config.executionMode === 'parallel') {
+  if (config.executionMode === "parallel") {
     // Parallel execution (no retry, skip failures)
     const results = await Promise.allSettled(
       tasks.map((task) => executeTask(task, wallets, lockManager))
@@ -411,18 +459,22 @@ export async function runScheduler(): Promise<void> {
     let failures = 0;
 
     results.forEach((result, index) => {
-      if (result.status === 'fulfilled') {
+      if (result.status === "fulfilled") {
         successes++;
       } else {
         failures++;
         console.error(`\n❌ Task ${index + 1} failed, skipping:`);
-        console.error(result.reason instanceof Error ? result.reason.stack || result.reason.message : result.reason);
+        console.error(
+          result.reason instanceof Error
+            ? result.reason.stack || result.reason.message
+            : result.reason
+        );
       }
     });
 
-    console.log('\n' + '='.repeat(80));
-    console.log('📊 EXECUTION SUMMARY');
-    console.log('='.repeat(80));
+    console.log("\n" + "=".repeat(80));
+    console.log("📊 EXECUTION SUMMARY");
+    console.log("=".repeat(80));
     console.log(`Total tasks: ${results.length}`);
     console.log(`✅ Successful: ${successes}`);
     console.log(`❌ Failed: ${failures}`);
@@ -433,7 +485,9 @@ export async function runScheduler(): Promise<void> {
         await executeTask(task, wallets, lockManager);
       } catch (error) {
         console.error(`\n❌ Token ${task.tokenIndex + 1} failed, skipping:`);
-        console.error(error instanceof Error ? error.stack || error.message : error);
+        console.error(
+          error instanceof Error ? error.stack || error.message : error
+        );
         // Continue to next token instead of stopping
       }
     }
@@ -443,10 +497,12 @@ export async function runScheduler(): Promise<void> {
   const totalTime = Date.now() - state.startTime!;
   const totalHours = (totalTime / 1000 / 60 / 60).toFixed(2);
 
-  console.log('\n' + '='.repeat(80));
-  console.log('✅ BOT COMPLETED SUCCESSFULLY!');
-  console.log('='.repeat(80));
-  console.log(`\nTokens created: ${state.tokensCreated}/${config.totalTokensToCreate}`);
+  console.log("\n" + "=".repeat(80));
+  console.log("✅ BOT COMPLETED SUCCESSFULLY!");
+  console.log("=".repeat(80));
+  console.log(
+    `\nTokens created: ${state.tokensCreated}/${config.totalTokensToCreate}`
+  );
   console.log(`Total time: ${totalHours} hours`);
   console.log(`\nCreated tokens:`);
 
@@ -454,5 +510,5 @@ export async function runScheduler(): Promise<void> {
     console.log(`  [${i + 1}] ${token.metadata.symbol}: ${token.tokenAddress}`);
   });
 
-  console.log('\n' + '='.repeat(80) + '\n');
+  console.log("\n" + "=".repeat(80) + "\n");
 }
