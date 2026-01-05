@@ -3,109 +3,28 @@
  */
 
 import { config } from '../config';
-import { httpGet, httpPost, httpUpload } from './api';
+import {
+  getTokenList,
+  uploadImage,
+  uploadMetadata,
+} from './nadfunApi';
 import type {
   TokenListResponse,
   MetadataUploadRequest,
-  MetadataUploadResponse,
   PreparedToken,
 } from '../types';
 
-// Use mainnet API for token list (more tokens available)
-const TOKEN_LIST_API_BASE_URL = config.tokenListApiBaseUrl;
-
-// Use network-specific API for metadata upload
-const METADATA_UPLOAD_API_BASE_URL = config.metadataUploadApiBaseUrl;
+// Re-export for backward compatibility
+export { uploadImage, uploadMetadata };
 
 /**
- * Image upload response
- */
-interface ImageUploadResponse {
-  image_uri: string;
-  is_nsfw: boolean;
-}
-
-/**
- * Fetch token list from API (always mainnet)
+ * Fetch token list from API (always mainnet, creation_time ASC)
  */
 export function fetchTokenList(
   page: number,
   limit: number
 ): Promise<TokenListResponse> {
-  return httpGet<TokenListResponse>(TOKEN_LIST_API_BASE_URL, '/order/creation_time', {
-    params: {
-      page,
-      limit,
-      is_nsfw: false,
-      direction: 'ASC',
-    },
-  });
-}
-
-/**
- * Download image from URL
- */
-async function downloadImage(imageUrl: string): Promise<Buffer> {
-  const response = await fetch(imageUrl);
-
-  if (!response.ok) {
-    throw new Error(`Failed to download image: ${response.status} ${response.statusText}`);
-  }
-
-  const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
-}
-
-/**
- * Detect content type from image URL
- */
-function detectContentType(imageUrl: string): string {
-  const ext = imageUrl.split('.').pop()?.toLowerCase().split('?')[0];
-  switch (ext) {
-    case 'jpg':
-    case 'jpeg':
-      return 'image/jpeg';
-    case 'png':
-      return 'image/png';
-    case 'gif':
-      return 'image/gif';
-    case 'webp':
-      return 'image/webp';
-    default:
-      return 'image/png';
-  }
-}
-
-/**
- * Upload image to API
- */
-export async function uploadImage(imageUrl: string): Promise<ImageUploadResponse> {
-  // Download image as buffer
-  const imageBuffer = await downloadImage(imageUrl);
-
-  // Detect content type from URL
-  const contentType = detectContentType(imageUrl);
-
-  // Upload as binary with Content-Type header
-  return httpUpload<ImageUploadResponse>(
-    METADATA_UPLOAD_API_BASE_URL,
-    '/metadata/image',
-    imageBuffer,
-    contentType
-  );
-}
-
-/**
- * Upload metadata and get metadata URI (network-specific)
- */
-export function uploadMetadata(
-  metadata: MetadataUploadRequest
-): Promise<MetadataUploadResponse> {
-  return httpPost<MetadataUploadResponse, MetadataUploadRequest>(
-    METADATA_UPLOAD_API_BASE_URL,
-    '/metadata/metadata',
-    metadata
-  );
+  return getTokenList({ page, limit, is_nsfw: false }, 'creation_time_asc');
 }
 
 /**

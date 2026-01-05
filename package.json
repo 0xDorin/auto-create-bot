@@ -21,6 +21,7 @@
     "cron:peak": "tsx src/scripts/cron-peak.ts",
     "cron:low": "tsx src/scripts/cron-low.ts",
     "cron:simple-volume": "tsx src/scripts/cron-simple-volume.ts",
+    "cron:latest-volume": "tsx src/scripts/cron-latest-volume.ts",
     "fetch-eligible-tokens": "tsx src/scripts/fetch-eligible-tokens.ts",
     "test-price": "tsx src/scripts/test-price.ts",
     "start:prepare-metadata": "node dist/scripts/prepare-metadata.js",

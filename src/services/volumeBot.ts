@@ -6,7 +6,7 @@
  */
 
 import { parseEther, formatEther, type Address } from "viem";
-import { httpGet } from "./api";
+import { getHolderCount } from "./nadfunApi";
 import { config } from "../config";
 import { buyTokens, sellTokens } from "./contracts";
 import { getBalance, type WalletInstance } from "./wallet";
@@ -15,26 +15,6 @@ import { loadState } from "./storage";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 
-/**
- * Holder info from API
- */
-interface HolderResponse {
-  holders: Array<{
-    account_info: {
-      account_id: string;
-      bio: string;
-      image_uri: string;
-      nickname: string;
-    };
-    balance_info: {
-      balance: string;
-      created_at: number;
-      native_price: string;
-      token_price: string;
-    };
-  }>;
-  total_count: number;
-}
 
 /**
  * Volume bot configuration
@@ -102,22 +82,8 @@ export function getVolumeConfig(): VolumeConfig {
   };
 }
 
-/**
- * Check holder count for a token
- */
-export async function checkHolderCount(tokenAddress: string): Promise<number> {
-  const baseUrl =
-    config.networkMode === "mainnet"
-      ? process.env.MAINNET_METADATA_API_BASE_URL!
-      : process.env.TESTNET_METADATA_API_BASE_URL!;
-
-  const response = await httpGet<HolderResponse>(
-    baseUrl,
-    `/trade/holder/${tokenAddress}`
-  );
-
-  return response.total_count;
-}
+// Re-export for backward compatibility
+export { getHolderCount as checkHolderCount } from "./nadfunApi";
 
 /**
  * Get tokens where I'm the only holder (total_count === 0)
@@ -149,7 +115,7 @@ export async function getEligibleTokens(): Promise<
 
   for (const token of state.createdTokens) {
     try {
-      const holderCount = await checkHolderCount(token.tokenAddress);
+      const holderCount = await getHolderCount(token.tokenAddress);
 
       if (holderCount === 0) {
         console.log(`  ✅ ${token.metadata.symbol}: ${holderCount} holders`);
@@ -207,27 +173,30 @@ export async function getEligibleTokens(): Promise<
 
 /**
  * Execute single volume trade (one buy/sell) for one token with one wallet
- * Checks holder count before trading to ensure no other holders
+ * @param skipHolderCheck - Skip holder count check (for latest_trade mode)
  */
 export async function executeVolumeTrade(
   wallet: WalletInstance,
   tokenAddress: Address,
   tokenSymbol: string,
-  targetPoints: number
+  targetPoints: number,
+  options?: { skipHolderCheck?: boolean }
 ): Promise<any> {
   console.log(`\n📈 ${tokenSymbol} - Wallet ${wallet.index}`);
 
-  // 1. Check holder count before trading
-  try {
-    const holderCount = await checkHolderCount(tokenAddress);
-    if (holderCount !== 0) {
-      console.log(`  ⏭️  Skipping - has ${holderCount} other holders`);
-      return { status: "has_other_holders" };
+  // 1. Check holder count before trading (unless skipped)
+  if (!options?.skipHolderCheck) {
+    try {
+      const holderCount = await getHolderCount(tokenAddress);
+      if (holderCount !== 0) {
+        console.log(`  ⏭️  Skipping - has ${holderCount} other holders`);
+        return { status: "has_other_holders" };
+      }
+      console.log(`  ✅ Holder check passed (count: ${holderCount})`);
+    } catch (error) {
+      console.log(`  ⚠️  Failed to check holder count:`, error);
+      // Continue anyway - holder check is best effort
     }
-    console.log(`  ✅ Holder check passed (count: ${holderCount})`);
-  } catch (error) {
-    console.log(`  ⚠️  Failed to check holder count:`, error);
-    // Continue anyway - holder check is best effort
   }
 
   // 2. Calculate buy amount for target points
@@ -262,14 +231,10 @@ export async function executeVolumeTrade(
 
   try {
     // 4. Buy tokens
-    console.log(`  💰 Buying ${formatEther(buyAmount)} MON worth...`);
     const tokensReceived = await buyTokens(wallet, tokenAddress, buyAmount);
-    console.log(`  ✅ Received ${formatEther(tokensReceived)} tokens`);
 
     // 5. Sell all tokens
-    console.log(`  💰 Selling ${formatEther(tokensReceived)} tokens...`);
     await sellTokens(wallet, tokenAddress, tokensReceived);
-    console.log(`  ✅ Sold successfully`);
 
     return { status: "success" };
   } catch (error) {

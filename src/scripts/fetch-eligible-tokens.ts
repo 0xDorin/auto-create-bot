@@ -11,7 +11,7 @@
  *   - Next run continues from where it left off
  */
 
-import { httpGet } from '../services/api';
+import { getTokenList } from '../services/nadfunApi';
 import { config } from '../config';
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
@@ -70,11 +70,9 @@ async function fetchEligibleTokens(
   existingTokens: EligibleToken[] = []
 ): Promise<{ tokens: EligibleToken[]; lastPage: number }> {
   const eligibleTokens: EligibleToken[] = [...existingTokens];
-  const baseUrl = config.tokenListApiBaseUrl;
   let currentPage = startPage;
 
   console.log('🔍 Searching for tokens with holder_count === 0...\n');
-  console.log(`API: ${baseUrl}`);
   console.log(`Starting from page: ${startPage}`);
   console.log(`Target count: ${targetCount}`);
   console.log(`Currently have: ${existingTokens.length} tokens`);
@@ -90,17 +88,9 @@ async function fetchEligibleTokens(
     try {
       console.log(`📄 Fetching page ${currentPage}...`);
 
-      const response = await httpGet<TokenListResponse>(
-        baseUrl,
-        '/order/creation_time',
-        {
-          params: {
-            page: currentPage,
-            limit: limitPerPage,
-            is_nsfw: false,
-            direction: 'ASC',
-          },
-        }
+      const response = await getTokenList(
+        { page: currentPage, limit: limitPerPage, is_nsfw: false },
+        'creation_time_asc'
       );
 
       console.log(`   Total tokens in page: ${response.tokens.length}`);

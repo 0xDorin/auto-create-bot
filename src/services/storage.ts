@@ -112,13 +112,13 @@ export function appendMetadata(newTokens: PreparedToken[]): void {
   // Combine existing and new tokens
   const allTokens = [...existingTokens, ...newTokens];
 
-  // Remove duplicates based on symbol (keep the newest one)
+  // Remove duplicates based on tokenURI (keep the first one)
   const uniqueTokens = allTokens.reduce((acc, token) => {
-    const existing = acc.find(t => t.symbol === token.symbol);
+    const existing = acc.find(t => t.tokenURI === token.tokenURI);
     if (!existing) {
       acc.push(token);
     }
-    // If duplicate, keep the current one (newest)
+    // If duplicate, keep the existing one (first occurrence)
     return acc;
   }, [] as PreparedToken[]);
 
@@ -173,9 +173,9 @@ export interface BotState {
  */
 export interface VolumeState {
   currentWalletIndex: number;    // Current wallet being processed (0-based)
-  currentWalletTrades: number;   // Number of trades completed by current wallet (0-4)
+  currentWalletTrades: number;   // Number of trades completed by current wallet (0-6)
   nextTokenIndex: number;        // Next token index to use from eligible tokens list
-  totalCompletedTrades: number;  // Total number of completed trades
+  totalCompletedTrades: number;  // Total number of completed trades (lifetime, never resets)
   lastTradeTimestamp?: number;   // Timestamp of last trade (for resuming)
 }
 
@@ -288,4 +288,65 @@ export async function resetVolumeState(): Promise<void> {
   };
   await saveVolumeState(emptyState);
   console.log('Volume bot state reset');
+}
+
+// ============================================================================
+// Metadata State (for prepare-metadata script)
+// ============================================================================
+
+const METADATA_STATE_FILE = resolve(DATA_DIR, 'metadata-state.json');
+
+/**
+ * Metadata preparation state
+ */
+export interface MetadataState {
+  lastPage: number;           // Last successfully processed page
+  lastPreparedAt?: number;    // Timestamp of last preparation
+  totalPrepared?: number;     // Total tokens prepared (lifetime)
+}
+
+/**
+ * Load metadata state
+ */
+export function loadMetadataState(): MetadataState {
+  if (!existsSync(METADATA_STATE_FILE)) {
+    return {
+      lastPage: 0,  // 0 means never run, will start from config or page 1
+    };
+  }
+
+  const content = readFileSync(METADATA_STATE_FILE, 'utf-8');
+  return JSON.parse(content) as MetadataState;
+}
+
+/**
+ * Save metadata state
+ */
+export function saveMetadataState(state: MetadataState): void {
+  ensureDataDir();
+  writeFileSync(METADATA_STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+}
+
+/**
+ * Update metadata state after successful preparation
+ */
+export function updateMetadataState(page: number, tokenCount: number): void {
+  const currentState = loadMetadataState();
+  const newState: MetadataState = {
+    lastPage: page,
+    lastPreparedAt: Date.now(),
+    totalPrepared: (currentState.totalPrepared || 0) + tokenCount,
+  };
+  saveMetadataState(newState);
+}
+
+/**
+ * Reset metadata state (start from page 1)
+ */
+export function resetMetadataState(): void {
+  const emptyState: MetadataState = {
+    lastPage: 0,
+  };
+  saveMetadataState(emptyState);
+  console.log('Metadata state reset');
 }

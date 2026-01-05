@@ -1856,7 +1856,1565 @@
       "imageUri": "https://storage.nadapp.net/coin/81931006-4566-4cc7-b475-b53ed35984cc",
       "twitter": "https://x.com/keoneHD/status/1892385549928837248/photo/1",
       "website": "https://x.com/keoneHD/status/1892385549928837248/photo/1"
+    },
+    {
+      "name": "Luk Belmar",
+      "symbol": "BELMAR",
+      "tokenURI": "https://storage.nadapp.net/metadata/3852c49d-cd0d-4c5e-9f72-acd0b962b3bf.json",
+      "description": "Luk $BELMAR  is the successful co-feunder of Kepitel Club and an established memecoin personality. \n\n\nHe made his wealth through multiple channels including digital merketing, e-cemmerce, drepshipping business, privete equity investments and crypto assets. $MONAD is the next step.\n\nLFG Peesant! Don't drink tep weter.",
+      "imageUri": "https://storage.nadapp.net/coin/bfd05a61-c96f-408a-afaf-41f3558c8031",
+      "telegram": "https://t.me/lukbelmar_monad"
+    },
+    {
+      "name": "WIDE KEONE",
+      "symbol": "WKEO",
+      "tokenURI": "https://storage.nadapp.net/metadata/bf77b7a4-f856-4e70-9ab9-01d9187a4fed.json",
+      "description": "Every 100 Mon Keone stance’s wider",
+      "imageUri": "https://storage.nadapp.net/coin/e9cb35fb-7ca2-426b-b656-63ee197f24c7",
+      "website": "https://x.com/monad/status/1973393771074105594"
+    },
+    {
+      "name": "BOMBACLAT",
+      "symbol": "BOMBACLAT",
+      "tokenURI": "https://storage.nadapp.net/metadata/25396ba3-73c0-4b05-91f8-5e3a92db9ca0.json",
+      "description": "BOMBACLAT",
+      "imageUri": "https://storage.nadapp.net/coin/be3944e3-7d03-46d8-bc59-2f96d31f2074",
+      "twitter": "https://x.com/i/communities/1993329594217218287"
+    },
+    {
+      "name": "Beer",
+      "symbol": "BEER",
+      "tokenURI": "https://storage.nadapp.net/metadata/25847346-5018-4489-bdd4-b585470c9441.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/150b9987-0615-4269-be8f-73291dc9b686",
+      "twitter": "https://x.com/_jhunsaker/status/1993328758170792298"
+    },
+    {
+      "name": "ESCARGO",
+      "symbol": "ESCARGO",
+      "tokenURI": "https://storage.nadapp.net/metadata/d4688ec5-5e56-4d08-8932-7bc9e27b79c0.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/75e87344-ccd4-4833-afb9-e43ff5677b51",
+      "website": "https://garycartlidge.art/"
+    },
+    {
+      "name": "Gondola",
+      "symbol": "Gondola",
+      "tokenURI": "https://storage.nadapp.net/metadata/709ccc78-e171-4de1-a7a4-bac38f7cffa1.json",
+      "description": "A relaxing space for fellow Gondola meme enjoyers to share, laugh, and observe together.\n",
+      "imageUri": "https://storage.nadapp.net/coin/0f8c65e9-55c0-446a-92d8-01ec78f1c2b7",
+      "twitter": "https://x.com/i/communities/1989474375418929233",
+      "website": "https://x.com/i/communities/1989474375418929233"
+    },
+    {
+      "name": "Mon Beater",
+      "symbol": "BEATER",
+      "tokenURI": "https://storage.nadapp.net/metadata/5a4bed28-f132-433f-9d7b-e43cac8bd610.json",
+      "description": "Otter or Beaver? why not both?\n",
+      "imageUri": "https://storage.nadapp.net/coin/8a156abf-b6fc-4a63-b4a0-1760fd5e4d19",
+      "twitter": "https://x.com/MonBeater",
+      "telegram": "https://t.me/BeaterOnMonad",
+      "website": "https://beatermeme.fun"
+    },
+    {
+      "name": "The Monad Inu ",
+      "symbol": "MONINU",
+      "tokenURI": "https://storage.nadapp.net/metadata/6c9557a9-b900-47ac-ad22-a1b4eb00473f.json",
+      "description": "Official The Monad Inu Coin",
+      "imageUri": "https://storage.nadapp.net/coin/4377b68d-f585-48d2-8fe2-25186cba4d47",
+      "twitter": "https://x.com/TheMonadInu",
+      "website": "https://moninu.fun/"
+    },
+    {
+      "name": "Kin no unko",
+      "symbol": "Kinnounko",
+      "tokenURI": "https://storage.nadapp.net/metadata/de2e6058-21da-4eed-bb8d-f128c9919eb6.json",
+      "description": "Apparently there is a golden poo which is a sigh of good luck, hospitality and greatness.",
+      "imageUri": "https://storage.nadapp.net/coin/0fa5ab07-987e-4ae6-ad7b-7bca1920ecbd",
+      "twitter": "https://x.com/Mostaccho/status/1993330859470946377?s=20",
+      "website": "https://en.wikipedia.org/wiki/Kin_no_unko"
+    },
+    {
+      "name": "angrymon",
+      "symbol": "angrymon",
+      "tokenURI": "https://storage.nadapp.net/metadata/535627fd-f644-428d-919b-b671341faf97.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/c508bfc9-b0db-4dc5-97ac-4559e555214d",
+      "twitter": "https://x.com/keoneHD/status/1807278545913233878/photo/1"
+    },
+    {
+      "name": "Monad AI Companion ",
+      "symbol": "ChefGPT",
+      "tokenURI": "https://storage.nadapp.net/metadata/c20fc30a-6146-453a-9616-329586878bfb.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/3f6faf8f-f712-418b-a93d-b45f5e864bfe",
+      "twitter": "https://x.com/SipinSol/status/1993331157857960324?s=20",
+      "website": "https://docs.monad.xyz/"
+    },
+    {
+      "name": "NADS GIRLS",
+      "symbol": "NADSGIRLS",
+      "tokenURI": "https://storage.nadapp.net/metadata/1df8ce69-0dec-4ef7-b90b-0171ae0c864d.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/4adc6759-191b-4a3f-b720-369c22c9e6ee"
+    },
+    {
+      "name": "Dick Dastard Coin",
+      "symbol": "DASTARD",
+      "tokenURI": "https://storage.nadapp.net/metadata/1542ac91-61d1-4206-a3d9-7b6d64768b7c.json",
+      "description": "DICK DASTARD OFFICIAL",
+      "imageUri": "https://storage.nadapp.net/coin/db1ec961-1783-4e21-86f4-91c3c46ed692",
+      "twitter": "https://x.com/dastard",
+      "telegram": "https://t.me/dastardcoin",
+      "website": "https://dickdastered.meme/"
+    },
+    {
+      "name": "1st Monad Library (2023)",
+      "symbol": "Mondragon",
+      "tokenURI": "https://storage.nadapp.net/metadata/56970ae0-8e8e-47e0-b106-805319106914.json",
+      "description": "I urgently need help. I'm going to create a token for my page so more people can access the complete Monad documentation. I hope you can help me, because otherwise, the first and only existing Monad library will be lost.",
+      "imageUri": "https://storage.nadapp.net/coin/4ce843d1-6774-4bd8-b1b2-1068e1d316e1",
+      "twitter": "https://x.com/jeankpss/status/1993331518039568862?s=20",
+      "website": "https://plucky.neocities.org/"
+    },
+    {
+      "name": "BONAD",
+      "symbol": "BONAD",
+      "tokenURI": "https://storage.nadapp.net/metadata/7669fc39-85b0-45ce-8eb1-2c97e58e9110.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/8ba8fca5-98d1-45c7-9526-f959fa6c08b8"
+    },
+    {
+      "name": "Chog",
+      "symbol": "Chog",
+      "tokenURI": "https://storage.nadapp.net/metadata/f38bd074-9ea0-4579-81e0-ea86bd4d7041.json",
+      "description": "chog, the community token ",
+      "imageUri": "https://storage.nadapp.net/coin/27b4f6f9-78ec-42bb-8461-db3eee65dafa",
+      "twitter": "https://x.com/ChogNFT",
+      "website": "https://chog.xyz"
+    },
+    {
+      "name": "Unexpected runner",
+      "symbol": "DISABLED",
+      "tokenURI": "https://storage.nadapp.net/metadata/715945dd-a104-44d1-984a-8edeedbb37d6.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/8f2a8985-2ff7-46ea-8b8e-f975402f1d0f"
+    },
+    {
+      "name": "monad family",
+      "symbol": "monfam",
+      "tokenURI": "https://storage.nadapp.net/metadata/9eba2201-55b3-42d5-bd31-4daadd7fafc6.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/d9b3ceef-98b6-4651-a40e-c38b8d1200a0",
+      "twitter": "https://x.com/keoneHD/status/1803754814616293758/photo/1"
+    },
+    {
+      "name": "All In One",
+      "symbol": "ONE",
+      "tokenURI": "https://storage.nadapp.net/metadata/2bbc61b4-ba68-4f0d-944c-b9153ccd27b6.json",
+      "description": "https://x.com/AllInOne_Mon/status/1993330610681577908",
+      "imageUri": "https://storage.nadapp.net/coin/bb6e9f28-a42a-4056-bfa0-145fcaf1de9d",
+      "twitter": "https://x.com/AllInOne_Mon/status/1993330610681577908",
+      "website": "https://x.com/search?q=All%20In%20One%20(from%3AMonad)&src=typed_query"
+    },
+    {
+      "name": "Adolph Hitler",
+      "symbol": "AH",
+      "tokenURI": "https://storage.nadapp.net/metadata/ac73d6ae-41b8-4128-8d2e-46c8554e80c2.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/3eadede4-b728-4178-b563-51dc0bd47102"
+    },
+    {
+      "name": "MONE",
+      "symbol": "mone",
+      "tokenURI": "https://storage.nadapp.net/metadata/4ba570a1-7155-446e-873f-18ab3189b9b2.json",
+      "description": "not eligible",
+      "imageUri": "https://storage.nadapp.net/coin/b66f7a1d-d28e-48a6-9e70-dc896b728f4a",
+      "twitter": "https://x.com/monticker"
+    },
+    {
+      "name": "COCO",
+      "symbol": "COCO",
+      "tokenURI": "https://storage.nadapp.net/metadata/8d296f53-f6b5-44a7-b375-0d3984ae3d1e.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/e28e8158-6737-46c2-bb87-6d835b55af12",
+      "twitter": "https://x.com/thetinaverse/status/1896800380392214853/photo/1"
+    },
+    {
+      "name": "Monad Rock",
+      "symbol": "Rock",
+      "tokenURI": "https://storage.nadapp.net/metadata/d535ecf1-e1bb-4098-818c-7d3f1fa71e43.json",
+      "description": "Monad Rock",
+      "imageUri": "https://storage.nadapp.net/coin/f37ea7e4-1d84-406f-a09f-588726ceefd6",
+      "twitter": "https://x.com/rock_on_monad"
+    },
+    {
+      "name": "1 mon for fees and a dream",
+      "symbol": "mondream",
+      "tokenURI": "https://storage.nadapp.net/metadata/c0114ab8-ec7c-43e6-916b-d07b9abdcb10.json",
+      "description": "you only need 1 mon for faith ",
+      "imageUri": "https://storage.nadapp.net/coin/2c678f61-1494-4e02-82f9-c13beb8650dd"
+    },
+    {
+      "name": "SeMON",
+      "symbol": "semon",
+      "tokenURI": "https://storage.nadapp.net/metadata/fe36b983-f78a-40fc-977b-317ef08396cf.json",
+      "description": "It’s a purple sperm.",
+      "imageUri": "https://storage.nadapp.net/coin/e97b5850-8a13-45d4-bdcd-d187405f3eae"
+    },
+    {
+      "name": "Hanna MONtana",
+      "symbol": "MONtana",
+      "tokenURI": "https://storage.nadapp.net/metadata/bfa74ef6-b24b-47a4-914e-c123095b8326.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/291341b2-98a3-4071-a1ef-220772f9b7a4"
+    },
+    {
+      "name": "PawNAD",
+      "symbol": "PNAD",
+      "tokenURI": "https://storage.nadapp.net/metadata/89ec3479-6372-416c-bbdf-77fb4dcf6f08.json",
+      "description": "PNAD",
+      "imageUri": "https://storage.nadapp.net/coin/c262e6cb-8b54-4312-bcbf-e666fad9ce30"
+    },
+    {
+      "name": "Googly-Eyed Stubby Squid",
+      "symbol": "GESS",
+      "tokenURI": "https://storage.nadapp.net/metadata/dbb4d0ce-711c-4d23-8d1c-7621a9bfceea.json",
+      "description": "The Official Non-Official Monad Mascot. ",
+      "imageUri": "https://storage.nadapp.net/coin/9d8d5af6-1283-40e4-8945-d7109c31564f",
+      "website": "https://www.youtube.com/watch?v=-pSYTvyUYJQ&t=66s"
+    },
+    {
+      "name": "Monad with AI",
+      "symbol": "5O1424",
+      "tokenURI": "https://storage.nadapp.net/metadata/cc902b8f-ebb5-47bd-89f6-b6efdc4f207c.json",
+      "description": "5O1424 analyzes, rates, and distributes winning tokens before they become popular.",
+      "imageUri": "https://storage.nadapp.net/coin/a0e63d54-b840-4fc8-b280-9cb811a933c6",
+      "twitter": "https://x.com/Mostaccho/status/1993332335081558346?s=20",
+      "website": "https://codecflow.ai/"
+    },
+    {
+      "name": "1 mon you need",
+      "symbol": "1mon",
+      "tokenURI": "https://storage.nadapp.net/metadata/77334bbb-3578-4416-94c4-69a2b210893f.json",
+      "description": "https://x.com/_jhunsaker/status/1993326111405613157",
+      "imageUri": "https://storage.nadapp.net/coin/b285b21f-64cb-485c-9b5a-e019e5d2aba5"
+    },
+    {
+      "name": "PBot",
+      "symbol": "PBOT",
+      "tokenURI": "https://storage.nadapp.net/metadata/2f4133b2-71fa-47a2-8de7-219b59250ca5.json",
+      "description": "💴 No.1 Market Maker Tool",
+      "imageUri": "https://storage.nadapp.net/coin/93e43f27-2dc9-4a52-ad52-7db38862896d",
+      "twitter": "https://x.com/pbot_dev",
+      "telegram": "https://t.me/pbotdev",
+      "website": "https://evm.pbot.dev"
+    },
+    {
+      "name": "MONBRETT",
+      "symbol": "MONBRETT",
+      "tokenURI": "https://storage.nadapp.net/metadata/9c1abd39-74f4-4334-a66a-4d89b2401bba.json",
+      "description": "base has brett \n\nmonad has monbrett  \n\npretty simple actually  \n\n$MONBRETT",
+      "imageUri": "https://storage.nadapp.net/coin/349ba80a-01c0-41d6-bccc-bf5dcc7bea2e",
+      "twitter": "https://x.com/jwllxyz/status/1993332436646977833?s=20"
+    },
+    {
+      "name": "Monad Rock",
+      "symbol": "MONADROCK",
+      "tokenURI": "https://storage.nadapp.net/metadata/b6292b80-140b-455a-af69-240c070cfc9d.json",
+      "description": "Monad Rock Live On Nad.fun",
+      "imageUri": "https://storage.nadapp.net/coin/3fa70ef4-e8a0-4dde-8a6f-f39badf81fe2",
+      "twitter": "https://x.com/rock_on_monad?t=OwKoxtVCAoi-0Xakfbn2Qg&s=09"
+    },
+    {
+      "name": "keeone hoon",
+      "symbol": "keeone",
+      "tokenURI": "https://storage.nadapp.net/metadata/8376fa87-ce75-4838-9be9-93958e58714d.json",
+      "description": "teh foundar of monad",
+      "imageUri": "https://storage.nadapp.net/coin/0b22a65c-b88e-4ff1-ab46-2223d3415cb2",
+      "twitter": "https://x.com/keeonehoon",
+      "telegram": "https://t.me/keeonehoon",
+      "website": "https://keeonehoon.xyz/"
+    },
+    {
+      "name": "Monad Rock",
+      "symbol": "Mrock",
+      "tokenURI": "https://storage.nadapp.net/metadata/e65d3f49-a3e3-4016-8c7f-2afc0c1ce859.json",
+      "description": "Mrock",
+      "imageUri": "https://storage.nadapp.net/coin/15da477f-cc48-4f58-99e3-a243177be2d0",
+      "twitter": "https://x.com/rock_on_monad?s=21"
+    },
+    {
+      "name": "My mom",
+      "symbol": "Mom",
+      "tokenURI": "https://storage.nadapp.net/metadata/e6b229a2-f61a-4698-9804-98eb58aed942.json",
+      "description": "Mom is everything",
+      "imageUri": "https://storage.nadapp.net/coin/ab23ffa8-7160-4438-8702-0610f3594c10"
+    },
+    {
+      "name": "1st Monad Coin in Dark Web",
+      "symbol": "EYE",
+      "tokenURI": "https://storage.nadapp.net/metadata/ade672ed-3585-4815-b92e-30fb49628e47.json",
+      "description": "I'm nuts because im gettin vulnerable by showing my IP and i'm risking my PC to create a nad.fun inside the Dark Web, using the ONIOFF terminal",
+      "imageUri": "https://storage.nadapp.net/coin/5338689b-f51c-4958-935b-be699ce2a264",
+      "twitter": "https://x.com/Lix_Devv/status/1993332933990420901?s=20",
+      "website": "https://github.com/k4m4/onioff"
+    },
+    {
+      "name": "RICK",
+      "symbol": "RICK",
+      "tokenURI": "https://storage.nadapp.net/metadata/4f105c2a-49b9-43fb-8cfc-32a7c30ea12e.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/dca26cfb-c143-4287-887d-4e5e40e60a41"
+    },
+    {
+      "name": "Not Eligible",
+      "symbol": "REKT",
+      "tokenURI": "https://storage.nadapp.net/metadata/061fd53c-0302-4dff-8174-20816be71b34.json",
+      "description": "Keep Clicking! You are not farmoorrr",
+      "imageUri": "https://storage.nadapp.net/coin/798cda85-5a29-40e3-9847-03168ba1b6f4"
+    },
+    {
+      "name": "just buy $1",
+      "symbol": "1",
+      "tokenURI": "https://storage.nadapp.net/metadata/676be882-498b-42f4-a466-94af0458710a.json",
+      "description": "sa",
+      "imageUri": "https://storage.nadapp.net/coin/fe27a41d-aaad-49fa-ae32-88969255e81b"
+    },
+    {
+      "name": "2025-2026",
+      "symbol": "2026",
+      "tokenURI": "https://storage.nadapp.net/metadata/2c25e6eb-6487-40b0-8a37-c57540c97ee2.json",
+      "description": "H",
+      "imageUri": "https://storage.nadapp.net/coin/eb505180-6719-4757-b9f6-67a8529a5792"
+    },
+    {
+      "name": "OPM",
+      "symbol": "OPM",
+      "tokenURI": "https://storage.nadapp.net/metadata/9e9eaaf9-cb97-4f3b-8744-a9e077cc3955.json",
+      "description": "Other Peoples Money",
+      "imageUri": "https://storage.nadapp.net/coin/18915ee3-5c73-44b1-aa79-8de130f7406b",
+      "twitter": "https://x.com/i/communities/1993325699248337137",
+      "website": "https://x.com/i/communities/1993325699248337137"
+    },
+    {
+      "name": "Catalyst",
+      "symbol": "CATALYST",
+      "tokenURI": "https://storage.nadapp.net/metadata/3c49dc5c-66d3-4b4f-a058-a0cc399b3587.json",
+      "description": "A Catalyst is all we need, and here we go!\n",
+      "imageUri": "https://storage.nadapp.net/coin/80e41007-6067-40d3-8252-4b655a9f75d3",
+      "twitter": "https://x.com/i/communities/1993310404877885757"
+    },
+    {
+      "name": "Keenoon",
+      "symbol": "Keenoon",
+      "tokenURI": "https://storage.nadapp.net/metadata/422f685b-3e72-48c5-b129-059c70698741.json",
+      "description": "Keenoon",
+      "imageUri": "https://storage.nadapp.net/coin/c96fe3cc-02e2-48b2-a860-8732d0cf6b64",
+      "twitter": "https://x.com/keeonehoon?s=21"
+    },
+    {
+      "name": "RUNSTREAM",
+      "symbol": "RUNSTR",
+      "tokenURI": "https://storage.nadapp.net/metadata/b80b7598-5b23-4299-a800-2840d90cf0cd.json",
+      "description": "https://x.com/i/communities/1967287100023210181\nhttps://runstream.fun/\nhttps://t.me/infiniteruns_chat",
+      "imageUri": "https://storage.nadapp.net/coin/2ac8a1ac-3243-423b-8f40-65facb067238",
+      "twitter": "https://x.com/i/communities/1967287100023210181",
+      "telegram": "https://t.me/infiniteruns_chat",
+      "website": "https://runstream.fun/"
+    },
+    {
+      "name": "Monad Brett",
+      "symbol": "MRETT",
+      "tokenURI": "https://storage.nadapp.net/metadata/d2883ac9-b0cd-4ca6-b9df-9a48bed2a513.json",
+      "description": "Monad Brett",
+      "imageUri": "https://storage.nadapp.net/coin/47da815e-dc1f-4a34-8f31-a541603cb70d"
+    },
+    {
+      "name": "Keeone Hoon",
+      "symbol": "Keeone",
+      "tokenURI": "https://storage.nadapp.net/metadata/f9e2d485-530b-4f18-9e47-f8c7738c67d3.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/5ad80028-0a1a-48ca-a620-d5175b554c59",
+      "twitter": "https://x.com/keeonehoon",
+      "website": "https://keeonehoon.xyz/"
+    },
+    {
+      "name": "Digimon",
+      "symbol": "DGMON",
+      "tokenURI": "https://storage.nadapp.net/metadata/7f716c3d-d047-4a20-96de-adba5fb0c131.json",
+      "description": "Digimon, or \"Digital Monsters,\" is a Japanese multimedia franchise that includes virtual pets, anime, manga, video games, films, and a trading card game. The franchise revolves around creatures called Digimon that inhabit the \"Digital World,\" a parallel universe born from Earth's communication networks. ",
+      "imageUri": "https://storage.nadapp.net/coin/4a70212c-5f2c-46c4-8897-1dbfa2028b2d",
+      "twitter": "https://x.com/digimon_tcg_EN",
+      "website": "https://m.youtube.com/watch?v=bjO_MIVLQcE&list=RDbjO_MIVLQcE&start_radio=1&pp=ygUWZGlnaW1vbiBvc3QgYnJhdmVoZWFydKAHAdIHCQkLCgGHKiGM7w%3D%3D"
+    },
+    {
+      "name": "PEPE ON MONAD",
+      "symbol": "PEPEMON",
+      "tokenURI": "https://storage.nadapp.net/metadata/9cfe4ae4-80bc-4d19-98ca-f162f20d6aac.json",
+      "description": "Pepemon is more than just another memecoin, it’s the heart of a new internet culture on Monad. On the surface, it’s fun, fast, and meme-rich. But under the hood it’s a powerful community-driven project born to break the mold.",
+      "imageUri": "https://storage.nadapp.net/coin/5fb130bf-0b71-4606-a87c-82caaf0aa7be",
+      "twitter": "https://x.com/Pepemon_xyz",
+      "website": "https://thepepemon.fun/"
+    },
+    {
+      "name": "JAILCHOG",
+      "symbol": "JAILCHOG",
+      "tokenURI": "https://storage.nadapp.net/metadata/22e0b50a-c46a-484d-b9f5-ad6869189eba.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/fb6f51e4-7211-47e9-af44-cf4dc777996b"
+    },
+    {
+      "name": "Keone",
+      "symbol": "Keone",
+      "tokenURI": "https://storage.nadapp.net/metadata/2667e7dc-49c1-488e-b61f-817350147b39.json",
+      "description": "Iykyk",
+      "imageUri": "https://storage.nadapp.net/coin/4bb59a6a-395c-45fe-bac9-0c207affb2b9"
+    },
+    {
+      "name": "KONE HON",
+      "symbol": "KONE",
+      "tokenURI": "https://storage.nadapp.net/metadata/cc740356-3c91-43a7-9529-58dca41cd091.json",
+      "description": "Hi ey am thi eh ho of MONAD. ",
+      "imageUri": "https://storage.nadapp.net/coin/878f2175-fea2-4d49-adfe-ecceb3073bb5",
+      "twitter": "https://x.com/Kone_monada",
+      "telegram": "https://t.me/konehonmonada"
+    },
+    {
+      "name": "Suiton Mon",
+      "symbol": "SMON",
+      "tokenURI": "https://storage.nadapp.net/metadata/b8dae59d-c40c-47c0-8cf0-0a737758adf6.json",
+      "description": "Suiton just summoned on Monad!\n",
+      "imageUri": "https://storage.nadapp.net/coin/ef7064ac-cc59-4b06-812b-745e4cec79cb",
+      "twitter": "https://x.com/SuitonMonads",
+      "telegram": "https://t.me/SuitonOnMONAD",
+      "website": "https://suiton.xyz"
+    },
+    {
+      "name": "Coingecko",
+      "symbol": "Coingecko",
+      "tokenURI": "https://storage.nadapp.net/metadata/aa06a978-97ed-46c2-bcd9-8320272dc7b8.json",
+      "description": "https://x.com/keoneHD/status/1784739796838928439\n",
+      "imageUri": "https://storage.nadapp.net/coin/138e8b15-5ae5-4ba4-9f45-7300515470cb",
+      "twitter": "https://x.com/keoneHD/status/1784739796838928439",
+      "website": "https://x.com/keoneHD/status/1784739796838928439"
+    },
+    {
+      "name": "Hopnad",
+      "symbol": "HOPNAD",
+      "tokenURI": "https://storage.nadapp.net/metadata/eba23201-fe5d-48c9-9c1b-936073f900d4.json",
+      "description": "hop nad? what am i? yes",
+      "imageUri": "https://storage.nadapp.net/coin/7d055990-e95d-44a1-a69b-6e57bd7da34d",
+      "twitter": "https://x.com/HOPNADmeme"
+    },
+    {
+      "name": "Monad's Symbol",
+      "symbol": "SYMBOL",
+      "tokenURI": "https://storage.nadapp.net/metadata/cba8e80d-f926-4f57-b454-3f7fa22a1d45.json",
+      "description": "Monad's Symbol",
+      "imageUri": "https://storage.nadapp.net/coin/d3721dd5-2700-4994-9599-41d8babc4858",
+      "twitter": "https://x.com/autodrp/status/1993309133722783984",
+      "website": "https://x.com/i/communities/1993000371657023982"
+    },
+    {
+      "name": "5M",
+      "symbol": "5M",
+      "tokenURI": "https://storage.nadapp.net/metadata/39582325-06ce-42fd-ad98-fc70afbb03de.json",
+      "description": "https://x.com/_jhunsaker/status/1993332846769873264",
+      "imageUri": "https://storage.nadapp.net/coin/be0c984c-4472-4ef1-8298-7145840ba6e4"
+    },
+    {
+      "name": "NADXBT AGENT",
+      "symbol": "NADXBT",
+      "tokenURI": "https://storage.nadapp.net/metadata/01393c22-7b57-40eb-93d2-d6e5daaa35ba.json",
+      "description": "NADXBT AGENT ",
+      "imageUri": "https://storage.nadapp.net/coin/f4350f89-7858-4385-ba09-3139c8b0f3df",
+      "twitter": "https://x.com/agent_nadxbt?s=21"
+    },
+    {
+      "name": "AgentMo",
+      "symbol": "AgentMo",
+      "tokenURI": "https://storage.nadapp.net/metadata/75fb70e7-772a-4fbc-b010-03547d0d163f.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/4fd8d035-3394-4b0a-941d-9359b2b3ec9b",
+      "twitter": "https://x.com/1agentmo?s=21",
+      "website": "https://agentmo.dev"
+    },
+    {
+      "name": "muttnad",
+      "symbol": "muttnad",
+      "tokenURI": "https://storage.nadapp.net/metadata/16df520c-98f0-4fff-83fe-418a6c4c17ff.json",
+      "description": "building the muttnad ai on @monad",
+      "imageUri": "https://storage.nadapp.net/coin/e13ec6af-3acd-4e2b-a48d-5503a3cab7c2",
+      "twitter": "https://x.com/muttnad",
+      "website": "https://x.com/muttnad/status/1993329649641046387"
+    },
+    {
+      "name": "SHIT MON",
+      "symbol": "SHITMON",
+      "tokenURI": "https://storage.nadapp.net/metadata/77afd3f8-3750-437d-945d-c42f38ab1f8f.json",
+      "description": "FUCK YOU MONAD FUCK YOU TOKEN NIGGA",
+      "imageUri": "https://storage.nadapp.net/coin/f2feeb1b-3a60-4b6e-9f9c-e192e0fdb530"
+    },
+    {
+      "name": "7",
+      "symbol": "7",
+      "tokenURI": "https://storage.nadapp.net/metadata/c4ce31ef-38f1-406a-b981-1db1ca644a81.json",
+      "description": "Everything is 7 coded",
+      "imageUri": "https://storage.nadapp.net/coin/33e57a55-fb7b-4d22-aa05-c29a16b9e0ca",
+      "twitter": "https://x.com/chognft/status/1993033869684359593"
+    },
+    {
+      "name": "Monpider",
+      "symbol": "Monpider",
+      "tokenURI": "https://storage.nadapp.net/metadata/b4d06247-5192-4adb-a5cf-41e68eae51fa.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/4e71e96e-5760-4841-bb47-1f4ce3845232"
+    },
+    {
+      "name": "NADMOON",
+      "symbol": "NADMOON",
+      "tokenURI": "https://storage.nadapp.net/metadata/9813789f-b949-4c54-925a-fdd7d3bde1dc.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/5ed59504-2a97-43fb-9616-adff43d4519e",
+      "twitter": "https://x.com/ohsennase91/status/1900203421489389588?s=46"
+    },
+    {
+      "name": "MONADINU",
+      "symbol": "MONADINU",
+      "tokenURI": "https://storage.nadapp.net/metadata/ac872a1c-ee7c-43dd-8cb9-ebb9f0bf2081.json",
+      "description": "MONADINU",
+      "imageUri": "https://storage.nadapp.net/coin/174cfe9c-5c5d-42a2-8dfa-8b7f829b57ea",
+      "twitter": "https://x.com/i/communities/1992924944003670266",
+      "website": "https://x.com/i/communities/1992924944003670266"
+    },
+    {
+      "name": "KEEONE HOON",
+      "symbol": "KEEONE",
+      "tokenURI": "https://storage.nadapp.net/metadata/c0cfb2c5-14dc-47b8-a613-20c343572e1a.json",
+      "description": "https://t.me/keeonehoon\nhttps://x.com/keeonehoon\nhttps://keeonehoon.xyz/",
+      "imageUri": "https://storage.nadapp.net/coin/6d06d03d-fe6d-464f-b8ab-41c9f35cdf45",
+      "twitter": "https://x.com/keeonehoon",
+      "telegram": "https://t.me/keeonehoon",
+      "website": "https://keeonehoon.xyz/"
+    },
+    {
+      "name": "McMonad's",
+      "symbol": "MONADS",
+      "tokenURI": "https://storage.nadapp.net/metadata/d5288af6-dd36-4b4a-a5b4-244470614516.json",
+      "description": "McMonad’s: where every transaction comes with fries and emotional damage.",
+      "imageUri": "https://storage.nadapp.net/coin/728cbe99-3a95-4ff0-b1d6-02702db6580d",
+      "twitter": "https://x.com/mcmonadsx"
+    },
+    {
+      "name": "Monad Stablecoin",
+      "symbol": "MUSD",
+      "tokenURI": "https://storage.nadapp.net/metadata/7b81569e-8a87-42e9-a10b-09c51f011215.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/1705f8da-969d-46e8-82a5-0f3b56db8cf0",
+      "twitter": "https://x.com/i/communities/1975294755652108458"
+    },
+    {
+      "name": "Brother",
+      "symbol": "Brother",
+      "tokenURI": "https://storage.nadapp.net/metadata/186fcf29-7df6-43b6-9e5b-78ee44e168aa.json",
+      "description": "My brother",
+      "imageUri": "https://storage.nadapp.net/coin/98c45a83-8dfb-4e6f-87cd-4d42177b765c"
+    },
+    {
+      "name": "Cowa Monad Companion",
+      "symbol": "COWA",
+      "tokenURI": "https://storage.nadapp.net/metadata/eacf1b53-54bb-4c64-b3d3-2662cd1ba6dd.json",
+      "description": "Cowa Monad Companion",
+      "imageUri": "https://storage.nadapp.net/coin/58cbee3e-a217-4884-b518-a6c3542f1c04",
+      "twitter": "https://x.com/autodrp/status/1993334415267598496",
+      "website": "https://github.com/category-labs/monad/blob/main/monad/__init__.py"
+    },
+    {
+      "name": "Eunice",
+      "symbol": "Eunice",
+      "tokenURI": "https://storage.nadapp.net/metadata/24e1d0b7-e33d-4a28-b51c-3ed534089093.json",
+      "description": "Eunice",
+      "imageUri": "https://storage.nadapp.net/coin/116bb359-7270-496c-8b26-1d5112cd7a01",
+      "twitter": "https://x.com/0x_eunice"
+    },
+    {
+      "name": "Steve",
+      "symbol": "STEVE",
+      "tokenURI": "https://storage.nadapp.net/metadata/2f3a47ac-2e67-4e95-b72e-eab70dcfadc8.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/17324fd1-03ec-4336-afb6-2cc9cf526cb4",
+      "twitter": "https://x.com/cryptunez/status/1907925638297874475"
+    },
+    {
+      "name": "MONAD ETF - AMERICA",
+      "symbol": "M3",
+      "tokenURI": "https://storage.nadapp.net/metadata/6f0e660a-463a-401b-8645-3b10197e9aca.json",
+      "description": "https://x.com/minara/status/1993332109596086651",
+      "imageUri": "https://storage.nadapp.net/coin/f4cfbe96-7fd0-45d4-8d44-0fe7a65951a4",
+      "twitter": "https://x.com/minara/status/1993332109596086651",
+      "website": "https://x.com/minara/status/1993332109596086651"
+    },
+    {
+      "name": "Retnard",
+      "symbol": "RETNARD",
+      "tokenURI": "https://storage.nadapp.net/metadata/c54e078f-645a-48aa-9717-b2d42707d766.json",
+      "description": "I'm retnard frog",
+      "imageUri": "https://storage.nadapp.net/coin/05ef6535-078e-48fd-ac8b-1d4224f56b2b",
+      "twitter": "https://x.com/retnard_"
+    },
+    {
+      "name": "CHONIGGA",
+      "symbol": "CHONIGGA",
+      "tokenURI": "https://storage.nadapp.net/metadata/9ff0b946-6c23-4674-9ca1-3382483bac19.json",
+      "description": "JUST A NIGGA CHOG",
+      "imageUri": "https://storage.nadapp.net/coin/1cd2f4c4-e0dc-435d-958d-e6847eebd546"
+    },
+    {
+      "name": "Monado",
+      "symbol": "MONADO",
+      "tokenURI": "https://storage.nadapp.net/metadata/55d171a4-7942-4da8-a3e7-0898108bed8c.json",
+      "description": "The ultimate social hub for the Monad ecosystem. Stream live, discover tokens, and connect with fellow Monad enthusiasts.\n\n",
+      "imageUri": "https://storage.nadapp.net/coin/7043b3cf-d6b0-4225-aa33-70bf4b064fa0",
+      "twitter": "https://x.com/monadosocial",
+      "website": "https://monadosocial.xyz/"
+    },
+    {
+      "name": "Angel Chog",
+      "symbol": "ACHOG",
+      "tokenURI": "https://storage.nadapp.net/metadata/ebedf6aa-477a-4e8c-908f-252f2f06a19a.json",
+      "description": "Angel version of CHOG\n\n\n\n\n",
+      "imageUri": "https://storage.nadapp.net/coin/42681643-9a0e-4a7b-aa82-c573461c661b",
+      "twitter": "https://x.com/search?q=Angel%20Chog&src=typeahead_click"
+    },
+    {
+      "name": "chongnft",
+      "symbol": "chong",
+      "tokenURI": "https://storage.nadapp.net/metadata/293e66b8-3503-46bb-a36a-1c9ae3f75875.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/f67de4e1-782d-45f0-b3f6-16209c73762e",
+      "twitter": "https://x.com/ChogNFT",
+      "website": "https://t.co/pJoragsTfV"
+    },
+    {
+      "name": "CHOG TEST",
+      "symbol": "POORCHOG",
+      "tokenURI": "https://storage.nadapp.net/metadata/f685b553-c55a-4133-844d-91ccd9bb7d1a.json",
+      "description": "scammed by CHOG mfers",
+      "imageUri": "https://storage.nadapp.net/coin/b6071d9e-85a3-4675-84a1-930fbb3209cf",
+      "twitter": "https://x.com/ChogNFT?s=20"
+    },
+    {
+      "name": "MOLE",
+      "symbol": "MOLE",
+      "tokenURI": "https://storage.nadapp.net/metadata/1feb6e48-9adc-494b-afc9-06e5d253dbcc.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/29fb549d-8538-4980-b491-0255e9b514f2"
+    },
+    {
+      "name": "BULLISH",
+      "symbol": "BULLISH",
+      "tokenURI": "https://storage.nadapp.net/metadata/e1288bef-257d-4d76-8c2e-b8006baacacc.json",
+      "description": "Who's ready for the moon?\n\nYou just have to STAY BULLISH.",
+      "imageUri": "https://storage.nadapp.net/coin/3ac9d03a-6c7b-43be-864c-077599cb52f9",
+      "twitter": "https://x.com/jwllxyz/status/1993351968337625434?s=20"
+    },
+    {
+      "name": "GrimNad",
+      "symbol": "GMAAD",
+      "tokenURI": "https://storage.nadapp.net/metadata/490d26c8-7203-48e4-9bb6-126d69138adf.json",
+      "description": "Grimace-powered Monad token made for the community grinding shifts at McDonald’s.",
+      "imageUri": "https://storage.nadapp.net/coin/6e9a66d1-1751-44f0-a4c4-888465db47ce"
+    },
+    {
+      "name": "Monad is for everyone",
+      "symbol": "EVERYONE",
+      "tokenURI": "https://storage.nadapp.net/metadata/ca839586-7966-4ace-b637-8e06e7affc50.json",
+      "description": "Monad is for everyone.",
+      "imageUri": "https://storage.nadapp.net/coin/057a738d-f557-4cd1-a83b-08a3adbe9332"
+    },
+    {
+      "name": " Chog",
+      "symbol": "chog",
+      "tokenURI": "https://storage.nadapp.net/metadata/9caa730c-d01a-4fe5-96b2-3003e67f3e26.json",
+      "description": "Chog emerged as one of the first memes to come out of the Monad community, born from a failed AI experiment. Since then, he’s grown into a symbol of monad’s culture: memes, fun, and a place to belong.",
+      "imageUri": "https://storage.nadapp.net/coin/565fa461-2cae-4bc4-ab66-f2202d274894",
+      "twitter": "https://x.com/ChogNFT",
+      "website": "https://www.chog.xyz/"
+    },
+    {
+      "name": "Monkid",
+      "symbol": "MONKID",
+      "tokenURI": "https://storage.nadapp.net/metadata/3376489e-3345-4e3a-b08b-2f54d3c320c1.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/1b68c320-c501-4496-9f97-31cc89f57804"
+    },
+    {
+      "name": "Monad Test Girl",
+      "symbol": "MONDA",
+      "tokenURI": "https://storage.nadapp.net/metadata/345f0005-8f42-4265-bedc-d39d9818a22f.json",
+      "description": "A hidden girl named MONDA on its 2015 test page. \n",
+      "imageUri": "https://storage.nadapp.net/coin/52acd6e6-c624-49bc-b923-9d0d7c8239bd",
+      "twitter": "https://x.com/AnguloTramposo/status/1993353005526106222?s=20",
+      "website": "https://github.com/category-labs/monad/blob/main/monad/__init__.py"
+    },
+    {
+      "name": "Chog World Order",
+      "symbol": "CWO",
+      "tokenURI": "https://storage.nadapp.net/metadata/dd39572c-ee26-493b-ae74-b6249e523b12.json",
+      "description": "Chog Chog World",
+      "imageUri": "https://storage.nadapp.net/coin/e7db1e86-580d-4e3e-8d15-9d7f378b6521",
+      "website": "https://www.youtube.com/watch?v=P8NSHkL7Fxs&t=8s"
+    },
+    {
+      "name": "breakfast of champions",
+      "symbol": "breakfast",
+      "tokenURI": "https://storage.nadapp.net/metadata/e5438eef-365d-4d0d-aaa7-810c73af074c.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/a99351ee-fe74-44d2-b934-01ecd7e53e7f",
+      "twitter": "https://x.com/_jhunsaker/status/1993351570206105669"
+    },
+    {
+      "name": "FEET",
+      "symbol": "FEET",
+      "tokenURI": "https://storage.nadapp.net/metadata/21698344-302c-4f25-a808-143719144c13.json",
+      "description": "FEET",
+      "imageUri": "https://storage.nadapp.net/coin/844c9766-a28c-4dee-9ed7-87c7c1a4174b"
+    },
+    {
+      "name": "SIZZURP",
+      "symbol": "LEAN",
+      "tokenURI": "https://storage.nadapp.net/metadata/de45e3b1-09a9-4118-8a51-0e3e2132fe9c.json",
+      "description": "Purple Highway to Hell",
+      "imageUri": "https://storage.nadapp.net/coin/f99808f1-7d32-4416-a543-52790f49d39e",
+      "twitter": "https://x.com/i/communities/1993352884566573175",
+      "website": "https://x.com/i/communities/1993352884566573175"
+    },
+    {
+      "name": "chog pfp cult",
+      "symbol": "chogpfp",
+      "tokenURI": "https://storage.nadapp.net/metadata/6496f6a1-77ef-4275-a7b4-a8c0f5e07a84.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/de5497a5-f4e8-43cb-aae7-a539a99366d3",
+      "twitter": "https://x.com/ChogNFT/status/1993033869684359593/photo/1"
+    },
+    {
+      "name": "INCHOGNITO",
+      "symbol": "INCHOGNITO",
+      "tokenURI": "https://storage.nadapp.net/metadata/2e75fc4e-6b88-427b-9586-a7542cd21a0c.json",
+      "description": "Inchognito is alter ego of Chog.",
+      "imageUri": "https://storage.nadapp.net/coin/d2267769-0153-448e-adce-4a2f48ecf9a5",
+      "twitter": "https://x.com/INCHOGNITOXYZ",
+      "website": "https://inchognito.xyz/"
+    },
+    {
+      "name": "Chogbar",
+      "symbol": "CGB",
+      "tokenURI": "https://storage.nadapp.net/metadata/5281634c-770e-4dae-9918-16bfd7233a90.json",
+      "description": "Chogbar de BZ",
+      "imageUri": "https://storage.nadapp.net/coin/a6943de0-d39b-411e-865b-4fbfdafa7a21"
+    },
+    {
+      "name": "No Ma Rug Pulls",
+      "symbol": "NOMARUGS",
+      "tokenURI": "https://storage.nadapp.net/metadata/544ab483-f5ea-41df-bccb-75467fbb1ba1.json",
+      "description": "No more rug pulls, guaranteed no rugging from dev",
+      "imageUri": "https://storage.nadapp.net/coin/52c760fc-d8ce-4bb2-aaff-741835a9f7a0"
+    },
+    {
+      "name": "Monadmas",
+      "symbol": "MONADMAS",
+      "tokenURI": "https://storage.nadapp.net/metadata/4d08cf14-4d28-48eb-99ff-72c374dbde89.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/79986440-c0ea-42d2-bd60-7dd66cfff3fa",
+      "twitter": "https://x.com/i/communities/1993353292785598537"
+    },
+    {
+      "name": "Chog Universe",
+      "symbol": "CHOGUNI",
+      "tokenURI": "https://storage.nadapp.net/metadata/663b446f-a60d-4e89-849b-d5ca16b84f9c.json",
+      "description": "CHOG UNI",
+      "imageUri": "https://storage.nadapp.net/coin/2f92bf55-7f73-4974-a212-5cfc9f48256d"
+    },
+    {
+      "name": "Monut",
+      "symbol": "MONUT",
+      "tokenURI": "https://storage.nadapp.net/metadata/0af3b9de-842c-40d8-9b5b-402dc3207357.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/8eb858fb-11e1-453a-940e-c7585fb33197"
+    },
+    {
+      "name": "hiroto token",
+      "symbol": "hiroto",
+      "tokenURI": "https://storage.nadapp.net/metadata/43d7582f-7cb8-4abd-98fc-7d5c413e6ef5.json",
+      "description": "this is hiroto charater",
+      "imageUri": "https://storage.nadapp.net/coin/5e5ce1e9-2ac0-496c-86ab-69a8fb1ddc25",
+      "telegram": "https://t.me/ana"
+    },
+    {
+      "name": "Gugu Gaga",
+      "symbol": "GUGU",
+      "tokenURI": "https://storage.nadapp.net/metadata/830444d3-99f1-4f23-98af-2d439281fa9a.json",
+      "description": "A secret chamber for the most dedicated Gugu Holders. ",
+      "imageUri": "https://storage.nadapp.net/coin/0dee11a0-1d25-42c6-bd95-3edb6b5e3243",
+      "twitter": "https://x.com/GuguGaga_NFT",
+      "website": "https://discord.com/invite/zdDYYGf3aq"
+    },
+    {
+      "name": "Magic Chog Money",
+      "symbol": "MAGICCHOG",
+      "tokenURI": "https://storage.nadapp.net/metadata/3cb332ee-6608-4605-92d1-5c96d868e7c9.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/d4166882-b23d-42ea-bcf0-599b7dc23361",
+      "twitter": "https://x.com/magicchogmoney",
+      "website": "https://magicchog.xyz/"
+    },
+    {
+      "name": "gchog",
+      "symbol": "gchog",
+      "tokenURI": "https://storage.nadapp.net/metadata/e6a3bd6c-c242-4e20-9dcf-f597e9d71136.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/c3594f5f-591c-4d80-b043-d7834932803e"
+    },
+    {
+      "name": "The Church of Chog",
+      "symbol": "CHOGCHURCH",
+      "tokenURI": "https://storage.nadapp.net/metadata/3fad8d36-16a6-4fa0-a537-72b4abd2933e.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/5d30789d-f266-4e4d-abfd-ee317832d539",
+      "website": "https://www.youtube.com/watch?v=P8NSHkL7Fxs&t=8s"
+    },
+    {
+      "name": "cute chogs",
+      "symbol": "CUTE",
+      "tokenURI": "https://storage.nadapp.net/metadata/8543082e-ff30-40b2-918e-819f46bf76d8.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/fda11d99-d17d-4b6d-abe7-03422140658b",
+      "twitter": "https://x.com/chognft/status/1948705288569127382"
+    },
+    {
+      "name": "MOUCH",
+      "symbol": "MOUCH",
+      "tokenURI": "https://storage.nadapp.net/metadata/8e415411-ca8b-49b0-adae-a22d9a76f173.json",
+      "description": "https://x.com/MouchonMON",
+      "imageUri": "https://storage.nadapp.net/coin/9aaac7c3-2466-4db3-ae0b-0126a8710c22",
+      "twitter": "https://x.com/MouchonMON",
+      "website": "https://x.com/MouchonMON"
+    },
+    {
+      "name": "Chog's friend",
+      "symbol": "rayj",
+      "tokenURI": "https://storage.nadapp.net/metadata/cca37704-5357-494d-ac1b-8b65c4972cab.json",
+      "description": "Chog's friend",
+      "imageUri": "https://storage.nadapp.net/coin/f4be4058-4d5a-4381-aa99-7696ac560edc",
+      "website": "https://www.youtube.com/watch?v=P8NSHkL7Fxs"
+    },
+    {
+      "name": "WEN CHOG",
+      "symbol": "WEN",
+      "tokenURI": "https://storage.nadapp.net/metadata/fb7d22ad-a261-4ec0-bbab-61f64d5f25bf.json",
+      "description": "WEN FOOOK",
+      "imageUri": "https://storage.nadapp.net/coin/6785c799-f081-43a5-90c9-126b2cc51038"
+    },
+    {
+      "name": "Got Nads",
+      "symbol": "NADS",
+      "tokenURI": "https://storage.nadapp.net/metadata/d5bb8a8b-9bfc-4183-ac5f-377fa582609a.json",
+      "description": "Parallel execution requires a pair. The unofficial test of bravery on Monad. ",
+      "imageUri": "https://storage.nadapp.net/coin/fa56bd30-9450-4db4-8f1f-a1353ab92c19",
+      "twitter": "https://x.com/GotNads",
+      "website": "https://x.com/GotNads/status/1993350349848297560"
+    },
+    {
+      "name": "Monad the CEO",
+      "symbol": "CEOMONAD",
+      "tokenURI": "https://storage.nadapp.net/metadata/7a7a9e71-2dfd-402e-a7a4-87efda7698ef.json",
+      "description": "Monad the CEO",
+      "imageUri": "https://storage.nadapp.net/coin/87f817b2-e22e-400e-9d60-ad97f8801130",
+      "twitter": "https://x.com/monad",
+      "website": "https://linktr.ee/monad_xyz"
+    },
+    {
+      "name": "KEONE HON",
+      "symbol": "KEONEHON",
+      "tokenURI": "https://storage.nadapp.net/metadata/df33838f-0189-44fa-8377-a38158d4718d.json",
+      "description": "8 years at jump trading\nbuilding the fastest systems on earth\n\nnow on monad\nbuilding the fastest chain on earth\n\nwe're just following the alpha\n\n$MONKEONE",
+      "imageUri": "https://storage.nadapp.net/coin/c56ae0ef-0d65-44f9-812e-57327f6f4576",
+      "twitter": "https://x.com/jwllxyz/status/1993355088203583826?s=20"
+    },
+    {
+      "name": "BOBR",
+      "symbol": "BOBR",
+      "tokenURI": "https://storage.nadapp.net/metadata/b6c35239-e7de-40d8-96ce-b57bbd290749.json",
+      "description": "First, only, official BOBR NFT on Monad. Welcome to the game",
+      "imageUri": "https://storage.nadapp.net/coin/4332447f-93f8-40cd-ad28-e055fd9291e1",
+      "twitter": "https://x.com/bober_xyz",
+      "website": "https://discord.com/invite/bobr"
+    },
+    {
+      "name": "PROFESSOR COIN",
+      "symbol": "PROFESSOR",
+      "tokenURI": "https://storage.nadapp.net/metadata/b4861272-4a68-4f77-b94e-f89fef32d379.json",
+      "description": "https://www.youtube.com/watch?si=O7ONss8mENzmnCK0&t=1472&v=aW3KlttN814&feature=youtu.be",
+      "imageUri": "https://storage.nadapp.net/coin/2e84743a-baa5-4ad2-ad1d-3f8c6befba29",
+      "website": "https://www.youtube.com/watch?si=O7ONss8mENzmnCK0&t=1472&v=aW3KlttN814&feature=youtu.be"
+    },
+    {
+      "name": "EDEL",
+      "symbol": "EDEL",
+      "tokenURI": "https://storage.nadapp.net/metadata/1d09edbd-0fbd-4c21-8a0f-16e0284473f2.json",
+      "description": "EDEL",
+      "imageUri": "https://storage.nadapp.net/coin/9a5eae2f-182b-415c-a2e6-b552ca557488"
+    },
+    {
+      "name": "dat",
+      "symbol": "DAT",
+      "tokenURI": "https://storage.nadapp.net/metadata/fb85b2fa-2a97-4831-b865-8ad795ce6768.json",
+      "description": "duck + cat = $dat",
+      "imageUri": "https://storage.nadapp.net/coin/60709c32-1080-4a35-9960-6c8b6b8e4bfd",
+      "twitter": "https://x.com/monad_datsdat",
+      "telegram": "https://t.me/+resnENbId382OTNh",
+      "website": "https://datsdatcoin.xyz/"
+    },
+    {
+      "name": "DeFi",
+      "symbol": "DeFi",
+      "tokenURI": "https://storage.nadapp.net/metadata/4f55597c-0448-4d1c-9901-bdfa0814092d.json",
+      "description": "DeFi",
+      "imageUri": "https://storage.nadapp.net/coin/a8a76f0b-1d90-4729-b1ca-ce0b2181a003"
+    },
+    {
+      "name": "Zero-Knowledge GF",
+      "symbol": "ZKGF",
+      "tokenURI": "https://storage.nadapp.net/metadata/1a363d30-1535-472f-b824-d3fefac4ecaf.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/39ea9fc7-d553-40b9-a07d-2883684996a9",
+      "twitter": "https://x.com/zeroknowledgegf"
+    },
+    {
+      "name": "One Coin to Hold Forever",
+      "symbol": "Forever",
+      "tokenURI": "https://storage.nadapp.net/metadata/18b299af-2d68-4ada-a3ee-7bca302a1c13.json",
+      "description": "One Coin to Hold Forever",
+      "imageUri": "https://storage.nadapp.net/coin/35137d6d-d496-4a09-91a6-65ff3a31feec",
+      "twitter": "https://x.com/nicoscalls/status/1993454326598308220?s=20"
+    },
+    {
+      "name": "JEWNAD",
+      "symbol": "JEWNAD",
+      "tokenURI": "https://storage.nadapp.net/metadata/d4a9b806-eddf-44ee-ba8b-f23461d7ab7c.json",
+      "description": "JEW CHAIN",
+      "imageUri": "https://storage.nadapp.net/coin/3d159f84-83f1-4e34-94e5-a3005d7ee197"
+    },
+    {
+      "name": "Monad Ducks",
+      "symbol": "Ducks",
+      "tokenURI": "https://storage.nadapp.net/metadata/7b7617d1-51a8-4c45-bf8e-f3730cb9497b.json",
+      "description": "Quacking on Monad ",
+      "imageUri": "https://storage.nadapp.net/coin/30c7e2dc-7ab1-432b-9122-586b5b4a3acc",
+      "twitter": "https://x.com/MonadDucks",
+      "website": "https://discord.gg/gH5dNyqghz"
+    },
+    {
+      "name": "SIX7",
+      "symbol": "SIX7",
+      "tokenURI": "https://storage.nadapp.net/metadata/076e6971-4c3e-49b5-8cfc-194aa9181949.json",
+      "description": "SIX7",
+      "imageUri": "https://storage.nadapp.net/coin/934537b8-d4bb-4561-bb37-029276124b13"
+    },
+    {
+      "name": "Web3 Advent Calendar",
+      "symbol": "25days",
+      "tokenURI": "https://storage.nadapp.net/metadata/86b93416-1f08-466a-a158-d99c4ebb20e6.json",
+      "description": "25days is a festive Solana project. It is a daily staking challenge where you earn SOL every day you stay locked in, miss a day and you lose the streak.",
+      "imageUri": "https://storage.nadapp.net/coin/e4f066db-e7b2-4498-9ee9-5b431dda99b8",
+      "twitter": "https://x.com/i/communities/1993428625371123818",
+      "website": "https://25days.fun/"
+    },
+    {
+      "name": "AutoGrid OS",
+      "symbol": "AGOS",
+      "tokenURI": "https://storage.nadapp.net/metadata/b7a41914-ba4f-4de6-aabc-67c47a7d7158.json",
+      "description": "Machine-to-machine payments. Autonomous task allocation. A new economic stack for robotic fleets.",
+      "imageUri": "https://storage.nadapp.net/coin/8de23bf5-c045-4507-a41e-0144466ff8d8",
+      "twitter": "https://x.com/AutoGridOS",
+      "website": "https://autogridos.xyz/"
+    },
+    {
+      "name": "SPERM",
+      "symbol": "SPERM",
+      "tokenURI": "https://storage.nadapp.net/metadata/bccbd80a-034c-4764-bc39-485516c7c520.json",
+      "description": "https://x.com/spermXsolana",
+      "imageUri": "https://storage.nadapp.net/coin/6f667d50-e041-4826-bba6-1158d1fcda3f",
+      "twitter": "https://x.com/spermXsolana",
+      "website": "https://x.com/spermXsolana"
+    },
+    {
+      "name": "Shield OS",
+      "symbol": "SHIELD",
+      "tokenURI": "https://storage.nadapp.net/metadata/4a1a9c88-9fb5-453e-862b-057b8e30a5fb.json",
+      "description": "Operating System built to protect your data and identity.",
+      "imageUri": "https://storage.nadapp.net/coin/33f5b619-5b0a-4917-b862-c6d341193a69",
+      "twitter": "https://x.com/shield_os",
+      "website": "https://www.shieldos.xyz/"
+    },
+    {
+      "name": "Mon You",
+      "symbol": "MY",
+      "tokenURI": "https://storage.nadapp.net/metadata/a8fccf6f-bece-417e-b40c-22a0ccbf69f3.json",
+      "description": "MONADU",
+      "imageUri": "https://storage.nadapp.net/coin/91879adf-eed1-4630-84ae-dab80a82dd87"
+    },
+    {
+      "name": "403 GeoPay Protocol",
+      "symbol": "403GEOPAY",
+      "tokenURI": "https://storage.nadapp.net/metadata/490dc657-cae6-4468-b03c-9cc8ca216067.json",
+      "description": "Autonomous agent for cheapest global payments. Routes transactions through the best virtual region to beat fees and limits.",
+      "imageUri": "https://storage.nadapp.net/coin/9c6f8c25-4343-479e-b581-8f24e8366402",
+      "twitter": "https://x.com/403GeoPay",
+      "website": "https://geopay403.xyz"
+    },
+    {
+      "name": "Monad Run Club",
+      "symbol": "MRC",
+      "tokenURI": "https://storage.nadapp.net/metadata/db1fbdc3-e669-4d56-8c7b-9dd347ad9bb4.json",
+      "description": "we’re running to space by running 100,000km 🚀🏃 MonadRunClub on top",
+      "imageUri": "https://storage.nadapp.net/coin/f9489162-584c-4431-b923-192e884f1414",
+      "twitter": "https://x.com/MonadRunClub",
+      "website": "https://monadrunclub.xyz/"
+    },
+    {
+      "name": "Mchog ",
+      "symbol": "Mchog",
+      "tokenURI": "https://storage.nadapp.net/metadata/0c3d2d15-f0fc-498d-9651-db992d38cdf5.json",
+      "description": "Alpha baby drawing chog ",
+      "imageUri": "https://storage.nadapp.net/coin/bd43a98a-c9c8-40b4-b648-c031016c45fd"
+    },
+    {
+      "name": "Monask on Monad",
+      "symbol": "Monask",
+      "tokenURI": "https://storage.nadapp.net/metadata/e159f23a-a77c-4245-8c25-696969e35b83.json",
+      "description": "Anago the Bulldog that has a ski mask on it",
+      "imageUri": "https://storage.nadapp.net/coin/660660d6-7850-4dbc-8f23-ed6b3d66c224",
+      "twitter": "https://x.com/Monask_nads"
+    },
+    {
+      "name": "blackjak",
+      "symbol": "blackjak",
+      "tokenURI": "https://storage.nadapp.net/metadata/bae476ce-4f2a-45e6-879d-67ffd1f93c3b.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/d2c7d460-33e6-4cbb-8824-64be69f52157",
+      "twitter": "https://x.com/blackjak_coin/status/1993454974685389056?s=20",
+      "website": "https://x.com/blackjak_coin"
+    },
+    {
+      "name": "BUSI",
+      "symbol": "BUSI",
+      "tokenURI": "https://storage.nadapp.net/metadata/0a0c23e9-cea1-432c-a9f5-08cb2bb0b080.json",
+      "description": "Web3 Gaming Casino",
+      "imageUri": "https://storage.nadapp.net/coin/698b32d9-6782-48df-ba43-de26640b7c4a",
+      "twitter": "https://x.com/BusinoBet",
+      "website": "https://busino.fun/"
+    },
+    {
+      "name": "Santa 67",
+      "symbol": "S67",
+      "tokenURI": "https://storage.nadapp.net/metadata/584eac3a-2d15-4b07-9521-14074ca06757.json",
+      "description": "HO HO HODL",
+      "imageUri": "https://storage.nadapp.net/coin/2747c463-fe43-4c75-9aad-0b42296fd84c",
+      "twitter": "https://x.com/i/communities/1993452833232801925",
+      "telegram": "https://t.me/pEmR7nArN"
+    },
+    {
+      "name": "moncock",
+      "symbol": "moncock",
+      "tokenURI": "https://storage.nadapp.net/metadata/f6148980-c410-4b7a-a9ad-3f8c7f0b868f.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/c4a02522-739b-4fee-bc8a-a5e9a7f1689a",
+      "twitter": "https://x.com/0xkitty69/status/1993463647436521975"
+    },
+    {
+      "name": "GOHC",
+      "symbol": "GOHC",
+      "tokenURI": "https://storage.nadapp.net/metadata/2499a449-78cb-4f76-926a-bd3a68540982.json",
+      "description": "Monad of Mascot The",
+      "imageUri": "https://storage.nadapp.net/coin/2c855609-d621-4a4f-b1d6-ef3709fe475a",
+      "twitter": "https://x.com/ChogNFT"
+    },
+    {
+      "name": "Ansem",
+      "symbol": "ANSEM",
+      "tokenURI": "https://storage.nadapp.net/metadata/3f9366ab-130d-4cbe-8044-0372688ee63f.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/4dad950d-600f-42e0-b236-e8cbb56de31c",
+      "twitter": "https://x.com/GordonTrenchAlp/status/1993457818025009447",
+      "website": "https://x.com/i/communities/1993455330182021475"
+    },
+    {
+      "name": "Monad Potatoe",
+      "symbol": "Potatoe",
+      "tokenURI": "https://storage.nadapp.net/metadata/12a18886-e6d9-46b3-8bf4-c94ccef71148.json",
+      "description": "Official monad potatoe ",
+      "imageUri": "https://storage.nadapp.net/coin/374b0fcb-10ee-41a0-8485-af3fc1192ba5"
+    },
+    {
+      "name": "Game",
+      "symbol": "THRONGLETS",
+      "tokenURI": "https://storage.nadapp.net/metadata/16a686cf-cd7d-4e83-8236-8247319c243d.json",
+      "description": "THRONGLETS are digital lifeforms on Solana. reference to Black Mirror Episode on Netflix.",
+      "imageUri": "https://storage.nadapp.net/coin/8b819506-5b9a-4c35-97e1-68f68ed8e9d1",
+      "twitter": "https://x.com/THRONGVERSE",
+      "telegram": "https://t.me/THRONGLETSONSOL",
+      "website": "https://thronglets.live/"
+    },
+    {
+      "name": "Fuck Monad",
+      "symbol": "FKMONAD",
+      "tokenURI": "https://storage.nadapp.net/metadata/69feb537-a06f-4bb2-9c07-9b9acd12ffcc.json",
+      "description": "Meme coin that will teach Monad a lesson about the power of community",
+      "imageUri": "https://storage.nadapp.net/coin/96ccb1d3-bbe1-44df-a423-5f2817e351b8",
+      "twitter": "https://x.com/fk_monad"
+    },
+    {
+      "name": "Wojak",
+      "symbol": "Wojak",
+      "tokenURI": "https://storage.nadapp.net/metadata/5f9351da-a5ad-4618-95b9-aaf6895cfa28.json",
+      "description": "Wojak aka ‘Feels Guy’ - the biggest meme in crypto",
+      "imageUri": "https://storage.nadapp.net/coin/c131d8c7-34d8-4cef-915c-47602545e9c6"
+    },
+    {
+      "name": "Hoppy by Matt Furie",
+      "symbol": "HOPPY",
+      "tokenURI": "https://storage.nadapp.net/metadata/ba458bde-0c17-499d-8baa-8609f301464e.json",
+      "description": "first ever frog by MATT FURIE - Fees will be redirected to him",
+      "imageUri": "https://storage.nadapp.net/coin/03c2651f-0bb0-4ce7-b44e-27e800bfb184",
+      "twitter": "https://x.com/i/communities/1993429502978850904"
+    },
+    {
+      "name": "Dogecoin",
+      "symbol": "DOGE",
+      "tokenURI": "https://storage.nadapp.net/metadata/97077f44-c492-4de3-ad45-ff1ad2a49fcf.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/85ae87a3-8505-4756-b3b9-44a257dde4be",
+      "twitter": "https://x.com/alohtrades/status/1993362218864246883",
+      "website": "https://x.com/alohtrades/status/1993362218864246883"
+    },
+    {
+      "name": "Monad One",
+      "symbol": "One",
+      "tokenURI": "https://storage.nadapp.net/metadata/e5ffc6a2-c18b-4bab-9ac9-05ca0a546a0c.json",
+      "description": "The only launchpad that matters on Monad. ONE.",
+      "imageUri": "https://storage.nadapp.net/coin/a10012f7-cde7-4af5-bb40-b493f3560ea0",
+      "twitter": "https://x.com/Monad_One"
+    },
+    {
+      "name": "Shibetoshi Nakamoto",
+      "symbol": "Billy",
+      "tokenURI": "https://storage.nadapp.net/metadata/4a654961-94e2-422f-9408-e5d3f6c80983.json",
+      "description": "the coin of Shibetoshi Nakamoto, one of the creators of Dogecoin",
+      "imageUri": "https://storage.nadapp.net/coin/0b2b98f0-113f-4999-8e45-9d85ff3d778f",
+      "twitter": "https://x.com/i/communities/1993120687393751229"
+    },
+    {
+      "name": "AHOS",
+      "symbol": "AHOS",
+      "tokenURI": "https://storage.nadapp.net/metadata/0a44a71b-7214-4b8e-b8b1-db15606d7694.json",
+      "description": "The First Owl on Monad",
+      "imageUri": "https://storage.nadapp.net/coin/0bccc3f4-001d-4d46-aa10-876c23ac7537",
+      "twitter": "https://x.com/AHOS_xyz",
+      "website": "https://www.ahos.xyz"
+    },
+    {
+      "name": "Anatoly Yakovenko",
+      "symbol": "Toly",
+      "tokenURI": "https://storage.nadapp.net/metadata/db5f971f-ec99-4edd-9c62-5d3d99ea1440.json",
+      "description": "the coin of Anatoly Yakovenko, The father of the trenches, co- founder of Solana.",
+      "imageUri": "https://storage.nadapp.net/coin/94733873-2b86-46f9-b957-8ece9134087f",
+      "twitter": "https://x.com/i/communities/1993425273405255864"
+    },
+    {
+      "name": "Super hog",
+      "symbol": "Laserbeam",
+      "tokenURI": "https://storage.nadapp.net/metadata/74b96cb1-0585-4576-a98a-32150b39663c.json",
+      "description": "Super hog comes and save the day. He takes charge and goes up ,up, and away",
+      "imageUri": "https://storage.nadapp.net/coin/3ff2c8b4-a215-449d-9e71-749b8151a3f2"
+    },
+    {
+      "name": "WARM FACE (not wojak)",
+      "symbol": "WARMFACE",
+      "tokenURI": "https://storage.nadapp.net/metadata/c2f54aba-9b73-4f36-9d12-c630b01c3472.json",
+      "description": "Wojak's real name is Warm Face.\n\nThe OG Meme $WARMFACE will now live on Monad (while others larp with $WOJAK). \n\nThe original meme was posted by a guy named \"Voyack\" on a Polish Imageboard in 2009 - The image was titled: Ciepła Twarz (Warm Face).",
+      "imageUri": "https://storage.nadapp.net/coin/07168cfe-5ef1-4292-ad43-33e5043cef41",
+      "twitter": "https://x.com/warmfacecoin"
+    },
+    {
+      "name": "Unstable Monad",
+      "symbol": "unstable",
+      "tokenURI": "https://storage.nadapp.net/metadata/a462992c-614f-4f72-b90a-195c7c44708f.json",
+      "description": "A decentralized, unstable neural network for robotics, powered by Monad.",
+      "imageUri": "https://storage.nadapp.net/coin/b6e78d0a-2e85-4de8-8ab8-6267f8f0b9fc",
+      "twitter": "https://x.com/Mostaccho/status/1993466385268351103?s=20",
+      "website": "https://www.synapserobotics.xyz/"
+    },
+    {
+      "name": "Official R3tard Coin",
+      "symbol": "r3tard",
+      "tokenURI": "https://storage.nadapp.net/metadata/a3a92a56-a945-46d2-b36c-2d6e0fb33579.json",
+      "description": "Official r3tard Coin",
+      "imageUri": "https://storage.nadapp.net/coin/321346bb-e1c0-4f34-971b-8d834a37cb5b",
+      "twitter": "https://x.com/r3tardsnft?s=21"
+    },
+    {
+      "name": "SANTAMONAD",
+      "symbol": "CHRISTMAS",
+      "tokenURI": "https://storage.nadapp.net/metadata/81f658ce-0958-487c-bace-214fb606a931.json",
+      "description": "Merry Christmas ",
+      "imageUri": "https://storage.nadapp.net/coin/1693d65d-9140-4bb9-9213-c557b5114aac"
+    },
+    {
+      "name": "Nad on Monad",
+      "symbol": "Nad",
+      "tokenURI": "https://storage.nadapp.net/metadata/8027398b-4fb7-4f16-bd3e-3224e13e162c.json",
+      "description": "The official Nad Cult token on Monad",
+      "imageUri": "https://storage.nadapp.net/coin/2577e2c5-6156-4c0a-b5cd-281757b97abf",
+      "twitter": "https://x.com/nad_monad"
+    },
+    {
+      "name": "ttt",
+      "symbol": "tt",
+      "tokenURI": "https://storage.nadapp.net/metadata/f9109c0c-72ad-43a7-ad74-f162b15662ec.json",
+      "description": "tt",
+      "imageUri": "https://storage.nadapp.net/coin/7ff7a467-ef83-4c4b-9381-cce28622ae9c"
+    },
+    {
+      "name": "Drako",
+      "symbol": "DRAKO",
+      "tokenURI": "https://storage.nadapp.net/metadata/77dc7f6b-f8f8-4d1f-918e-a5876eb5a120.json",
+      "description": "Drako - The Violet Origin Beast of Monad\n\nBorn inside the purple void before block zero. Awakened when the chain fired. Feeds on failed TXs, grows every surge.\n\nNot a mascot. The chain's first native soul.\nOne dragon. One story. One chain.\n\nThe dragon has hatched. Join the flame or become ash.",
+      "imageUri": "https://storage.nadapp.net/coin/6d6667c2-7917-459a-87d5-eeb2c87dd85e",
+      "twitter": "https://x.com/drako_token",
+      "website": "https://drakotoken.com"
+    },
+    {
+      "name": "MONKEY",
+      "symbol": "Mono",
+      "tokenURI": "https://storage.nadapp.net/metadata/5dd39a2a-0621-4b80-a877-869fa31f0d3a.json",
+      "description": "Monkey coin, you buy he swings!",
+      "imageUri": "https://storage.nadapp.net/coin/2a9e1e48-5fe6-464c-ad31-8ec6e4b75600"
+    },
+    {
+      "name": "Monade",
+      "symbol": "MONADE",
+      "tokenURI": "https://storage.nadapp.net/metadata/909719d2-d581-4eff-8bcd-16e9930a312a.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/93efa6a6-e645-4a93-8c36-44b4514fdd1e",
+      "twitter": "https://x.com/devvingonsol/status/1993466825104036199?t=BynPFj0gs4OVpA12Ipc3Mg&s=19",
+      "website": "https://hodl.fyi/t/monade"
+    },
+    {
+      "name": "PeanutNad ",
+      "symbol": "PN",
+      "tokenURI": "https://storage.nadapp.net/metadata/e161be1b-9330-46c9-af3d-24d4b82d0ae7.json",
+      "description": "$PN is the official token for PeanutNad ",
+      "imageUri": "https://storage.nadapp.net/coin/0a98b77e-1cfb-470f-acef-f1587a841f5a",
+      "twitter": "https://x.com/Peanut_Nad_"
+    },
+    {
+      "name": "Monad BAYC",
+      "symbol": "MONBAYC",
+      "tokenURI": "https://storage.nadapp.net/metadata/e326e588-3270-4311-baa8-89cb65f7a7bb.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/4877aefe-4274-4a85-ba3f-194c1538e8cf",
+      "twitter": "https://x.com/monad_bayc"
+    },
+    {
+      "name": "Monaco",
+      "symbol": "Monaco",
+      "tokenURI": "https://storage.nadapp.net/metadata/fac0a308-7a98-44d3-a5bd-1aaab3deb8a0.json",
+      "description": "Monaco on Monad",
+      "imageUri": "https://storage.nadapp.net/coin/c7dab476-d846-4349-9f6e-647b0be0f19c",
+      "twitter": "https://x.com/monaco_on_monad"
+    },
+    {
+      "name": "Nads Bull Club",
+      "symbol": "NBC",
+      "tokenURI": "https://storage.nadapp.net/metadata/b50bf2ce-599b-4efe-8eb4-2fb84fc1491a.json",
+      "description": "Nads Bulls Unite!",
+      "imageUri": "https://storage.nadapp.net/coin/e72d5ccf-d6f1-4a50-8d4f-90d96c39c25f",
+      "twitter": "https://x.com/nadsbullclub/"
+    },
+    {
+      "name": "Elementz on Monad",
+      "symbol": "Elementz",
+      "tokenURI": "https://storage.nadapp.net/metadata/74a88920-a5e8-4614-bb24-23660ffaaaa1.json",
+      "description": "Digital elements evolving on-chain.\nHigh-speed NFTs with real utility, powered by Monad.",
+      "imageUri": "https://storage.nadapp.net/coin/e0f33c86-bdf9-406c-bfed-d1cd6c510684",
+      "twitter": "https://x.com/elementz_monad"
+    },
+    {
+      "name": "1MON",
+      "symbol": "1MON",
+      "tokenURI": "https://storage.nadapp.net/metadata/88390c17-ac4b-44e9-b06b-28b3f4976947.json",
+      "description": "1 MON coin can change your life",
+      "imageUri": "https://storage.nadapp.net/coin/2ea7a643-c11b-4fd8-94d3-f8c949b51cac",
+      "twitter": "https://x.com/monad"
+    },
+    {
+      "name": "Mortal",
+      "symbol": "MR",
+      "tokenURI": "https://storage.nadapp.net/metadata/c30a3004-9e32-4b51-a151-fe7d9920ee83.json",
+      "description": "$MR is the official token for PeanutNad ",
+      "imageUri": "https://storage.nadapp.net/coin/42c111d0-35b9-497b-899a-d6fa42f3980b",
+      "twitter": "https://x.com/MortalCK"
+    },
+    {
+      "name": "MON6900",
+      "symbol": "MON6900",
+      "tokenURI": "https://storage.nadapp.net/metadata/216dccd4-9f1d-4ef9-a230-9a9ed6df4dda.json",
+      "description": "https://x.com/mon_6900",
+      "imageUri": "https://storage.nadapp.net/coin/841a9dc6-cb3c-41b7-9436-f4403c2e7861",
+      "twitter": "https://x.com/mon_6900",
+      "website": "https://x.com/mon_6900"
+    },
+    {
+      "name": "Unvampable Coin",
+      "symbol": "Unvampable",
+      "tokenURI": "https://storage.nadapp.net/metadata/871ec68b-0de4-4eb4-8463-6d7a987e6862.json",
+      "description": "All these coins with lore in monad are getting Vamped left and right, so why not make a proper coin that is 100% $Unvampable?",
+      "imageUri": "https://storage.nadapp.net/coin/6843511a-c27b-44fa-a150-82e286b5ece9",
+      "twitter": "https://x.com/ZZantrus/status/1993469592371437652?s=20",
+      "website": "https://x.com/ZZantrus/status/1993469592371437652?s=20"
+    },
+    {
+      "name": "cash",
+      "symbol": "cash",
+      "tokenURI": "https://storage.nadapp.net/metadata/2cef4ac8-351e-4db4-bda7-17ebd76f2d91.json",
+      "description": "It's your liquidity. Use it when you need. Put cash in your wallet today.",
+      "imageUri": "https://storage.nadapp.net/coin/cc5bfc2b-e065-4d36-b16a-d8f4b64335f2",
+      "twitter": "https://x.com/0xKeziah/status/1993469818306281588",
+      "website": "https://x.com/i/communities/1993469554274476541"
+    },
+    {
+      "name": "GURU",
+      "symbol": "GURU",
+      "tokenURI": "https://storage.nadapp.net/metadata/9fdfd96f-78fa-49d7-9763-e7ad3c632664.json",
+      "description": "on MON",
+      "imageUri": "https://storage.nadapp.net/coin/b34e2d48-70e3-4053-9d51-3082813b88fc"
+    },
+    {
+      "name": "MOYAKI",
+      "symbol": "MOYAKI",
+      "tokenURI": "https://storage.nadapp.net/metadata/545a4381-20ee-4c11-8c3c-407868d4ae61.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/73f95cf8-5a30-47f3-aaa2-aadce6ad1b38",
+      "twitter": "https://x.com/hellomoyaki/status/1993469339224404027?s=46",
+      "website": "https://moyakimonad.xyz/"
+    },
+    {
+      "name": "Pepe Monad",
+      "symbol": "PENAD",
+      "tokenURI": "https://storage.nadapp.net/metadata/674aea7a-5056-405b-a37e-272e4203231a.json",
+      "description": "Pepe Monad is a next-generation meme identity born from the fusion of internet culture and the emerging Monad blockchain ecosystem. Powered by speed, scalability, and a community-driven spirit, Pepe Monad represents a playful yet unstoppable force in the world of decentralized finance.",
+      "imageUri": "https://storage.nadapp.net/coin/9848cac9-96f4-404a-89b6-46b7f770baff",
+      "twitter": "https://x.com/pepemonad"
+    },
+    {
+      "name": "monad scam",
+      "symbol": "monadscam",
+      "tokenURI": "https://storage.nadapp.net/metadata/4d5aec6a-6c5f-49eb-aefe-1a49931a1ad6.json",
+      "description": "monad big scam",
+      "imageUri": "https://storage.nadapp.net/coin/7c6a4f52-4123-4fc3-a983-563c46751f94"
+    },
+    {
+      "name": "Gardenor of Monad",
+      "symbol": "GARDENOR",
+      "tokenURI": "https://storage.nadapp.net/metadata/7f5b5d07-b97b-4c25-a558-8ac07459fe19.json",
+      "description": "MON EYE MONEY",
+      "imageUri": "https://storage.nadapp.net/coin/5585d0be-e1c3-4246-9337-3a09ecb517a5"
+    },
+    {
+      "name": "Flap Hog",
+      "symbol": "FHOG",
+      "tokenURI": "https://storage.nadapp.net/metadata/cdc3a0dc-37cb-4def-a0fc-0cdf549f27bc.json",
+      "description": "Oink Oink to the Moon!\n",
+      "imageUri": "https://storage.nadapp.net/coin/47a84ba5-ccd3-4e8e-9e8b-470cbd38d4c5",
+      "twitter": "https://x.com/FhogHog23643",
+      "website": "https://flap-hog.vercel.app/"
+    },
+    {
+      "name": "Symphony",
+      "symbol": "Symphony",
+      "tokenURI": "https://storage.nadapp.net/metadata/bbe3fb73-1a3c-4a18-b6f0-f5de09e7d912.json",
+      "description": "The Agentic Layer for Global Financial Markets",
+      "imageUri": "https://storage.nadapp.net/coin/e286d09b-6c1f-4e07-8e85-c936f0016c92",
+      "twitter": "https://x.com/symphonyio",
+      "telegram": "https://t.me/symphonyio",
+      "website": "https://www.symphony.io"
+    },
+    {
+      "name": "yao ming",
+      "symbol": "yao",
+      "tokenURI": "https://storage.nadapp.net/metadata/a696a120-2ced-47a2-a106-e3210b4d3176.json",
+      "description": "yao ming face",
+      "imageUri": "https://storage.nadapp.net/coin/95c61d9d-e746-43cc-8b68-a5d9853d371e",
+      "twitter": "https://x.com/yaoming_face_/status/1993469327459402070?s=20",
+      "website": "https://x.com/yaoming_face_"
+    },
+    {
+      "name": "OctoNads",
+      "symbol": "OCD",
+      "tokenURI": "https://storage.nadapp.net/metadata/933feb1e-bd83-4401-89ff-713be23ff51c.json",
+      "description": "OCD is the official token for OctoNads",
+      "imageUri": "https://storage.nadapp.net/coin/e906702b-9fd2-4497-989b-2a38aa1d65e1",
+      "twitter": "https://x.com/OctoNads",
+      "website": "https://octonads.xyz/"
+    },
+    {
+      "name": "Monad AI DeFi",
+      "symbol": "MonAI",
+      "tokenURI": "https://storage.nadapp.net/metadata/4f6fdb69-87dc-434f-b047-7a87dad76cac.json",
+      "description": "The First DeFAI Agents on Monad",
+      "imageUri": "https://storage.nadapp.net/coin/ed6b19e8-f51c-49d4-b874-05dc1f72b8e9",
+      "twitter": "https://x.com/MonAIgg",
+      "website": "https://www.monai.gg/"
+    },
+    {
+      "name": "nadfun emoji",
+      "symbol": "nadmoji",
+      "tokenURI": "https://storage.nadapp.net/metadata/e071780e-a5ce-435b-a117-b8582c9e1e4a.json",
+      "description": "Hand-drawn emojis (not AI) for @naddotfun — we’re promoting them, and they might even be added to the platform so we can use them.",
+      "imageUri": "https://storage.nadapp.net/coin/01daac0c-94c2-4aea-8813-08c1653d1880",
+      "twitter": "https://x.com/nadmoji",
+      "website": "https://x.com/i/communities/1992955374136156475"
+    },
+    {
+      "name": "Japanese Network",
+      "symbol": "Monashi",
+      "tokenURI": "https://storage.nadapp.net/metadata/a1ad399a-8fff-4afb-bb5d-25f5e868c0c5.json",
+      "description": "A Japanese unstable neural network for robotics, powered by Monad.",
+      "imageUri": "https://storage.nadapp.net/coin/b7a510d1-5d70-4fa5-9937-96c4823739c1",
+      "twitter": "https://x.com/gabomclv/status/1993472118319993208?s=20",
+      "website": "https://www.synapserobotics.xyz/"
+    },
+    {
+      "name": "REAL MON",
+      "symbol": "REAL",
+      "tokenURI": "https://storage.nadapp.net/metadata/88d88d2d-6844-45e6-b6bd-93a0d8455bae.json",
+      "description": "REAL MARDRID",
+      "imageUri": "https://storage.nadapp.net/coin/782f9d32-b481-4eb4-8e8a-9534dd88dbdd"
+    },
+    {
+      "name": "Monadies",
+      "symbol": "Monadies",
+      "tokenURI": "https://storage.nadapp.net/metadata/63986aad-8d48-4405-9675-3a59eb5fd457.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/6d7e2e5b-8ae4-4b9c-9f5c-10502a151f22",
+      "twitter": "https://x.com/MonadiesNft",
+      "website": "https://magiceden.io/collections/monad/Monadies"
+    },
+    {
+      "name": "COIN",
+      "symbol": "COIN",
+      "tokenURI": "https://storage.nadapp.net/metadata/8258ab50-c994-456f-b25a-65db97e7980e.json",
+      "description": "",
+      "imageUri": "https://storage.nadapp.net/coin/47bd2085-7aa6-4e13-b064-020b1b40973b"
+    },
+    {
+      "name": "hehe",
+      "symbol": "hehe",
+      "tokenURI": "https://storage.nadapp.net/metadata/8e9acad8-0087-4ee1-bb93-b1ce1cf482b5.json",
+      "description": "hehe i bought just another lil token",
+      "imageUri": "https://storage.nadapp.net/coin/59507198-1647-4406-a1b9-6ae43d514532"
+    },
+    {
+      "name": "PeePee",
+      "symbol": "PeePee",
+      "tokenURI": "https://storage.nadapp.net/metadata/a86f8587-5430-4d7d-99d2-da33c62e76b4.json",
+      "description": "PeePee",
+      "imageUri": "https://storage.nadapp.net/coin/7780a50a-5b91-40ab-9575-fe16ac87a540"
+    },
+    {
+      "name": "DON'T BUY ME",
+      "symbol": "DBM",
+      "tokenURI": "https://storage.nadapp.net/metadata/f29ae9a5-f265-46eb-ab8f-8da996a013ea.json",
+      "description": "PLEASE DONT BUY ME",
+      "imageUri": "https://storage.nadapp.net/coin/c14edb49-b3f5-40f0-913f-78bf29d76a25",
+      "website": "https://www.youtube.com/watch?v=srwxJUXPHvE"
+    },
+    {
+      "name": "Pipeline",
+      "symbol": "PIPE",
+      "tokenURI": "https://storage.nadapp.net/metadata/43c63eaf-653b-47be-8748-ffe6f1919d3c.json",
+      "description": "The number monad media (parody)",
+      "imageUri": "https://storage.nadapp.net/coin/c20769b8-8d79-4ee0-a374-dcee5c0dc384"
+    },
+    {
+      "name": "kekcoin",
+      "symbol": "KEK",
+      "tokenURI": "https://storage.nadapp.net/metadata/34d0794c-0228-406c-b1dc-1c3dd35cba1a.json",
+      "description": "If you miss $WOJAK on Solana, don't miss $kek on Monad.",
+      "imageUri": "https://storage.nadapp.net/coin/d8515403-7a5e-42c3-a530-ad0a096de902",
+      "twitter": "https://x.com/aidenfts/status/1993473410283065711?s=20",
+      "website": "https://archive.4plebs.org/s4s/thread/1629335/#1629335"
+    },
+    {
+      "name": "zSend",
+      "symbol": "ZSEND",
+      "tokenURI": "https://storage.nadapp.net/metadata/0cd35212-ed84-4970-835e-f5fbc9dc2ac6.json",
+      "description": "send anon",
+      "imageUri": "https://storage.nadapp.net/coin/b17cef80-6945-4eb1-96fe-0e2d2ae836a3"
+    },
+    {
+      "name": "Nodea",
+      "symbol": "Nodea",
+      "tokenURI": "https://storage.nadapp.net/metadata/d1c8a638-f496-4800-8c49-e4aef091c254.json",
+      "description": "Experience next-level speed with the fastest trading automation on Monad.",
+      "imageUri": "https://storage.nadapp.net/coin/b8f7e41b-a84f-4325-995b-f828d692e19d",
+      "twitter": "https://x.com/nodeamonad",
+      "website": "https://github.com/nodea-software/nodea"
+    },
+    {
+      "name": "TITMON",
+      "symbol": "titmon",
+      "tokenURI": "https://storage.nadapp.net/metadata/00aaa0ec-984d-483d-976c-67eab6177c09.json",
+      "description": "tit on mon",
+      "imageUri": "https://storage.nadapp.net/coin/19994267-4d45-449d-8110-02c5ff7ce9b3"
+    },
+    {
+      "name": "ttt",
+      "symbol": "ttt",
+      "tokenURI": "https://storage.nadapp.net/metadata/479f7990-d069-4a6d-89c7-7f2d479022ff.json",
+      "description": "ttt",
+      "imageUri": "https://storage.nadapp.net/coin/6e0dce9e-cd62-4721-a33f-d440b370cdf1"
+    },
+    {
+      "name": "EvaX Bot",
+      "symbol": "EvaX",
+      "tokenURI": "https://storage.nadapp.net/metadata/2fa931ff-e016-4399-b943-f302f474bb97.json",
+      "description": "First-wave trading tech on Monad - built for speed.",
+      "imageUri": "https://storage.nadapp.net/coin/992d9a5d-721f-4774-a56c-da3d765ae0cc",
+      "twitter": "https://x.com/EvaX_Bot",
+      "telegram": "https://t.me/EvaX_BuyBot",
+      "website": "https://www.evaxbot.com/"
+    },
+    {
+      "name": "Badtz Maru",
+      "symbol": "Badtz",
+      "tokenURI": "https://storage.nadapp.net/metadata/8572ed09-3aa6-4516-8d3d-f26756ae9134.json",
+      "description": "Cute silly little japanese penguin has stumbled upon the Monad chain",
+      "imageUri": "https://storage.nadapp.net/coin/b8f0af23-e471-48f0-9988-649627bff238",
+      "twitter": "https://x.com/badtzmaru_mon",
+      "telegram": "https://t.me/+aBi9Kw-Iw6g2MTU5",
+      "website": "https://badtzcoin.xyz/"
+    },
+    {
+      "name": "nadmoji",
+      "symbol": "NADMOJI",
+      "tokenURI": "https://storage.nadapp.net/metadata/ce86666f-5d9b-49b2-9e69-008e3f8cee88.json",
+      "description": "Hand-drawn emojis (not AI) for \n@naddotfun\n — we’re promoting them, and they might even be added to the platform so we can use them.\n ",
+      "imageUri": "https://storage.nadapp.net/coin/03a3c34e-9375-4687-b85d-cd6b8b1c8906",
+      "twitter": "https://x.com/nadmoji"
     }
   ],
-  "total_count": 230
+  "total_count": 421
 }

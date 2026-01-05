@@ -188,10 +188,6 @@ export async function buyTokens(
     Math.floor(Date.now() / 1000) + TX_DEFAULTS.DEADLINE_OFFSET
   );
 
-  console.log(`  Buying tokens with ${formatEther(monAmount)} MON`);
-  console.log(`  Expected tokens: ${formatEther(expectedTokens)}`);
-  console.log(`  Min tokens (1% slippage): ${formatEther(minTokens)}`);
-
   // Buy
   const hash = await wallet.walletClient.writeContract({
     address: ADDRS.BONDING_CURVE_ROUTER as Address,
@@ -209,8 +205,6 @@ export async function buyTokens(
     chain: wallet.walletClient.chain,
     value: monAmount,
   });
-
-  console.log(`  Transaction hash: ${hash}`);
 
   const receipt = await wallet.publicClient.waitForTransactionReceipt({ hash });
 
@@ -234,12 +228,12 @@ export async function buyTokens(
       break;
     } catch (error) {
       if (attempt === TIMING.BALANCE_MAX_RETRIES) throw error;
-      console.log(`  ⚠️  balanceOf failed (attempt ${attempt}/${TIMING.BALANCE_MAX_RETRIES}), retrying...`);
+      console.log(`  ⚠️  balanceOf retry ${attempt}/${TIMING.BALANCE_MAX_RETRIES}`);
       await new Promise((resolve) => setTimeout(resolve, TIMING.BALANCE_RETRY_DELAY));
     }
   }
 
-  console.log(`  ✅ Buy successful - received ${formatEther(tokensReceived)} tokens`);
+  console.log(`  💰 Buy: ${formatEther(monAmount)} MON → ${formatEther(tokensReceived)} tokens`);
 
   return tokensReceived;
 }
@@ -278,12 +272,7 @@ export async function sellTokens(
     Math.floor(Date.now() / 1000) + TX_DEFAULTS.DEADLINE_OFFSET
   );
 
-  console.log(`Selling tokens: ${formatEther(amount)}`);
-  console.log(`  Expected MON: ${formatEther(expectedMon)}`);
-  console.log(`  Min MON (1% slippage): ${formatEther(minMon)}`);
-
   // Approve
-  console.log(`  Approving router...`);
   const approveHash = await wallet.walletClient.writeContract({
     address: tokenAddress,
     abi: erc20Abi,
@@ -313,15 +302,13 @@ export async function sellTokens(
     chain: wallet.walletClient.chain,
   });
 
-  console.log(`  Transaction hash: ${hash}`);
-
   const receipt = await wallet.publicClient.waitForTransactionReceipt({ hash });
 
   if (receipt.status === "reverted") {
     throw new Error(`Token sell reverted: ${hash}`);
   }
 
-  console.log(`  ✅ Sold successfully`);
+  console.log(`  💰 Sell: ${formatEther(amount)} tokens → ${formatEther(expectedMon)} MON`);
 
   return hash;
 }

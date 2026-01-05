@@ -65,20 +65,18 @@ async function main() {
     console.log(`  Total target points per wallet: ${volumeConfig.targetPoints}`);
     console.log(`  Points per trade: ${pointsPerTrade.toFixed(1)}`);
     console.log(`  Delay randomness: ±${(volumeConfig.delayRandomness * 100).toFixed(0)}%`);
-
-    // Calculate base delay between trades
-    const baseDelayMs = (24 * 60 * 60 * 1000) / volumeConfig.dailyTrades;
-    const baseDelayMin = (baseDelayMs / 60000).toFixed(1);
-    console.log(`  Base delay: ~${baseDelayMin} minutes between trades`);
     console.log();
 
     // 2. Load state
     const state = loadVolumeState();
 
+    // Calculate target for this run
+    const targetTrades = state.totalCompletedTrades + volumeConfig.dailyTrades;
+
     console.log('📊 Current State:');
+    console.log(`  Lifetime trades: ${state.totalCompletedTrades}`);
     console.log(`  Current wallet: ${state.currentWalletIndex + 1}/${volumeConfig.numWallets}`);
     console.log(`  Current wallet trades: ${state.currentWalletTrades}/${volumeConfig.tradesPerWallet}`);
-    console.log(`  Total completed trades: ${state.totalCompletedTrades}/${volumeConfig.dailyTrades}`);
     console.log(`  Next token index: ${state.nextTokenIndex}`);
 
     if (state.lastTradeTimestamp) {
@@ -88,13 +86,23 @@ async function main() {
     }
     console.log();
 
-    // Check if already completed
-    if (state.totalCompletedTrades >= volumeConfig.dailyTrades) {
-      console.log('✅ All trades for today completed!');
-      console.log(`   Completed: ${state.totalCompletedTrades}/${volumeConfig.dailyTrades}`);
-      console.log('\n💡 Tip: Run reset-volume-state to start fresh for a new day\n');
+    // Calculate dynamic delay based on remaining trades
+    const remainingTrades = targetTrades - state.totalCompletedTrades;
+
+    // Guard against division by zero (shouldn't happen, but defensive)
+    if (remainingTrades <= 0) {
+      console.log('✅ Target already reached. Nothing to do.\n');
       process.exit(0);
     }
+
+    const baseDelayMs = (24 * 60 * 60 * 1000) / remainingTrades;
+    const baseDelayMin = (baseDelayMs / 60000).toFixed(1);
+
+    console.log('⏱️  This Run:');
+    console.log(`  Target: ${volumeConfig.dailyTrades} more trades (${state.totalCompletedTrades} → ${targetTrades})`);
+    console.log(`  Remaining: ${remainingTrades} trades`);
+    console.log(`  Interval: ~${baseDelayMin} min per trade`);
+    console.log();
 
     // 3. Get eligible tokens (holder count === 0)
     const eligibleTokens = await getEligibleTokens();
@@ -115,24 +123,66 @@ async function main() {
 
     console.log(`💼 Volume wallets loaded: ${volumeWallets.length}`);
 
-    // 5. Check current wallet balance
-    const currentWallet = volumeWallets[state.currentWalletIndex]!;
-    const currentBalance = await getBalance(currentWallet);
-    console.log(`\n💰 Wallet ${state.currentWalletIndex + 1} balance: ${formatEther(currentBalance)} MON\n`);
+    // 5. Validate and fix wallet index if needed
+    let initialWalletIndex = state.currentWalletIndex;
+    if (initialWalletIndex < 0 || initialWalletIndex >= volumeConfig.numWallets) {
+      console.warn(`\n⚠️  Invalid wallet index in state: ${initialWalletIndex}. Resetting to 0.`);
+      initialWalletIndex = 0;
+      await updateVolumeState((s) => {
+        s.currentWalletIndex = 0;
+        s.currentWalletTrades = 0;
+      });
+    }
 
-    // 6. Execute trades (resume from current state)
+    // 6. Check current wallet balance
+    const currentWallet = volumeWallets[initialWalletIndex]!;
+    const currentBalance = await getBalance(currentWallet);
+    console.log(`\n💰 Wallet ${initialWalletIndex + 1} balance: ${formatEther(currentBalance)} MON\n`);
+
+    // 7. Execute trades (resume from current state)
     console.log('='.repeat(80));
     console.log('🔄 EXECUTING VOLUME TRADES');
     console.log('='.repeat(80));
 
-    let walletIndex = state.currentWalletIndex;
+    let walletIndex = initialWalletIndex;
     let walletTrades = state.currentWalletTrades;
     let tokenIndex = state.nextTokenIndex;
     let totalTrades = state.totalCompletedTrades;
 
-    // Continue until all trades are done
-    while (totalTrades < volumeConfig.dailyTrades && walletIndex < volumeConfig.numWallets) {
-      const wallet = volumeWallets[walletIndex]!;
+    // Helper function to advance wallet with bounds check
+    const advanceWallet = async (reason: string): Promise<void> => {
+      walletIndex++;
+      walletTrades = 0;
+
+      // Wallet rotation: wrap around to wallet 0
+      if (walletIndex >= volumeConfig.numWallets) {
+        console.log(`\n  🔄 All ${volumeConfig.numWallets} wallets completed. Rotating back to Wallet 1...`);
+        walletIndex = 0;
+      }
+
+      // Save state atomically
+      await updateVolumeState((s) => {
+        s.currentWalletIndex = walletIndex;
+        s.currentWalletTrades = 0;
+      });
+
+      console.log(`  → Moved to Wallet ${walletIndex + 1} (${reason})`);
+    };
+
+    // Continue until target is reached
+    while (totalTrades < targetTrades) {
+      const wallet = volumeWallets[walletIndex];
+
+      // Safety check: wallet should always exist due to bounds check
+      if (!wallet) {
+        console.error(`\n  ❌ Invalid wallet index: ${walletIndex}. Resetting to 0.`);
+        walletIndex = 0;
+        await updateVolumeState((s) => {
+          s.currentWalletIndex = 0;
+          s.currentWalletTrades = 0;
+        });
+        continue;
+      }
 
       // If starting new wallet, print header
       if (walletTrades === 0) {
@@ -156,12 +206,25 @@ async function main() {
 
         console.log(`\n  Trade ${walletTrades + 1}/${volumeConfig.tradesPerWallet}: ${tokenSymbol} (Token #${displayTokenNum}/${eligibleTokens.length})`);
 
-        const result: TradeResult = await executeVolumeTrade(
-          wallet,
-          token.tokenAddress as Address,
-          tokenSymbol,
-          pointsPerTrade
-        );
+        // Execute trade with error handling
+        let result: TradeResult;
+        try {
+          result = await executeVolumeTrade(
+            wallet,
+            token.tokenAddress as Address,
+            tokenSymbol,
+            pointsPerTrade
+          );
+        } catch (error) {
+          // Handle unexpected errors (network issues, etc.) - don't crash entire bot
+          console.error(`    ❌ Trade error:`, error instanceof Error ? error.message : error);
+          console.log(`    ⏭️  Trying next token...`);
+          tokenIndex++;
+          await updateVolumeState((s) => {
+            s.nextTokenIndex = tokenIndex;
+          });
+          continue;
+        }
 
         // Handle result
         if (result.status === 'success') {
@@ -171,31 +234,42 @@ async function main() {
           totalTrades++;
           tokenIndex++;
 
-          // Save state after successful trade
-          await updateVolumeState((s) => {
-            s.currentWalletTrades = walletTrades;
-            s.nextTokenIndex = tokenIndex;
-            s.totalCompletedTrades = totalTrades;
-            s.lastTradeTimestamp = Date.now();
-          });
-
-          console.log(`    📊 Progress: ${totalTrades}/${volumeConfig.dailyTrades} total trades`);
-
           // Check if wallet completed all trades
-          if (walletTrades >= volumeConfig.tradesPerWallet) {
-            console.log(`\n  ✅ Wallet ${walletIndex + 1} completed all ${volumeConfig.tradesPerWallet} trades`);
-            walletIndex++;
-            walletTrades = 0;
+          const walletCompleted = walletTrades >= volumeConfig.tradesPerWallet;
 
-            // Save state for new wallet
+          if (walletCompleted) {
+            console.log(`\n  ✅ Wallet ${walletIndex + 1} completed all ${volumeConfig.tradesPerWallet} trades`);
+            const nextWalletIndex = (walletIndex + 1) % volumeConfig.numWallets;
+
+            if (walletIndex + 1 >= volumeConfig.numWallets) {
+              console.log(`\n  🔄 All ${volumeConfig.numWallets} wallets completed. Rotating back to Wallet 1...`);
+            }
+
+            // Save state atomically (all updates in one call)
             await updateVolumeState((s) => {
-              s.currentWalletIndex = walletIndex;
               s.currentWalletTrades = 0;
+              s.nextTokenIndex = tokenIndex;
+              s.totalCompletedTrades = totalTrades;
+              s.lastTradeTimestamp = Date.now();
+              s.currentWalletIndex = nextWalletIndex;
+            });
+
+            walletIndex = nextWalletIndex;
+            walletTrades = 0;
+          } else {
+            // Save state after successful trade
+            await updateVolumeState((s) => {
+              s.currentWalletTrades = walletTrades;
+              s.nextTokenIndex = tokenIndex;
+              s.totalCompletedTrades = totalTrades;
+              s.lastTradeTimestamp = Date.now();
             });
           }
 
+          console.log(`    📊 Progress: ${totalTrades}/${targetTrades}`);
+
           // Apply delay before next trade (unless this was the last trade)
-          if (totalTrades < volumeConfig.dailyTrades) {
+          if (totalTrades < targetTrades) {
             const delayMs = calculateDelay(baseDelayMs, volumeConfig.delayRandomness);
             const delayMin = (delayMs / 60000).toFixed(1);
             console.log(`\n  ⏰ Waiting ${delayMin} minutes before next trade...`);
@@ -213,14 +287,7 @@ async function main() {
           // Wallet-level issues: stop this wallet's trades
           else if (result.status === 'insufficient_balance') {
             console.log(`    ❌ Insufficient balance, skipping to next wallet`);
-            walletIndex++;
-            walletTrades = 0;
-
-            // Save state for new wallet
-            await updateVolumeState((s) => {
-              s.currentWalletIndex = walletIndex;
-              s.currentWalletTrades = 0;
-            });
+            await advanceWallet('insufficient balance');
             break; // Exit retry loop
           }
 
@@ -232,35 +299,24 @@ async function main() {
         }
       }
 
-      // If we exhausted all tokens without success
-      if (!tradeSuccessful) {
+      // If we exhausted all tokens without success (and didn't break due to insufficient_balance)
+      if (!tradeSuccessful && attempts >= maxAttempts) {
         console.log(`\n  ⚠️  Could not find valid token after ${attempts} attempts, skipping to next wallet`);
-        walletIndex++;
-        walletTrades = 0;
-
-        await updateVolumeState((s) => {
-          s.currentWalletIndex = walletIndex;
-          s.currentWalletTrades = 0;
-        });
+        await advanceWallet('no valid tokens');
       }
     }
 
-    // 7. Final summary
+    // 8. Final summary
     console.log('\n' + '='.repeat(80));
     console.log('📊 FINAL SUMMARY');
     console.log('='.repeat(80));
-    console.log(`Total completed: ${totalTrades}/${volumeConfig.dailyTrades} trades`);
+    console.log(`Lifetime trades: ${totalTrades}`);
+    console.log(`Target reached: ${targetTrades}`);
 
-    if (totalTrades >= volumeConfig.dailyTrades) {
-      console.log('\n🎉 All daily trades completed!');
-    } else {
-      console.log(`\n⏸️  Paused at: Wallet ${walletIndex + 1}, Trade ${walletTrades + 1}`);
-      console.log(`   Resume anytime - state is saved`);
-    }
+    console.log('\n🎉 All trades completed!');
+    console.log('💡 Restart bot to do another round\n');
 
     console.log('='.repeat(80) + '\n');
-
-    console.log('✅ Simple volume bot session completed!\n');
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Simple volume bot failed:', error);
