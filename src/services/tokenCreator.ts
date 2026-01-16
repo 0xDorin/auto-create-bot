@@ -3,11 +3,11 @@
  */
 
 import { parseEther, formatEther } from "viem";
-import { createToken, sellTokens } from "./contracts";
+import { createToken } from "./contracts";
 import { config } from "../config";
 import { updateState } from "./storage";
 import { calculateMonAmount } from "./priceOracle";
-import type { WalletInstance } from "./wallet";
+import { getSDK, type WalletInstance } from "./wallet";
 import type { PreparedToken } from "../types";
 import type { BotState } from "./storage";
 
@@ -28,7 +28,6 @@ export async function executeTokenCreation(
     initialBuyAmount = parseEther(monAmount.toString());
   } else {
     initialBuyAmount = parseEther(config.initialBuyAmount);
-    console.log(`💰 Buy: ${config.initialBuyAmount} MON (fixed)`);
   }
 
   // Create token (no retry - if fails, skip to next)
@@ -41,6 +40,11 @@ export async function executeTokenCreation(
     },
     initialBuyAmount
   );
+
+  console.log(`  🏠 ${tokenAddress}`);
+  if (initialBuyAmount > 0n) {
+    console.log(`  💰 Buy: ${formatEther(initialBuyAmount)} MON → ${formatEther(tokensReceived)} tokens`);
+  }
 
   // Update state immediately after successful creation (atomic operation)
   await updateState((state) => {
@@ -56,22 +60,27 @@ export async function executeTokenCreation(
 
   // Sell tokens if configured AND initial buy was > 0 (WITH RETRY - must succeed to ensure wallet only has MON)
   if (initialBuyAmount === 0n) {
-    console.log(`⏭️  Skipping sell (no initial buy)`);
+    // No sell needed
   } else if (config.sellPercentage === 0) {
-    console.log(`⏭️  Skipping sell (sellPercentage is 0, holding ${formatEther(tokensReceived)} tokens)`);
+    console.log(`  📦 Holding ${formatEther(tokensReceived)} tokens`);
   } else if (config.sellPercentage > 0) {
     const sellAmount =
       (tokensReceived * BigInt(config.sellPercentage)) / BigInt(100);
 
+    // Get SDK and sell using simpleSell
+    const sdk = getSDK(config.mnemonic, wallet.index);
     await withRetry(
-      () => sellTokens(wallet, tokenAddress, sellAmount),
+      () => sdk.simpleSell({
+        token: tokenAddress,
+        amountIn: sellAmount,
+        slippagePercent: 1,
+      }),
       `Sell tokens for ${metadata.symbol}`,
       config.maxRetries,
       config.retryDelayMs
     );
+    console.log(`  💰 Sell: ${formatEther(sellAmount)} tokens → MON`);
   }
-
-  console.log(`✅ Complete\n`);
 }
 
 /**
