@@ -84,8 +84,6 @@ export async function fetchMonPrice(): Promise<PriceData> {
   cachedPrice = result;
   cacheExpiry = Date.now() + CACHE_TTL_MS;
 
-  console.log(`✅ MON/USD: $${price.toFixed(6)}`);
-
   return result;
 }
 
@@ -102,55 +100,34 @@ export async function fetchMonPrice(): Promise<PriceData> {
  * - Buy fee: 1% of buy amount
  * - Sell fee: 1% of (buy amount × 0.99)
  *
- * Points formula:
- * 10 MON × price × 8 + buyAmount × 0.01 × 10 + (buyAmount × 0.99) × 0.01 × 10 = targetPoints
- * 80 MON × price + buyAmount × 0.199 = targetPoints
- * buyAmount = (targetPoints - 80 MON × price) / 0.199
- *
- * @param targetPoints Target points to earn (default: 20.5)
+ * @param targetPoints Target points to earn
+ * @param options.volumeOnly If true, skip create fee calculation (for volume trading)
  */
 export async function calculateMonAmount(
-  targetPoints: number
+  targetPoints: number,
+  options?: { volumeOnly?: boolean }
 ): Promise<number> {
   const priceData = await fetchMonPrice();
   const monPrice = priceData.price;
 
-  // Create fee: 10 MON (fixed), earns 8 points per $1 of fee
-  const createFeeUSD = 10 * monPrice;
-  const createPoints = createFeeUSD * 8; // $X × 8 points/$
+  let remainingPoints = targetPoints;
 
-  // Remaining points needed from buy/sell fees
-  const remainingPoints = targetPoints - createPoints;
+  // For token creation: subtract create fee points first
+  if (!options?.volumeOnly) {
+    const createFeeUSD = 10 * monPrice;
+    const createPoints = createFeeUSD * 8; // 8 points per $1
+    remainingPoints = targetPoints - createPoints;
 
-  if (remainingPoints <= 0) {
-    console.log(`⚠️  Target points (${targetPoints}) ≤ Create fee points (${createPoints.toFixed(2)})`);
-    console.log(`   Create fee: 10 MON × $${monPrice.toFixed(6)} × 8 = ${createPoints.toFixed(2)} pts`);
-    console.log(`   → Skipping initial buy (create only)`);
-    return 0;
+    if (remainingPoints <= 0) {
+      return 0;
+    }
   }
 
-  // Buy points = buyAmount × 0.01 × 10 = buyAmount × 0.1
-  // Sell points = (buyAmount × 0.99) × 0.01 × 10 = buyAmount × 0.099
-  // Total = buyAmount × 0.199
+  // Buy points = buyAmountUSD × 0.01 × 10 = buyAmountUSD × 0.1
+  // Sell points = (buyAmountUSD × 0.99) × 0.01 × 10 = buyAmountUSD × 0.099
+  // Total = buyAmountUSD × 0.199
   const buyAmountUSD = remainingPoints / 0.199;
   const buyAmountMON = buyAmountUSD / monPrice;
-
-  // Calculate fees and points for display
-  const buyFeeUSD = buyAmountUSD * 0.01;
-  const buyPoints = buyFeeUSD * 10;
-
-  const afterBuyUSD = buyAmountUSD * 0.99;
-  const sellFeeUSD = afterBuyUSD * 0.01;
-  const sellPoints = sellFeeUSD * 10;
-
-  const totalFeeUSD = createFeeUSD + buyFeeUSD + sellFeeUSD;
-  const totalPoints = createPoints + buyPoints + sellPoints;
-
-  console.log(
-    `💰 Buy: ${buyAmountMON.toFixed(2)} MON ($${buyAmountUSD.toFixed(
-      2
-    )}) → ${totalPoints.toFixed(1)} pts`
-  );
 
   return buyAmountMON;
 }

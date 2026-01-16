@@ -8,8 +8,7 @@
 import { parseEther, formatEther, type Address } from "viem";
 import { getHolderCount } from "./nadfunApi";
 import { config } from "../config";
-import { buyTokens, sellTokens } from "./contracts";
-import { getBalance, type WalletInstance } from "./wallet";
+import { getBalance, getSDK, type WalletInstance } from "./wallet";
 import { calculateMonAmount } from "./priceOracle";
 import { loadState } from "./storage";
 import { existsSync, readFileSync } from "fs";
@@ -173,6 +172,7 @@ export async function getEligibleTokens(): Promise<
 
 /**
  * Execute single volume trade (one buy/sell) for one token with one wallet
+ * @param mnemonic - Mnemonic for SDK initialization
  * @param skipHolderCheck - Skip holder count check (for latest_trade mode)
  */
 export async function executeVolumeTrade(
@@ -180,8 +180,9 @@ export async function executeVolumeTrade(
   tokenAddress: Address,
   tokenSymbol: string,
   targetPoints: number,
+  mnemonic: string,
   options?: { skipHolderCheck?: boolean }
-): Promise<any> {
+): Promise<TradeResult> {
   console.log(`\n📈 ${tokenSymbol} - Wallet ${wallet.index}`);
 
   // 1. Check holder count before trading (unless skipped)
@@ -199,8 +200,8 @@ export async function executeVolumeTrade(
     }
   }
 
-  // 2. Calculate buy amount for target points
-  const buyAmountMON = await calculateMonAmount(targetPoints);
+  // 2. Calculate buy amount for target points (volumeOnly: skip create fee)
+  const buyAmountMON = await calculateMonAmount(targetPoints, { volumeOnly: true });
 
   if (buyAmountMON === 0) {
     console.log(`  ⚠️  Target points too low`);
@@ -230,11 +231,25 @@ export async function executeVolumeTrade(
   }
 
   try {
-    // 4. Buy tokens
-    const tokensReceived = await buyTokens(wallet, tokenAddress, buyAmount);
+    // Get SDK instance (lazy + cached)
+    const sdk = getSDK(mnemonic, wallet.index);
 
-    // 5. Sell all tokens
-    await sellTokens(wallet, tokenAddress, tokensReceived);
+    // 4. Buy tokens using SDK
+    const buyResult = await sdk.simpleBuy({
+      token: tokenAddress,
+      amountIn: buyAmount,
+      slippagePercent: 1,
+    });
+    const tokensReceived = await sdk.getBalance(tokenAddress);
+    console.log(`  💰 Buy: ${formatEther(buyAmount)} MON → ${formatEther(tokensReceived)} tokens`);
+
+    // 5. Sell all tokens using SDK (auto approve)
+    const sellResult = await sdk.simpleSell({
+      token: tokenAddress,
+      amountIn: tokensReceived,
+      slippagePercent: 1,
+    });
+    console.log(`  💰 Sell: ${formatEther(tokensReceived)} tokens → MON`);
 
     return { status: "success" };
   } catch (error) {
