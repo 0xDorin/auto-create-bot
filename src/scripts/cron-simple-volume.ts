@@ -213,7 +213,8 @@ async function main() {
             wallet,
             token.tokenAddress as Address,
             tokenSymbol,
-            pointsPerTrade
+            pointsPerTrade,
+            volumeConfig.mnemonic
           );
         } catch (error) {
           // Handle unexpected errors (network issues, etc.) - don't crash entire bot
