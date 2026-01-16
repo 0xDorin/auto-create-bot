@@ -20,3 +20,7 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Docs (local only)
+CLAUDE.md
+CHANGELOG.md
