@@ -24,6 +24,7 @@
     "cron:latest-volume": "tsx src/scripts/cron-latest-volume.ts",
     "fetch-eligible-tokens": "tsx src/scripts/fetch-eligible-tokens.ts",
     "test-price": "tsx src/scripts/test-price.ts",
+    "test:smoke": "tsx src/scripts/smoke-test.ts",
     "start:prepare-metadata": "node dist/scripts/prepare-metadata.js",
     "start:show-wallets:create": "node dist/scripts/show-wallets.js create",
     "start:show-wallets:volume": "node dist/scripts/show-wallets.js volume",
@@ -33,18 +34,24 @@
     "start:withdraw-funds:volume": "node dist/scripts/withdraw-funds.js volume",
     "start:withdraw-master": "node dist/scripts/withdraw-master.js"
   },
-  "keywords": ["monad", "token", "automation", "bot"],
+  "keywords": [
+    "monad",
+    "token",
+    "automation",
+    "bot"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "viem": "^2.21.0",
+    "@nadfun/sdk": "^0.3.1",
     "dotenv": "^16.4.5",
+    "viem": "^2.21.0",
     "winston": "^3.11.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "typescript": "^5.3.3",
+    "nodemon": "^3.0.3",
     "tsx": "^4.7.0",
-    "nodemon": "^3.0.3"
+    "typescript": "^5.3.3"
   }
 }
