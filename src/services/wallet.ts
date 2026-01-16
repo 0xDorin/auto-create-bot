@@ -4,6 +4,9 @@
 
 import { createWalletClient, createPublicClient, http, type Address, type Hash, parseEther, formatEther } from 'viem';
 import { mnemonicToAccount } from 'viem/accounts';
+import { HDKey } from '@scure/bip32';
+import { mnemonicToSeedSync } from '@scure/bip39';
+import { initSDK, type NadFunSDK } from '@nadfun/sdk';
 import { config } from '../config';
 
 // Custom chain definition for Monad
@@ -95,4 +98,46 @@ export async function sendNative(
 
   await fromWallet.publicClient.waitForTransactionReceipt({ hash });
   return hash;
+}
+
+/**
+ * SDK cache (lazy initialization)
+ */
+const sdkCache = new Map<string, NadFunSDK>();
+
+/**
+ * Derive private key from mnemonic
+ */
+function derivePrivateKey(mnemonic: string, index: number): `0x${string}` {
+  const seed = mnemonicToSeedSync(mnemonic);
+  const hdKey = HDKey.fromMasterSeed(seed);
+  const path = `m/44'/60'/0'/0/${index}`;
+  const childKey = hdKey.derive(path);
+  return `0x${Buffer.from(childKey.privateKey!).toString('hex')}` as `0x${string}`;
+}
+
+/**
+ * Get SDK instance for wallet (lazy + cached)
+ */
+export function getSDK(mnemonic: string, walletIndex: number): NadFunSDK {
+  const cacheKey = `${mnemonic.slice(0, 10)}_${walletIndex}`;
+
+  if (!sdkCache.has(cacheKey)) {
+    const privateKey = derivePrivateKey(mnemonic, walletIndex);
+    const sdk = initSDK({
+      rpcUrl: config.network.rpcUrl,
+      privateKey,
+      network: config.networkMode,
+    });
+    sdkCache.set(cacheKey, sdk);
+  }
+
+  return sdkCache.get(cacheKey)!;
+}
+
+/**
+ * Clear SDK cache (for cleanup)
+ */
+export function clearSDKCache(): void {
+  sdkCache.clear();
 }
